@@ -1,18 +1,40 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div class="presentacion flex flex-column">
+        <texto-presentacion></texto-presentacion>
+        <sobre-mi></sobre-mi>
+    </div>
+    <div>
+        <skills></skills>
+    </div>
+    <div>
+        <trabajos></trabajos>
+    </div>
+    <div>
+        <contacto></contacto>
+    </div>
 </template>
-
+<style scoped>
+.presentacion{
+    gap: 2rem;
+}
+</style>
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import TextoPresentacionComponent   from '../components/presentacion/TextoPresentacionComponent.vue'
+import SobreMiComponent             from '../components/presentacion/SobreMiComponent.vue'
+import SkillsComponent              from '../components/skills/skillsComponent.vue'
+import TrabajosComponent            from '../components/trabajos/trabajosComponent.vue'
+import ContactoComponent            from '../components/contacto/contactoComponent.vue'
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+    components:{
+        'texto-presentacion':   TextoPresentacionComponent,
+        'sobre-mi':             SobreMiComponent,
+        'skills':               SkillsComponent,
+        'trabajos':             TrabajosComponent,
+        'contacto':             ContactoComponent
+    },
+    setup() {
+        
+    },
 }
 </script>
