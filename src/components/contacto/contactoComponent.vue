@@ -7,7 +7,7 @@
 </template>
 <style scoped>
 .contacto-container{
-    padding: 3rem var(--lateral-padding-mobile);
+    padding: 5rem var(--lateral-padding-mobile);
 }
 </style>
 <script>

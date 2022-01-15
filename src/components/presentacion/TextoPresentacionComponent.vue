@@ -1,14 +1,18 @@
 <template>
     <div class="texto-presentacion-container flex flex-column">
-        <h1 class="titulo texto-grande texto-centrado violet">Front-end & Back-end Developer</h1>
-        <h2 class="texto-medio texto-centrado">Creo soluciones e interfaces y trato de codear la menor cantidad posible de bugs 😝 </h2>
+        <div class="texto-centrado flex flex-column violet">
+            <span class="titulo texto-grande">Front-end </span>
+            <span class="titulo texto-grande">&</span>
+            <span class="titulo texto-grande">Back-end Developer</span>
+        </div>
+        <div class="texto-medio texto-centrado">Creo soluciones e interfaces y trato de codear la menor cantidad posible de bugs 😝 </div>
         <div class="avatar"></div>
     </div>
 </template>
 <style scoped>
 .texto-presentacion-container{
-    padding: 3rem var(--lateral-padding-mobile) 0;
-    gap: 2.3rem;
+    padding: 2rem var(--lateral-padding-mobile);
+    gap: 2rem;
 }
 .avatar{
     height: 250px;

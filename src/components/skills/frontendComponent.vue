@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-column">
-        <div class="titulo texto-medio texto-centrado violet text-shadow">Front End</div>
+        <div class="titulo texto-semi-grande texto-centrado violet">Front End</div>
         <ul class="flex flex-column">
-            <li>HTML <div class="icon html5"></div></li>
-            <li>CSS <div class="icon css3"></div></li>
-            <li>JS <div class="icon js"></div></li>
-            <li>VueJS (2/3) <div class="icon vue"></div></li>
+            <li class="texto-semi-medio">HTML <div class="icon html5"></div></li>
+            <li class="texto-semi-medio">CSS <div class="icon css3"></div></li>
+            <li class="texto-semi-medio">JS <div class="icon js"></div></li>
+            <li class="texto-semi-medio">VueJS (2/3) <div class="icon vue"></div></li>
         </ul>
     </div>
 </template>

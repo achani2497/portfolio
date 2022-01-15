@@ -3,13 +3,17 @@
   <router-view/>
 </template>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&family=Rubik:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand:300,500');
+@import url('https://fonts.googleapis.com/css?family=Archivo:500|Open+Sans:300,700');
+
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Quicksand', sans-serif;
+  /* font-family: 'Quicksand', sans-serif; */
+  font-family: 'Open Sans', sans-serif;
   font-size: 15px;
+  font-weight: 300;
 }
 html{
   scroll-behavior: smooth;
@@ -30,7 +34,8 @@ html{
   background-size: 250%;
 }
 .titulo{
-  font-family: 'Rubik', sans-serif;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 500;
 }
 .violet{
   color: var(--violet)
@@ -47,8 +52,14 @@ html{
 .texto-grande{
   font-size: 3rem;
 }
+.texto-semi-grande{
+  font-size: 1.7rem;
+}
 .texto-medio{
   font-size: 1.5rem;
+}
+.texto-semi-medio{
+  font-size: 1.2rem;
 }
 .texto-centrado{
   text-align: center;

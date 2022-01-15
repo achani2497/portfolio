@@ -30,7 +30,7 @@
 </template>
 <style scoped>
     .form-container{
-        border: 2px solid var(--yellow);
+        border: 1px solid var(--yellow);
         padding: 1rem;
         border-radius: 15px;
     }
@@ -48,6 +48,7 @@
     }
     .form-input-group label{
         color: var(--violet);
+        letter-spacing: .6px;
     }
     .input-form{
         border: none;

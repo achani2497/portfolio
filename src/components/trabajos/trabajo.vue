@@ -1,17 +1,17 @@
 <template>
     <div class="trabajo-container flex flex-column">
-        <h3 class="titulo texto-medio texto-centrado">{{titulo}}</h3>
-        <p class="texto-centrado">{{descripcion}}</p>
+        <h3 class="titulo texto-semi-grande texto-centrado">{{titulo}}</h3>
+        <p class="texto-centrado texto-semi-medio">{{descripcion}}</p>
         <div class="list-container flex flex-column">
-            <h4 class="titulo yellow">Roles</h4>
-            <ul>
-                <li v-for="(tarea, index) in this.tareas" :key="index">{{tarea}}</li>
+            <h4 class="titulo texto-medio yellow">Roles</h4>
+            <ul class="flex flex-column">
+                <li class="texto-semi-medio" v-for="(tarea, index) in this.tareas" :key="index">{{tarea}}</li>
             </ul>
         </div>
         <div class="list-container flex flex-column">
-            <h4 class="titulo yellow">Técnologias</h4>
-            <ul>
-                <li v-for="(tecnologia, index) in this.tecnologias" :key="index">{{tecnologia.nombre}}</li>
+            <h4 class="titulo texto-medio yellow">Técnologias</h4>
+            <ul class="flex flex-column">
+                <li class="texto-semi-medio" v-for="(tecnologia, index) in this.tecnologias" :key="index">{{tecnologia.nombre}}</li>
             </ul>
         </div>
     </div>
@@ -20,7 +20,7 @@
     .trabajo-container{
         width: 100%;
         padding: .5rem;
-        gap: 1rem;
+        gap: 1.5rem;
         color: white;
         border: 1px solid white;
         border-radius: 15px;
@@ -29,6 +29,9 @@
         letter-spacing: 1px;
     }
     .list-container{
+        gap: .3rem;
+    }
+    ul{
         gap: .3rem;
     }
 </style>

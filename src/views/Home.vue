@@ -12,6 +12,9 @@
     <div>
         <contacto></contacto>
     </div>
+    <div>
+        <redes-sociales></redes-sociales>
+    </div>
 </template>
 <style scoped>
 .presentacion{
@@ -24,6 +27,7 @@ import SobreMiComponent             from '../components/presentacion/SobreMiComp
 import SkillsComponent              from '../components/skills/skillsComponent.vue'
 import TrabajosComponent            from '../components/trabajos/trabajosComponent.vue'
 import ContactoComponent            from '../components/contacto/contactoComponent.vue'
+import RedesSociales                from '../components/rrss/redesSocialesComponents.vue'
 
 export default {
     components:{
@@ -31,7 +35,8 @@ export default {
         'sobre-mi':             SobreMiComponent,
         'skills':               SkillsComponent,
         'trabajos':             TrabajosComponent,
-        'contacto':             ContactoComponent
+        'contacto':             ContactoComponent,
+        'redes-sociales':       RedesSociales
     },
     setup() {
         

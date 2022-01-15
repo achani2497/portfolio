@@ -12,14 +12,13 @@
         </div>
     </div>
 </template>
-<style>
+<style >
 .skills{
     position: relative;
-    padding: 4rem var(--lateral-padding-mobile);
+    padding: 5rem var(--lateral-padding-mobile);
 }
 .absolute-container{
     padding: 1rem;
-    margin: 0 var(--lateral-padding-mobile);
     gap: 1rem;
     border-radius: 25px;
     background-color: white;

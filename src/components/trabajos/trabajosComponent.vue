@@ -24,12 +24,12 @@
 <style scoped>
 .trabajos-container{
     position: relative;
-    padding: 3rem var(--lateral-padding-mobile);
+    padding: 5rem var(--lateral-padding-mobile);
     background-color: var(--violet);
 }
 .absolute-container{
     padding: 0;
-    margin: 0 var(--lateral-padding-mobile);
+    margin: 0;
     border-radius: 25px;
     gap: 1rem;
     background-color: var(--violet);
