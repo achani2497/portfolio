@@ -1,25 +1,26 @@
 <template>
+    <menu-flotante></menu-flotante>
     <div class="presentacion flex flex-column">
         <texto-presentacion></texto-presentacion>
-        <sobre-mi></sobre-mi>
+        <sobre-mi id="sobre-mi"></sobre-mi>
     </div>
     <div>
-        <skills></skills>
+        <skills id="habilidades"></skills>
     </div>
     <div>
-        <trabajos></trabajos>
+        <trabajos id="trabajos"></trabajos>
     </div>
     <div>
-        <contacto></contacto>
+        <contacto id="contacto"></contacto>
     </div>
     <div>
-        <redes-sociales></redes-sociales>
+        <redes-sociales id="redes"></redes-sociales>
     </div>
 </template>
 <style scoped>
-.presentacion{
-    gap: 2rem;
-}
+    .presentacion{
+        gap: 2rem;
+    }
 </style>
 <script>
 import TextoPresentacionComponent   from '../components/presentacion/TextoPresentacionComponent.vue'
@@ -28,6 +29,7 @@ import SkillsComponent              from '../components/skills/skillsComponent.v
 import TrabajosComponent            from '../components/trabajos/trabajosComponent.vue'
 import ContactoComponent            from '../components/contacto/contactoComponent.vue'
 import RedesSociales                from '../components/rrss/redesSocialesComponents.vue'
+import Menu                         from '../components/float-menu/menuComponent.vue'
 
 export default {
     components:{
@@ -36,7 +38,8 @@ export default {
         'skills':               SkillsComponent,
         'trabajos':             TrabajosComponent,
         'contacto':             ContactoComponent,
-        'redes-sociales':       RedesSociales
+        'redes-sociales':       RedesSociales,
+        'menu-flotante':        Menu
     },
     setup() {
         

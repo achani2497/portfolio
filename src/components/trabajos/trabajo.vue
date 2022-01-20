@@ -19,7 +19,7 @@
 <style scoped>
     .trabajo-container{
         width: 100%;
-        padding: .5rem;
+        padding: 1rem;
         gap: 1.5rem;
         color: white;
         border: 1px solid white;
