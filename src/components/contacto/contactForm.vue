@@ -92,7 +92,7 @@
         background-color: rgb(53, 177, 0);
         color: white;
         border: none;
-        border-radius: 25px;
+        border-radius: 20px;
         padding: .4rem;
         transition: all .3s ease-in-out;
         letter-spacing: 2px;

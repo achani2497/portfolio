@@ -9,8 +9,14 @@
                 </div>
             </li>
             <li v-for="(seccion, index) in secciones" :key="index">
-                <router-link :to="seccion.url" :class="[seccion.class, menuAbierto ? 'link' : '']" >{{seccion.nombre}}</router-link>
-                <i :id="seccion.class" :class="[seccion.icon, menuAbierto ? 'icon' : '']"></i>
+                <router-link 
+                    :to="seccion.url" 
+                    :class="[seccion.class, menuAbierto ? 'link' : '']" >{{seccion.nombre}}
+                </router-link>
+                <i 
+                    :id="seccion.class" 
+                    :class="[seccion.icon, menuAbierto ? 'icon' : '']">
+                </i>
             </li>
         </ul>
     </nav>
@@ -22,16 +28,15 @@
         right: 20px;
         width: auto;
         height: 250px;
-        z-index: 2;
+        z-index: 6;
     }
     nav ul{
         width: 50px;
         height: 50px;
         background-color: var(--violet);
-        border-top-left-radius: 90px;
-        border-top-right-radius: 90px;
-        border-bottom-right-radius: 90px;
-        z-index: 2;
+        border-top-left-radius: 100px;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
         cursor: pointer;
         box-shadow: 2px 1px 1px rgba(0,0,0,0.02), 
                     2px 2px 2px rgba(0,0,0,0.06), 
@@ -40,39 +45,63 @@
                     2px 16px 16px rgba(0,0,0,0.2);
         transition: .3s cubic-bezier(0.98, 0.23, 0.16, 1.28);
     }
-    li{
-        width: 180px;
-        height: 50px;
+    nav ul li{
         display: flex;
         align-items: center;
     }
-    li:first-child{
+    nav ul li:not(:first-child){
+        width: 0;
+        height: 0;
+        z-index: -5;
+    }
+    nav ul.active li:not(:first-child){
+        width: 180px;
+        height: 50px;
+        z-index: 2;
+    }
+    nav ul li:first-child{
         padding: 0;
     }
-    li a{
+    nav ul li:not(:first-child) a{
+        display: none;
+    }
+    nav ul.active li:not(:first-child) a{
+        display: unset;
         color: white;
+        height: inherit;
+        width: inherit;
+        padding-left: 1rem;
+        font-size: 18px;
+        opacity: 0;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
         box-shadow: -5px 1px 1px rgba(0,0,0,0.02), 
                     -5px 2px 2px rgba(0,0,0,0.06), 
                     -5px 4px 4px rgba(0,0,0,0.12), 
                     -5px 8px 8px rgba(0,0,0,0.16),
                     -5px 16px 16px rgba(0,0,0,0.2);
     }
-    li:not(.menuButton){
+    nav ul li i{
+        color: white;
+        opacity: 0;
+    }  
+    nav ul li:not(.menuButton){
         justify-content: space-between;
         margin-left: -140px;
     }
-    li.menuButton{
+    nav ul li.menuButton{
         width: 50px;
         height: 50px;
         justify-content: center;
     }
-    li.menuButton .bar{
+    nav ul li.menuButton .bar{
         width: 20px;
         height: 2px;
         background: white;
         transition: .4s linear;
     }
-    li.menuButton .bar:nth-child(2){
+    nav ul li.menuButton .bar:nth-child(2){
         margin: 3px 0;
     }
     .active .bar:first-child{
@@ -85,11 +114,6 @@
         animation: barTwo .4s ease-in-out forwards;
     }
 
-    li i{
-        color: white;
-        opacity: 0;
-    }
-    
     .sobre-mi{
         background-image: url('~@/assets/images/icons/menu/sobre-mi.svg');
     }
@@ -106,17 +130,6 @@
         background-image: url('~@/assets/images/icons/menu/redes.svg');
     }
 
-    a{
-        height: 100%;
-        width: 100%;
-        padding-left: 1rem;
-        color: var(--yellow);
-        font-size: 18px;
-        opacity: 0;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-    }
     .icon, .link{
         animation: fadeIn .3s ease-in-out forwards;
     }

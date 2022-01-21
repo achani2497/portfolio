@@ -62,12 +62,12 @@ export default {
     setup() {
         const trabajos =[
             {
-                titulo: 'IngeSystem',
-                descripcion: `IngeSystem es un sistema de almacenamiento y gestion de información relacionada a los trabajos que realiza la empresa Ingeray. Ayuda a facilitar el seguimiento de los trabajos realizados y los trabajos pendientes, así como tambien facilita el proceso de realizacion de presupuestos y de facturación.`,
+                titulo: 'IngeSystem⚡️',
+                descripcion: `IngeSystem⚡️es un sistema de almacenamiento y gestión de la información relacionada a los trabajos que realiza la empresa Ingeray. Ayuda a facilitar el seguimiento de los trabajos realizados y los trabajos pendientes, así como tambien facilita el proceso de realización de presupuestos y de facturación.`,
                 tareas:['Desarrollo Front-end', 'Desarrollo Back-end', 'Diseño de la UI'],
                 tecnologias:[
                     {
-                        nombre:'Laravel',
+                        nombre:'PHP (Laravel)',
                         img: 'laravel.svg'
                     },
                     {
@@ -101,6 +101,17 @@ export default {
                     {
                         nombre:'Express',
                         img: 'mongodb.svg'
+                    }
+                ],
+            },
+            {
+                titulo: 'Página principal de Ingeray',
+                descripcion: `Página de presentación e información de la empresa Ingeray S.R.L.`,
+                tareas:['Desarrollo Front-end'],
+                tecnologias:[
+                    {
+                        nombre:'Vue 3',
+                        img: 'vue.svg'
                     }
                 ],
             }
