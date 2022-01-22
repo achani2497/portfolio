@@ -15,7 +15,8 @@
                 </router-link>
                 <i 
                     :id="seccion.class" 
-                    :class="[seccion.icon, menuAbierto ? 'icon' : '']">
+                    :class="[menuAbierto ? 'icon' : '']">
+                    {{seccion.emoji}}
                 </i>
             </li>
         </ul>
@@ -38,11 +39,11 @@
         border-top-right-radius: 100px;
         border-bottom-right-radius: 100px;
         cursor: pointer;
-        box-shadow: 2px 1px 1px rgba(0,0,0,0.02), 
-                    2px 2px 2px rgba(0,0,0,0.06), 
-                    2px 4px 4px rgba(0,0,0,0.12), 
-                    2px 8px 8px rgba(0,0,0,0.16),
-                    2px 16px 16px rgba(0,0,0,0.2);
+        box-shadow: 6px 1px 1px rgba(0,0,0,0.02), 
+                    6px 2px 2px rgba(0,0,0,0.06), 
+                    6px 4px 4px rgba(0,0,0,0.12), 
+                    6px 8px 8px rgba(0,0,0,0.16),
+                    6px 16px 16px rgba(0,0,0,0.2);
         transition: .3s cubic-bezier(0.98, 0.23, 0.16, 1.28);
     }
     nav ul li{
@@ -76,15 +77,19 @@
         text-decoration: none;
         display: flex;
         align-items: center;
-        box-shadow: -5px 1px 1px rgba(0,0,0,0.02), 
-                    -5px 2px 2px rgba(0,0,0,0.06), 
-                    -5px 4px 4px rgba(0,0,0,0.12), 
-                    -5px 8px 8px rgba(0,0,0,0.16),
-                    -5px 16px 16px rgba(0,0,0,0.2);
+        box-shadow: -6px 1px 1px rgba(0,0,0,0.02), 
+                    -6px 2px 2px rgba(0,0,0,0.06), 
+                    -6px 4px 4px rgba(0,0,0,0.12), 
+                    -6px 8px 8px rgba(0,0,0,0.16),
+                    -6px 16px 16px rgba(0,0,0,0.2);
     }
     nav ul li i{
         color: white;
         opacity: 0;
+        height: 50px;
+        width: 50px;
+        font-size: 25px;
+        font-style: normal;
     }  
     nav ul li:not(.menuButton){
         justify-content: space-between;
@@ -184,7 +189,6 @@
             background-color: var(--violet);
             border-top-left-radius: 90px;
             border-bottom-left-radius: 90px;
-            /* z-index: -1; */
         }
     }
 </style>
@@ -198,31 +202,36 @@ export default {
                 nombre: 'Sobre mi',
                 url: '#sobre-mi',
                 class: 'l_sobreMi',
-                icon: 'sobre-mi'
+                icon: 'sobre-mi',
+                emoji: '👨🏽‍💻'
             },
             {
                 nombre: 'Habilidades',
                 url: '#habilidades',
                 class: 'l_habilidades',
-                icon: 'habilidades'
+                icon: 'habilidades',
+                emoji: '💻'
             },
             {
                 nombre: 'Mis Trabajos',
                 url: '#trabajos',
                 class: 'l_misTrabajos',
-                icon: 'trabajos'
+                icon: 'trabajos',
+                emoji: '💼'
             },
             {
                 nombre: 'Contacto',
                 url: '#contacto',
                 class: 'l_contacto',
-                icon: 'contacto'
+                icon: 'contacto',
+                emoji: '📱'
             },
             {
                 nombre: 'Redes Sociales',
                 url: '#redes',
                 class: 'l_redes',
-                icon: 'redes'
+                icon: 'redes',
+                emoji: '🌐'
             }
         ]
         const menu = () => {
