@@ -72,8 +72,8 @@ html{
   flex-direction: column;
 }
 .icon{
-  height: 30px;
-  width: 30px;
+  height: 50px;
+  width: 50px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -94,7 +94,9 @@ html{
 
 /* Para tablets   */
 @media screen and (min-width: 768px) {
-
+  :root{
+    --lateral-padding-mobile: 3rem
+  }
 }
 
 /* Para pantallas mas grandes */

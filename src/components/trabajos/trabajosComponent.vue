@@ -6,7 +6,7 @@
                 <div class="trabajos-image"></div>
             </div>
             <ul class="trabajos-galeria">
-                <li v-for="(trabajo, index) in trabajos" :key="index">
+                <li class="trabajo" v-for="(trabajo, index) in trabajos" :key="index">
                     <trabajo 
                         :titulo="trabajo.titulo" 
                         :descripcion="trabajo.descripcion"
@@ -50,7 +50,20 @@
 .trabajos-galeria{
     display: flex;
     flex-direction: column;
+    list-style: none;
     gap: 2rem;
+}
+@media screen and (min-width: 768px) {
+    .trabajos-galeria{
+        display: unset;
+        columns: 2;
+        column-gap: 2rem;
+    }
+    .trabajo{
+        display: inline-block;
+        margin: 0 0 2rem;
+        width: 100%;
+    }
 }
 </style>
 <script>
@@ -82,6 +95,17 @@ export default {
                 imagenes:['aboutme2.svg', 'skills2.svg']
             },
             {
+                titulo: 'Página principal de Ingeray',
+                descripcion: `Página de presentación e información de la empresa Ingeray S.R.L.`,
+                tareas:['Desarrollo Front-end'],
+                tecnologias:[
+                    {
+                        nombre:'Vue 3',
+                        img: 'vue.svg'
+                    }
+                ],
+            },
+            {
                 titulo: 'Ingeray Qr Maker',
                 descripcion: `Plataforma complementaria a IngeSystem utilizada para la creacion de códigos QR que facilitan la carga de pedidos de servicio técnico por parte del personal médico que opere el equipo.`,
                 tareas:['Desarrollo Front-end', 'Desarrollo Back-end', 'Diseño de la UI'],
@@ -101,17 +125,6 @@ export default {
                     {
                         nombre:'Express',
                         img: 'mongodb.svg'
-                    }
-                ],
-            },
-            {
-                titulo: 'Página principal de Ingeray',
-                descripcion: `Página de presentación e información de la empresa Ingeray S.R.L.`,
-                tareas:['Desarrollo Front-end'],
-                tecnologias:[
-                    {
-                        nombre:'Vue 3',
-                        img: 'vue.svg'
                     }
                 ],
             }

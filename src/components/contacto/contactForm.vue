@@ -23,16 +23,17 @@
                 </div>
             </div>
             <div class="form-footer">
-                <button type="submit" class="btn">Enviar!</button>
+                <button type="submit" class="btn">Enviar</button>
             </div>
         </form>
     </div>
 </template>
 <style scoped>
     .form-container{
-        border: 1px solid var(--yellow);
+        border: 1px solid rgb(235, 235, 235);
         padding: 1rem;
         border-radius: 15px;
+        width: 100%;
     }
     form{
         gap: 1rem;
@@ -77,6 +78,7 @@
         background-color: transparent;
         border: 1px solid var(--violet);
         font-size: 20px;
+        padding: 0 .3rem;
     }
     .input-form:focus~span::after{
         transform: scaleX(1);
@@ -93,6 +95,7 @@
         color: white;
         border: none;
         border-radius: 20px;
+        font-size: 18px;
         padding: .4rem;
         transition: all .3s ease-in-out;
         letter-spacing: 2px;
@@ -105,6 +108,11 @@
         cursor: pointer;
         box-shadow: none;
     }
+@media screen and (min-width: 768px) {
+    .form-container{
+        max-width: 500px;
+    }
+}
 </style>
 <script>
 export default {

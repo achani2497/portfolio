@@ -10,10 +10,22 @@
 </template>
 <style scoped>
 .sobre-mi-container{
+    align-items: center;
     padding: 3rem var(--lateral-padding-mobile) 5rem;
     background-color: var(--yellow);
     color: black;
     gap: 1rem;
 }
-
+img{
+    width: 100%;
+}
+@media screen and (min-width: 768px) {
+    .sobre-mi-container{
+        padding: 1rem var(--lateral-padding-mobile) 5rem;
+    }
+    img{
+        height: 300px;
+        width: 500px;
+    }
+}
 </style>

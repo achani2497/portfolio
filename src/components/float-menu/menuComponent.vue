@@ -133,7 +133,10 @@
     .icon, .link{
         animation: fadeIn .3s ease-in-out forwards;
     }
-
+    .icon{
+        height: 30px;
+        width: 30px;
+    }
     .l_sobreMi,#l_sobreMi{
         animation-delay: .1s;
     }

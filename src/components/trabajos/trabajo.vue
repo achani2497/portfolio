@@ -5,6 +5,7 @@
                 <div class="card--display flex flex-column">
                     <h2 class="titulo texto-semi-grande texto-centrado">{{titulo}}</h2>
                     <p class="texto-centrado texto-semi-medio">{{descripcion}}</p>
+                    <button class="work-button titulo box-shadow">Ver detalle técnicos</button>
                 </div>
                 <div class="card--hover flex flex-column">
                     <div class="list-container flex flex-column">
@@ -14,7 +15,7 @@
                         </ul>
                     </div>
                     <div class="list-container flex flex-column">
-                        <h4 class="titulo texto-medio yellow">Técnologias</h4>
+                        <h4 class="titulo texto-medio yellow">Stack</h4>
                         <ul class="flex flex-column">
                             <li class="texto-semi-medio" v-for="(tecnologia, index) in this.tecnologias" :key="index">{{tecnologia.nombre}}</li>
                         </ul>
@@ -82,15 +83,20 @@
         background-color: transparent;
         color: white;
         margin: 0 auto;
-        transition: all .3s ease-in-out;
+        transition: all .1s ease-in-out;
         font-weight: bold;
     }
-    .work-button:hover{
-        cursor: pointer;
+    .work-button:active{
         background-color: white;
         color: var(--violet);
         box-shadow: none;
     }
+    /* .work-button:hover{
+        cursor: pointer;
+        background-color: white;
+        color: var(--violet);
+        box-shadow: none;
+    } */
 </style>
 <script>
 export default {

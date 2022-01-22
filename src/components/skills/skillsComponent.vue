@@ -1,23 +1,24 @@
 <template>
     <div class="skills">
-        <div class="absolute-container flex flex-column box-shadow">
+        <div class="skill-container flex flex-column box-shadow">
             <div class="skills-titulo flex">
-                <div class="titulo texto-centrado texto-grande violet">Estas son mis skills!</div>
+                <div class="titulo texto-centrado texto-grande violet">Conozco estas tecnologías</div>
                 <div class="skills-image"></div>
             </div>
-            <div class="stacks flex flex-column">
-                <front-end></front-end>
+            <div class="stacks">
                 <back-end></back-end>
+                <front-end></front-end>
+                <tools></tools>
             </div>
         </div>
     </div>
 </template>
-<style >
+<style scoped>
 .skills{
     position: relative;
     padding: 5rem var(--lateral-padding-mobile);
 }
-.absolute-container{
+.skill-container{
     padding: 1rem;
     gap: 1rem;
     border-radius: 25px;
@@ -39,25 +40,34 @@
 }
 .stacks{
     gap: 3rem;
-}
-ul{
-    list-style: none;
-    gap: .5rem;
-}
-li{
     display: flex;
-    align-items: center;
-    gap: .5rem;
+    flex-direction: column;
+}
+@media screen and (min-width: 768px) {
+    .skills{
+        padding: var(--lateral-padding-mobile);
+    }
+    .stacks{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(40%, 25rem), 1fr));
+    }
+    li{
+        text-align: center;
+        justify-content: center;
+        background-color: turquoise;
+    }
 }
 </style>
 <script>
 import FrontEndComponent from './frontendComponent.vue'
 import BackEndComponent from './backendComponent.vue'
+import ToolsComponent from './toolsComponent.vue'
 
 export default {
     components:{
         'front-end': FrontEndComponent,
-        'back-end': BackEndComponent
+        'back-end': BackEndComponent,
+        'tools': ToolsComponent
     },
     setup() {
         

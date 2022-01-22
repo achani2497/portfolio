@@ -1,14 +1,18 @@
 <template>
     <div class="rrss-container flex flex-column">
-        <ul class="rrss flex">
-            <li :class="['rs-icon', 'box-shadow', rs.class_name]" v-for="(rs, index) in rrss" :key="index">
-                <a :href="rs.link"></a>
-            </li>
-        </ul>
+        <div class="rrss flex active">
+            <a v-for="(rs, index) in rrss" 
+                :key="index" 
+                :href="rs.link" 
+                :class="['rs-icon', 'box-shadow', rs.class_name]"
+                target="_blank" 
+                rel="noopener noreferrer">
+            </a>
+        </div>
         <div class="footer-text texto-centrado flex flex-column">
-            <span>Copyright © 2022</span>
-            <span>Página creada por Alejandro Ismael Chañi</span>
-            <span>Todos los derechos reservados</span>
+            <span>Hecho con Vue.js | Copyright © 2022.</span>
+            <span>Página creada por Alejandro Ismael Chañi.</span>
+            <span>Todos los derechos reservados.</span>
         </div>
     </div>
 </template>
@@ -21,20 +25,14 @@
     .rrss{
         gap: 1rem;
         justify-content: space-around;
+        list-style: none;
     }
     .rs-icon{
         height: 50px;
         width: 50px;
         background-position: center;
         background-repeat: no-repeat;
-        fill: white;
-        overflow: hidden;
         border: 1px solid white;
-        border-radius: 100%;
-    }
-    .rs-icon a{
-        height: 100%;
-        width: 100%;
         border-radius: 100%;
     }
     .github{
@@ -52,6 +50,11 @@
     .footer-text{
         color: hsl(266, 88%, 77%);
     }
+@media screen and (min-width: 768px){
+    .rrss-container{
+        padding: 2rem 8rem ;
+    }
+}
 </style>
 <script>
 export default {

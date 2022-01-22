@@ -8,6 +8,16 @@
 <style scoped>
 .contacto-container{
     padding: 5rem var(--lateral-padding-mobile);
+    align-items: center;
+}
+img{
+    width: 100%;
+    max-width: 500px;
+}
+@media screen and (min-width: 768px) {
+    .contact-container{
+        padding: var(--lateral-padding-mobile);
+    }
 }
 </style>
 <script>
