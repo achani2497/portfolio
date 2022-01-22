@@ -102,7 +102,12 @@ html{
 /* Para pantallas mas grandes */
 @media screen and (min-width: 1024px) {
   :root{
-    --lateral-padding-mobile: 12rem
+    --lateral-padding-mobile: 8rem
+  }
+}
+@media screen and (min-width: 1200px) {
+  :root{
+    --lateral-padding-mobile: 10rem
   }
 }
 

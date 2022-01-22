@@ -95,7 +95,6 @@
     }
     .rrss a.instagram-theme:hover{
         background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);        
-        /* background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); */
     }
     .rrss a:hover span{
         font-size: 22px;

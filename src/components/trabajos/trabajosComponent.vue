@@ -55,7 +55,8 @@
 }
 @media screen and (min-width: 768px) {
     .trabajos-container{
-        height: 1130px;
+        padding: 3rem var(--lateral-padding-mobile);
+        max-height: 1000px;
     }
     .trabajos-galeria{
         display: unset;
@@ -70,7 +71,14 @@
 }
 @media screen and (min-width: 1024px){
     .trabajos-container{
-        height: 900px;
+        padding: 3rem var(--lateral-padding-mobile);
+        height: 925px;
+    }
+}
+@media screen and (min-width: 1200px){
+    .trabajos-container{
+        padding: 3rem var(--lateral-padding-mobile) 1rem;
+        height: 870px;
     }
 }
 </style>
