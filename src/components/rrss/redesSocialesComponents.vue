@@ -4,9 +4,12 @@
             <a v-for="(rs, index) in rrss" 
                 :key="index" 
                 :href="rs.link" 
-                :class="['rs-icon', 'box-shadow', rs.class_name]"
+                :class="['box-shadow', 'flex', rs.class_name+'-theme']"
                 target="_blank" 
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"
+            >
+                <div :class="['rs-icon', rs.class_name]"></div>
+                <span> {{rs.nombre}} </span>
             </a>
         </div>
         <div class="footer-text texto-centrado flex flex-column">
@@ -27,13 +30,26 @@
         justify-content: space-around;
         list-style: none;
     }
-    .rs-icon{
+    .rrss a{
+        border-radius: 50px;
+        transition: all .3s ease-in-out;
+        border: 1px solid white;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+    .rrss a .rs-icon{
         height: 50px;
         width: 50px;
         background-position: center;
         background-repeat: no-repeat;
-        border: 1px solid white;
-        border-radius: 100%;
+        border-radius: 50px;
+        transition: all .3s ease-in-out;
+    }
+    .rrss a .rs-icon + span{
+        font-size: 0;
+        width: 0;
+        transition: all .4s ease-in;
     }
     .github{
         background-image: url('~@/assets/images/icons/rrss/github.svg');
@@ -53,6 +69,46 @@
 @media screen and (min-width: 768px){
     .rrss-container{
         padding: 2rem 8rem ;
+    }
+}
+@media screen and (min-width: 1024px){
+    .rrss-container{
+        padding: 2rem 16rem ;
+    }
+    .rrss a:hover{
+        animation: open .3s ease-in-out;
+        width: 170px;
+        box-shadow: none;
+        padding: 0 1rem;
+    }
+    .rrss a:hover span{
+        color: white;
+    }
+    .rrss a.linkedin-theme:hover{
+        background-color: #2867B2;
+    }
+    .rrss a.github-theme:hover{
+        background-color: black;
+    }
+    .rrss a.twitter-theme:hover{
+        background-color: #1DA1F2;
+    }
+    .rrss a.instagram-theme:hover{
+        background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);        
+        /* background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); */
+    }
+    .rrss a:hover span{
+        font-size: 22px;
+        width: 100%;
+        text-align: center;
+    }
+    @keyframes open{
+        0%{
+            width: 50px;
+        }
+        100%{
+            width: 150px;
+        }
     }
 }
 </style>

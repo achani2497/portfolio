@@ -1,6 +1,5 @@
 <template>
-    <div class="trabajos-container">
-        <div class="absolute-container flex flex-column">
+    <div class="trabajos-container flex flex-column">
             <div class="trabajos-titulo flex">
                 <div class="titulo texto-centrado texto-grande white">Estos son mis trabajos!</div>
                 <div class="trabajos-image"></div>
@@ -18,7 +17,8 @@
                     </trabajo>
                 </li>
             </ul>
-        </div>
+        <!-- <div class="absolute-container flex flex-column">
+        </div> -->
     </div>
 </template>
 <style scoped>
@@ -32,7 +32,7 @@
     margin: 0;
     border-radius: 25px;
     gap: 1rem;
-    background-color: var(--violet);
+    background-color: white;
 }
 .trabajos-titulo{
     position: relative;
@@ -54,6 +54,9 @@
     gap: 2rem;
 }
 @media screen and (min-width: 768px) {
+    .trabajos-container{
+        height: 1130px;
+    }
     .trabajos-galeria{
         display: unset;
         columns: 2;
@@ -63,6 +66,11 @@
         display: inline-block;
         margin: 0 0 2rem;
         width: 100%;
+    }
+}
+@media screen and (min-width: 1024px){
+    .trabajos-container{
+        height: 900px;
     }
 }
 </style>

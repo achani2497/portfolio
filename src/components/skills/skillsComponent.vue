@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px){
     .skills{
         padding: var(--lateral-padding-mobile);
     }
@@ -55,6 +55,11 @@
         text-align: center;
         justify-content: center;
         background-color: turquoise;
+    }
+}
+@media screen and (min-width: 1024px){
+    .skills{
+        padding: 5rem var(--lateral-padding-mobile);
     }
 }
 </style>

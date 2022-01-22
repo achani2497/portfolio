@@ -5,7 +5,7 @@
                 <div class="card--display flex flex-column">
                     <h2 class="titulo texto-semi-grande texto-centrado">{{titulo}}</h2>
                     <p class="texto-centrado texto-semi-medio">{{descripcion}}</p>
-                    <button class="work-button titulo box-shadow">Ver detalle técnicos</button>
+                    <button class="work-button titulo box-shadow technical-button">Ver detalles técnicos</button>
                 </div>
                 <div class="card--hover flex flex-column">
                     <div class="list-container flex flex-column">
@@ -91,12 +91,17 @@
         color: var(--violet);
         box-shadow: none;
     }
-    /* .work-button:hover{
+@media screen and (min-width: 1024px){
+    .work-button:hover{
         cursor: pointer;
         background-color: white;
         color: var(--violet);
         box-shadow: none;
-    } */
+    }
+    .technical-button{
+        display: none;
+    }
+}
 </style>
 <script>
 export default {
