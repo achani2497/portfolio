@@ -13,7 +13,7 @@
             </a>
         </div>
         <div class="footer-text texto-centrado flex flex-column">
-            <span>Hecho con Vue.js | Copyright © 2022.</span>
+            <span>Hecho con Vue.js 3 | Copyright © 2022.</span>
             <span>Página creada por Alejandro Ismael Chañi.</span>
             <span>Todos los derechos reservados.</span>
         </div>
