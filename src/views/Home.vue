@@ -30,6 +30,7 @@ import TrabajosComponent            from '../components/trabajos/trabajosCompone
 import ContactoComponent            from '../components/contacto/contactoComponent.vue'
 import RedesSociales                from '../components/rrss/redesSocialesComponents.vue'
 import Menu                         from '../components/float-menu/menuComponent.vue'
+import { onMounted } from 'vue'
 
 export default {
     components:{
@@ -42,7 +43,28 @@ export default {
         'menu-flotante':        Menu
     },
     setup() {
-        
-    },
+        var fadeInElements = []
+        const handleScroll = () => {
+            for (var i = 0; i < fadeInElements.length; i++) {
+                var elem = fadeInElements[i]
+                if(isElemVisible(elem)){
+                    elem.style.opacity = '1'
+                    elem.style.transform = 'scale(1)'
+                    fadeInElements.splice(i, 1)
+                }
+            }
+        }
+        const isElemVisible = (el) => {
+            var rect = el.getBoundingClientRect()
+            var elemTop = rect.top + 100 // 200 = buffer
+            var elemBottom = rect.bottom
+            return elemTop < window.innerHeight && elemBottom >= 0
+        }
+        onMounted(() => {
+            fadeInElements = Array.from(document.getElementsByClassName('fade-in'))
+            document.addEventListener('scroll', handleScroll)
+            handleScroll()
+        })
+    }
 }
 </script>

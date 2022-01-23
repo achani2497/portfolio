@@ -1,5 +1,5 @@
 <template>
-    <div class="form-container box-shadow">
+    <div class="form-container box-shadow fade-in">
         <form @submit.prevent="enviarMail" class="flex flex-column">
             <div class="form-body flex flex-column">
                 <div class="form-input-group">

@@ -26,6 +26,7 @@ html{
   --height-section-image: 200px;
 }
 .logo{
+  margin: 1rem;
   width: 70px;
   height: 70px;
   background-image: url('~@/assets/images/logo.png');
@@ -91,6 +92,28 @@ html{
               0 2px 4px rgba(0,0,0,0.1), 
               0 4px 8px rgba(0,0,0,0.14);
 }
+.fade-in{
+  opacity: 0;
+  transition: 0.3s all ease-out;
+  transform: scale(0.8);
+}
+
+@keyframes fadeIn{
+  0%{
+    opacity: 0;
+  }
+  40%{
+    opacity: .2;
+  }
+  80%{
+    opacity: .6;
+  }
+  100%{
+    opacity: 1;
+    transform: translateX(0)
+  }
+}
+
 
 /* Para tablets   */
 @media screen and (min-width: 768px) {

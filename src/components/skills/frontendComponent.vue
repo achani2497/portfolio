@@ -2,10 +2,10 @@
     <div class="techs-container flex flex-column">
         <div class="titulo texto-semi-grande texto-centrado violet">Front End</div>
         <ul class="flex">
-            <li class="texto-semi-medio"> <div class="icon html5"></div> HTML <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"> <div class="icon css3"></div> CSS <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"> <div class="icon js"></div> JS <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"> <div class="icon vue"></div> Vue.js (2/3)  <span>(Nivel: Medio)</span></li>
+            <li class="texto-semi-medio fade-in"> <div class="icon html5"></div> HTML <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"> <div class="icon css3"></div> CSS <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"> <div class="icon js"></div> JS <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"> <div class="icon vue"></div> Vue.js (2/3)  <span>(Nivel: Medio)</span></li>
         </ul>
     </div>
 </template>

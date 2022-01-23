@@ -2,9 +2,9 @@
     <div class="techs-container flex flex-column">
         <div class="titulo texto-semi-grande texto-centrado violet">Herramientas</div>
         <ul class="flex">
-            <li class="texto-semi-medio"><div class="icon github"></div>Github </li>
-            <li class="texto-semi-medio"><div class="icon postman"></div>Postman </li>
-            <li class="texto-semi-medio"><div class="icon figma"></div>Figma <span>(Nivel: Básico)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon github"></div>Github </li>
+            <li class="texto-semi-medio fade-in"><div class="icon postman"></div>Postman </li>
+            <li class="texto-semi-medio fade-in"><div class="icon figma"></div>Figma <span>(Nivel: Básico)</span> </li>
         </ul>
     </div>
 </template>

@@ -2,13 +2,13 @@
     <div class="techs-container flex flex-column">
         <div class="titulo texto-semi-grande texto-centrado violet">Back End</div>
         <ul class="flex">
-            <li class="texto-semi-medio"><div class="icon php"></div>PHP <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"><div class="icon laravel"></div>Laravel <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"><div class="icon nodejs"></div>Node Js <span>(Nivel: Básico)</span> </li>
-            <li class="texto-semi-medio"><div class="icon mysql"></div>MySQL <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"><div class="icon sql"></div>SQL Server <span>(Nivel: Medio)</span> </li>
-            <li class="texto-semi-medio"><div class="icon mongodb"></div>Mongo DB <span>(Nivel: Básico)</span> </li>
-            <li class="texto-semi-medio"><div class="icon express"></div>Express <span>(Nivel: Básico)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon php"></div>PHP <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon laravel"></div>Laravel <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon nodejs"></div>Node Js <span>(Nivel: Básico)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon mysql"></div>MySQL <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon sql"></div>SQL Server <span>(Nivel: Medio)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon mongodb"></div>Mongo DB <span>(Nivel: Básico)</span> </li>
+            <li class="texto-semi-medio fade-in"><div class="icon express"></div>Express <span>(Nivel: Básico)</span> </li>
         </ul>
     </div>
 </template>

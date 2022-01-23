@@ -2,7 +2,7 @@
     <div class="skills">
         <div class="skill-container flex flex-column box-shadow">
             <div class="skills-titulo flex">
-                <div class="titulo texto-centrado texto-grande violet">Conozco estas tecnologías</div>
+                <div class="titulo texto-centrado texto-grande violet">Uso estas tecnologías</div>
                 <div class="skills-image"></div>
             </div>
             <div class="stacks">
@@ -73,9 +73,6 @@ export default {
         'front-end': FrontEndComponent,
         'back-end': BackEndComponent,
         'tools': ToolsComponent
-    },
-    setup() {
-        
-    },
+    }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
     <div class="trabajos-container flex flex-column">
             <div class="trabajos-titulo flex">
-                <div class="titulo texto-centrado texto-grande white">Estos son mis trabajos!</div>
+                <div class="titulo texto-centrado texto-grande white">Estos son mis trabajos</div>
                 <div class="trabajos-image"></div>
             </div>
             <ul class="trabajos-galeria">
-                <li class="trabajo" v-for="(trabajo, index) in trabajos" :key="index">
+                <li class="trabajo fade-in" v-for="(trabajo, index) in trabajos" :key="index">
                     <trabajo 
                         :titulo="trabajo.titulo" 
                         :descripcion="trabajo.descripcion"
@@ -17,8 +17,6 @@
                     </trabajo>
                 </li>
             </ul>
-        <!-- <div class="absolute-container flex flex-column">
-        </div> -->
     </div>
 </template>
 <style scoped>
