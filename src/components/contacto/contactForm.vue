@@ -4,17 +4,17 @@
             <div class="form-body flex flex-column">
                 <div class="form-input-group">
                     <label for="nombre" class="titulo">¿Cómo te llamas?</label>
-                    <input type="text" name="nombre" id="nombre" class="input-form">
+                    <input type="text" name="nombre" id="nombre" class="input-form" autocomplete="off">
                     <span></span>
                 </div>
                 <div class="form-input-group">
                     <label for="telefono" class="titulo">¿Cómo es tu numero de teléfono?</label>
-                    <input type="text" name="telefono" id="telefono" class="input-form">
+                    <input type="text" name="telefono" id="telefono" class="input-form" autocomplete="off">
                     <span></span>
                 </div>
                 <div class="form-input-group">
                     <label for="mail" class="titulo">¿Cómo es tu mail?</label>
-                    <input type="text" name="mail" id="mail" class="input-form">
+                    <input type="text" name="mail" id="mail" class="input-form" autocomplete="off">
                     <span></span>
                 </div>
                 <div class="form-input-group">
@@ -23,7 +23,10 @@
                 </div>
             </div>
             <div class="form-footer">
-                <button type="submit" class="btn">Enviar</button>
+                <button type="submit" class="btn flex" id="sendButton">
+                    <div class="button-text titulo" id="textButton">Enviar</div>
+                    <i id="plane"></i>
+                </button>
             </div>
         </form>
     </div>
@@ -31,7 +34,7 @@
 <style scoped>
     .form-container{
         border: 1px solid rgb(235, 235, 235);
-        padding: 1rem;
+        padding: 2rem;
         border-radius: 15px;
         width: 100%;
     }
@@ -84,20 +87,24 @@
         transform: scaleX(1);
         width: 100%;
         height: 2px;
-        background-color: var(--violet);
+        background-color: var(--yellow);
     }
     .input-form, textarea:focus{
         outline: none;
     }
     .btn{
+        position: relative;
         width: 100%;
-        background-color: rgb(53, 177, 0);
-        color: white;
-        border: none;
+        background-color: transparent;
+        color: var(--violet);
+        border: 1px solid var(--violet);
         border-radius: 20px;
-        font-size: 18px;
+        height: 35px;
         padding: .4rem;
         transition: all .3s ease-in-out;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
         letter-spacing: 2px;
         box-shadow: 0 1px 1px rgba(0,0,0,0.02), 
                     0 2px 2px rgba(0,0,0,0.06), 
@@ -106,7 +113,38 @@
     }
     .btn:hover{
         cursor: pointer;
+        background-color: var(--violet);
+        color: white;
         box-shadow: none;
+    }
+    .button-text{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    i{
+        height: 35px;
+        width: 35px;
+        display: none;
+    }
+    .plane{
+        background-image: url('~@/assets/images/icons/plane.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        transform: translateX(-200px);
+        display: block;
+    }
+    .fly{
+        animation: fly 1.5s forwards;
+        animation-timing-function: cubic-bezier(.85,.11,.41,.96);
+    }
+    @keyframes fly{
+        from{
+            transform: translateX(-200px) rotate(45deg);
+        }
+        to{
+            transform: translateX(250px) rotate(45deg);
+        }
     }
 @media screen and (min-width: 768px) {
     .form-container{
@@ -117,11 +155,29 @@
 <script>
 export default {
     setup() {
+        const animarBoton = () => {
+            let boton = document.getElementById('sendButton')
+            let texto = document.getElementById('textButton')
+            let avion = document.getElementById('plane')
+            texto.style.display = 'none'
+            avion.classList.add('fly')
+            avion.classList.add('plane')
+            setTimeout(() => {
+                avion.style.display = 'none'
+                boton.style.boxShadow = 'none'
+                boton.style.backgroundColor = 'rgb(53, 177, 0)'
+                texto.innerHTML = '!Enviado!'
+                texto.style.display = 'block'
+                texto.style.color = 'white'
+            }, 1600)
+
+        }
         const enviarMail = () => {
-            console.log('Mando mail')
+            animarBoton()
         }
         return {
-            enviarMail
+            enviarMail,
+            animarBoton
         }
     },
 }
