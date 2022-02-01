@@ -32,7 +32,7 @@ html{
   background-image: url('~@/assets/images/logo.png');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 250%;
+  background-size: cover;
 }
 .titulo{
   font-family: 'Archivo', sans-serif;
