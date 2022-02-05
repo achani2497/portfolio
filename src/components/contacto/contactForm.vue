@@ -23,7 +23,9 @@
                 </div>
             </div>
             <div class="form-footer">
+
                 <button type="submit" class="btn flex" id="sendButton">
+                    <button @click="recaptcha()">Recaptcha</button>
                     <div class="button-text titulo" id="textButton">Enviar</div>
                     <i id="plane"></i>
                 </button>
@@ -153,6 +155,8 @@
 }
 </style>
 <script>
+import { useReCaptcha } from 'vue-recaptcha-v3'
+
 export default {
     setup() {
         const animarBoton = () => {
@@ -175,10 +179,20 @@ export default {
         const enviarMail = () => {
             animarBoton()
         }
+        const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+        const recaptcha = async () => {
+            // (optional) Wait until recaptcha has been loaded.
+            await recaptchaLoaded()
+            // Execute reCAPTCHA with action "login".
+            const token = await executeRecaptcha('login')
+            // Do stuff with the received token.
+            console.log(token)
+        }
         return {
             enviarMail,
-            animarBoton
+            animarBoton,
+            recaptcha
         }
-    },
+    }
 }
 </script>
