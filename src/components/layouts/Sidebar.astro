@@ -1,0 +1,61 @@
+---
+import { Home, LayoutGrid, Mail, MessageSquare, Shapes } from "lucide-react";
+import SideBarItem from "../ui/SideBarItem.astro";
+
+const items = [
+  { icon: Home, label: "Introducción" },
+  { icon: MessageSquare, label: "Asistente virtual" },
+  { icon: LayoutGrid, label: "Experiencia y Educación" },
+  { icon: Shapes, label: "Tecnologías" },
+  { icon: Mail, label: "Contacto" },
+];
+---
+
+<aside
+  id="sidebar"
+  class="group fixed left-6 top-1/2 -translate-y-1/2 z-50 bg-surface rounded-4xl p-2 shadow-neumorphic flex flex-col items-stretch gap-2 w-fit hover:w-fit"
+>
+  {
+    items.map((item, index) => {
+      const Icon = item.icon;
+
+      return <SideBarItem icon={Icon} label={item.label} />;
+    })
+  }
+</aside>
+
+<!-- SCRIPT CLIENTE -->
+<script is:inline>
+  if (typeof window !== "undefined") {
+    const items = document.querySelectorAll(".sidebar-item");
+
+    items.forEach((item) => {
+      item.addEventListener("click", () => {
+        items.forEach((el) => {
+          el.classList.remove(
+            "bg-surface",
+            "shadow-neumorphic-inset",
+            "text-text-primary",
+          );
+          el.classList.add("text-text-secondary");
+        });
+
+        item.classList.add(
+          "bg-surface",
+          "shadow-neumorphic-inset",
+          "text-text-primary",
+        );
+        item.classList.remove("text-text-secondary");
+      });
+    });
+
+    // estado inicial
+    if (items[0]) {
+      items[0].classList.add(
+        "bg-surface",
+        "shadow-neumorphic-inset",
+        "text-text-primary",
+      );
+    }
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  icon: any;
+  label: string;
+}
+
+const { icon: Icon, label } = Astro.props;
+---
+
+<div
+  class="sidebar-item flex w-fit items-center py-3 px-4 rounded-full cursor-pointer text-text-secondary text-left group-hover:w-full"
+>
+  {/* ICONO */}
+  <Icon className="w-5 h-5 shrink-0" />
+
+  {/* LABEL */}
+  <span
+    class="whitespace-nowrap overflow-hidden
+         max-w-0 opacity-0 p-0
+         group-hover:max-w-fit group-hover:opacity-100 group-hover:pl-3"
+  >
+    {label}
+  </span>
+</div>
