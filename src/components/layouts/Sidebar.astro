@@ -13,7 +13,7 @@ const items = [
 
 <aside
   id="sidebar"
-  class="group fixed left-6 top-1/2 -translate-y-1/2 z-50 bg-surface rounded-4xl p-2 shadow-neumorphic flex flex-col items-stretch gap-2 w-fit hover:w-fit"
+  class="group fixed left-6 top-1/2 -translate-y-1/2 z-50 bg-surface rounded-4xl p-2 shadow-neumorphic flex flex-col items-stretch gap-2 w-fit max-w-20 hover:max-w-[24rem] overflow-hidden opacity-0 -translate-x-2 pointer-events-none transition-[opacity,transform,max-width] duration-600 ease-in-out"
 >
   {
     items.map((item, index) => {
@@ -27,7 +27,18 @@ const items = [
 <!-- SCRIPT CLIENTE -->
 <script is:inline>
   if (typeof window !== "undefined") {
+    const sidebar = document.querySelector("#sidebar");
     const items = document.querySelectorAll(".sidebar-item");
+
+    if (sidebar) {
+      setTimeout(() => {
+        sidebar.classList.remove(
+          "opacity-0",
+          "-translate-x-2",
+          "pointer-events-none",
+        );
+      }, 700);
+    }
 
     items.forEach((item) => {
       item.addEventListener("click", () => {
