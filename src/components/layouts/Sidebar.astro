@@ -3,33 +3,43 @@ import { Home, LayoutGrid, Mail, MessageSquare, Shapes } from "lucide-react";
 import SideBarItem from "../ui/SideBarItem.astro";
 
 const items = [
-  { icon: Home, label: "Introducción" },
-  { icon: MessageSquare, label: "Asistente virtual" },
-  { icon: LayoutGrid, label: "Experiencia y Educación" },
-  { icon: Shapes, label: "Tecnologías" },
-  { icon: Mail, label: "Contacto" },
+  { id: "1", icon: Home, label: "Introducción" },
+  { id: "3", icon: MessageSquare, label: "Asistente virtual" },
+  { id: "4", icon: LayoutGrid, label: "Experiencia y Educación" },
+  { id: "5", icon: Shapes, label: "Tecnologías" },
+  { id: "6", icon: Mail, label: "Contacto" },
 ];
 ---
 
 <aside
   id="sidebar"
   class="group fixed left-6 top-1/2 -translate-y-1/2 z-50 bg-surface rounded-4xl p-2 shadow-neumorphic flex flex-col items-stretch gap-2 w-fit max-w-20 hover:max-w-[24rem] overflow-hidden opacity-0 -translate-x-2 pointer-events-none transition-[opacity,transform,max-width] duration-600 ease-in-out"
+  style="visibility: hidden;"
 >
+  <!-- INDICADOR -->
+  <div
+    id="sidebar-indicator"
+    class="absolute left-2 right-2 rounded-full bg-surface shadow-neumorphic-inset transition-all duration-300 ease-in-out pointer-events-none z-0"
+    style="top: 0px;"
+  >
+  </div>
+
   {
-    items.map((item, index) => {
+    items.map((item) => {
       const Icon = item.icon;
 
-      return <SideBarItem icon={Icon} label={item.label} />;
+      return <SideBarItem icon={Icon} label={item.label} id={item.id} />;
     })
   }
 </aside>
 
-<!-- SCRIPT CLIENTE -->
 <script is:inline>
   if (typeof window !== "undefined") {
     const sidebar = document.querySelector("#sidebar");
     const items = document.querySelectorAll(".sidebar-item");
+    const indicator = document.getElementById("sidebar-indicator");
 
+    // animación inicial
     if (sidebar) {
       setTimeout(() => {
         sidebar.classList.remove(
@@ -37,36 +47,65 @@ const items = [
           "-translate-x-2",
           "pointer-events-none",
         );
-      }, 700);
+
+        sidebar.style.visibility = "visible";
+      }, 400);
     }
 
-    items.forEach((item) => {
-      item.addEventListener("click", () => {
-        items.forEach((el) => {
-          el.classList.remove(
-            "bg-surface",
-            "shadow-neumorphic-inset",
-            "text-text-primary",
-          );
-          el.classList.add("text-text-secondary");
-        });
+    function moveIndicator(index) {
+      const item = items[index];
+      if (!item || !indicator) return;
 
-        item.classList.add(
-          "bg-surface",
-          "shadow-neumorphic-inset",
-          "text-text-primary",
-        );
-        item.classList.remove("text-text-secondary");
+      indicator.style.top = `${item.offsetTop}px`;
+      indicator.style.height = `${item.offsetHeight}px`;
+
+      activeIndex = index;
+    }
+
+    // click
+    items.forEach((item, index) => {
+      item.addEventListener("click", () => {
+        const id = item.getAttribute("data-id");
+        const section = document.getElementById(id);
+
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+
+        moveIndicator(index);
       });
     });
 
+    // scroll tracking
+    const sections = Array.from(items).map((item) =>
+      document.getElementById(item.getAttribute("data-id")),
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = sections.findIndex((sec) => sec === entry.target);
+            if (index !== -1) {
+              moveIndicator(index);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.6,
+      },
+    );
+
+    sections.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
     // estado inicial
-    if (items[0]) {
-      items[0].classList.add(
-        "bg-surface",
-        "shadow-neumorphic-inset",
-        "text-text-primary",
-      );
+    if (items.length > 0) {
+      requestAnimationFrame(() => {
+        moveIndicator(0);
+      });
     }
   }
 </script>

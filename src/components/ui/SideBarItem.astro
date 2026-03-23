@@ -2,13 +2,15 @@
 interface Props {
   icon: any;
   label: string;
+  id: string;
 }
 
-const { icon: Icon, label } = Astro.props;
+const { icon: Icon, label, id } = Astro.props;
 ---
 
 <div
-  class="sidebar-item flex w-full items-center py-2 px-3 rounded-full cursor-pointer text-text-secondary text-left"
+  data-id={id}
+  class="sidebar-item z-10 relative flex w-full items-center py-2 px-3 rounded-full cursor-pointer text-text-secondary text-left"
 >
   {/* ICONO */}
   <Icon className="w-5 h-5 shrink-0" />
