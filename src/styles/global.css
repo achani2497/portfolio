@@ -72,3 +72,9 @@
     inset 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.4),
     inset -0.25rem -0.25rem 0.5rem rgba(255,255,255,0.05);
 }
+
+@layer utilities {
+  .font-display {
+    font-weight: 900;
+  }
+}

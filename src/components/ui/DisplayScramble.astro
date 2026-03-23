@@ -1,0 +1,176 @@
+---
+interface Props {
+  text: string;
+  as?: string;
+  class?: string;
+  delay?: number;
+  duration?: number;
+  scrambleChars?: string;
+  scrambleStepMs?: number;
+  initialCharCount?: number;
+  respectReducedMotion?: boolean;
+}
+
+const {
+  text,
+  as = "span",
+  class: className = "",
+  delay = 0,
+  duration = 900,
+  scrambleChars = "",
+  scrambleStepMs = 90,
+  initialCharCount = text.length,
+  respectReducedMotion = false,
+} = Astro.props as Props;
+
+const Tag = as as any;
+const charSource = (scrambleChars.trim().length > 0 ? scrambleChars : text).replaceAll(
+  " ",
+  "",
+);
+const charPool = Array.from(charSource.length > 0 ? charSource : "X");
+const getRandomChar = () =>
+  charPool[Math.floor(Math.random() * charPool.length)] ?? "X";
+const safeInitialCharCount = Math.max(1, Math.floor(initialCharCount));
+const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
+  getRandomChar(),
+).join("");
+---
+
+<Tag
+  class={`font-display ${className}`.trim()}
+  data-scramble
+  data-text={text}
+  data-delay={String(delay)}
+  data-duration={String(duration)}
+  data-chars={charSource}
+  data-step-ms={String(scrambleStepMs)}
+  data-initial-char-count={String(safeInitialCharCount)}
+  data-respect-reduced-motion={String(respectReducedMotion)}
+  >{initialScramble}</Tag
+>
+
+<script is:inline>
+  const initScrambleText = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const scrambleElements = document.querySelectorAll(
+      "[data-scramble]:not([data-scramble-init])",
+    );
+
+    scrambleElements.forEach((element) => {
+      element.setAttribute("data-scramble-init", "true");
+
+      const finalText =
+        element.getAttribute("data-text") ?? element.textContent ?? "";
+      const delay = Number(element.getAttribute("data-delay") ?? 0);
+      const duration = Math.max(
+        200,
+        Number(element.getAttribute("data-duration") ?? 900),
+      );
+      const scrambleStepMs = Math.max(
+        16,
+        Number(element.getAttribute("data-step-ms") ?? 90),
+      );
+      const initialCharCount = Math.max(
+        1,
+        Math.floor(
+          Number(element.getAttribute("data-initial-char-count") ?? finalText.length),
+        ),
+      );
+      const charsSource = (
+        element.getAttribute("data-chars") ||
+        finalText ||
+        "X"
+      ).replaceAll(" ", "");
+      const chars = Array.from(charsSource.length > 0 ? charsSource : "X");
+      const getRandomChar = () =>
+        chars[Math.floor(Math.random() * chars.length)] ?? "X";
+      const respectReducedMotion =
+        element.getAttribute("data-respect-reduced-motion") === "true";
+
+      if (respectReducedMotion && prefersReducedMotion) {
+        element.textContent = finalText;
+        return;
+      }
+
+      const getScrambledText = (length = finalText.length) => {
+        let output = "";
+        const safeLength = Math.max(1, Math.floor(length));
+
+        for (let index = 0; index < safeLength; index += 1) {
+          output += getRandomChar();
+        }
+
+        return output;
+      };
+
+      // Evita mostrar el texto final antes de que inicie la animación.
+      element.textContent = getScrambledText(initialCharCount);
+
+      const renderFrame = (progress) => {
+        const currentLength = Math.max(
+          1,
+          Math.round(
+            initialCharCount + (finalText.length - initialCharCount) * progress,
+          ),
+        );
+        const revealCount = Math.floor(progress * Math.min(currentLength, finalText.length));
+        let output = "";
+
+        for (let index = 0; index < currentLength; index += 1) {
+          if (index < finalText.length) {
+            const currentChar = finalText[index];
+
+            if (index < revealCount) {
+              output += currentChar;
+            } else {
+              output += getRandomChar();
+            }
+          } else {
+            output += getRandomChar();
+          }
+        }
+
+        element.textContent = output;
+      };
+
+      const runScramble = () => {
+        const start = performance.now();
+        let lastShuffleAt = start;
+
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          if (now - lastShuffleAt >= scrambleStepMs || progress >= 1) {
+            renderFrame(progress);
+            lastShuffleAt = now;
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            element.textContent = finalText;
+          }
+        };
+
+        requestAnimationFrame(tick);
+      };
+
+      if (delay > 0) {
+        window.setTimeout(runScramble, delay);
+      } else {
+        runScramble();
+      }
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScrambleText, {
+      once: true,
+    });
+  } else {
+    initScrambleText();
+  }
+</script>

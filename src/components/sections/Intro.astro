@@ -1,5 +1,6 @@
 ---
 import { Github, Linkedin, Mail } from "lucide-react";
+import DisplayScramble from "../ui/DisplayScramble.astro";
 import SocialButton from "../ui/SocialButton.astro";
 ---
 
@@ -8,7 +9,16 @@ import SocialButton from "../ui/SocialButton.astro";
     <h2 class="font-sans text-text-secondary text-lg -mb-4">
       Full Stack Developer
     </h2>
-    <h1 class="font-display text-5xl tracking-wide">Alejandro Ismael Chañi</h1>
+    <DisplayScramble
+      as="h1"
+      text="Alejandro Ismael Chañi"
+      class="text-5xl tracking-wide"
+      delay={300}
+      duration={800}
+      scrambleStepMs={40}
+      initialCharCount={30}
+      scrambleChars="X"
+    />
     <p class="font-sans text-text-secondary max-w-xl leading-relaxed mb-6">
       Ingeniero en Sistemas de Información y Desarrollador Full Stack con 5 años
       de experiencia construyendo aplicaciones web escalables y orientadas a
