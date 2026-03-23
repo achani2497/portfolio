@@ -4,8 +4,8 @@ import DisplayScramble from "../ui/DisplayScramble.astro";
 import SocialButton from "../ui/SocialButton.astro";
 ---
 
-<section class="relative w-full overflow-hidden" id="intro">
-  <div class="flex flex-col gap-4 max-w-5xl mx-auto px-6 pb-4">
+<section class="relative w-full" id="intro">
+  <div class="flex flex-col gap-4 mx-auto">
     <h2 class="font-sans text-text-secondary text-lg -mb-4">
       Full Stack Developer
     </h2>
@@ -19,7 +19,9 @@ import SocialButton from "../ui/SocialButton.astro";
       initialCharCount={30}
       scrambleChars="X"
     />
-    <p class="font-sans text-text-secondary max-w-xl leading-relaxed mb-6">
+    <p
+      class="font-sans text-text-secondary text-justify md:text-left max-w-xl leading-relaxed mb-6"
+    >
       Ingeniero en Sistemas de Información y Desarrollador Full Stack con 5 años
       de experiencia construyendo aplicaciones web escalables y orientadas a
       producto. Con experiencia principalmente en React y Node.js, trabajando en
@@ -29,7 +31,7 @@ import SocialButton from "../ui/SocialButton.astro";
       evolucionar hacia roles de liderazgo técnico.
     </p>
 
-    <div class="flex gap-6">
+    <div class="flex gap-6 flex-wrap md:flex-nowrap">
       <SocialButton
         href="https://github.com/achani2497"
         label="GitHub"

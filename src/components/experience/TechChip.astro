@@ -1,0 +1,63 @@
+---
+import type { SimpleIcon } from "simple-icons";
+import {
+  siAngular,
+  siDjango,
+  siExpress,
+  siLaravel,
+  siMongodb,
+  siMysql,
+  siNodedotjs,
+  siNestjs,
+  siPhp,
+  siPostgresql,
+  siReact,
+  siTypescript,
+  siVuedotjs,
+} from "simple-icons";
+
+interface Props {
+  label: string;
+  icon?: string;
+}
+
+const { label } = Astro.props;
+
+const techIconMap: Record<string, SimpleIcon> = {
+  React: siReact,
+  "React Native": siReact,
+  TypeScript: siTypescript,
+  "Node.js": siNodedotjs,
+  "Express.js": siExpress,
+  MongoDB: siMongodb,
+  Angular: siAngular,
+  NestJS: siNestjs,
+  Django: siDjango,
+  PostgreSQL: siPostgresql,
+  MySQL: siMysql,
+  Vue: siVuedotjs,
+  Laravel: siLaravel,
+  PHP: siPhp,
+};
+
+const iconData = techIconMap[label];
+---
+
+<div
+  class="flex items-center gap-2 px-3 py-1.5 rounded-full
+  bg-surface shadow-neumorphic-inset text-text-secondary text-sm"
+>
+  {
+    iconData && (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        class="w-4 h-4 shrink-0 fill-current"
+        role="img"
+      >
+        <path d={iconData.path}></path>
+      </svg>
+    )
+  }
+  <span>{label}</span>
+</div>

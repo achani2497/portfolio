@@ -24,10 +24,9 @@ const {
 } = Astro.props as Props;
 
 const Tag = as as any;
-const charSource = (scrambleChars.trim().length > 0 ? scrambleChars : text).replaceAll(
-  " ",
-  "",
-);
+const charSource = (
+  scrambleChars.trim().length > 0 ? scrambleChars : text
+).replaceAll(" ", "");
 const charPool = Array.from(charSource.length > 0 ? charSource : "X");
 const getRandomChar = () =>
   charPool[Math.floor(Math.random() * charPool.length)] ?? "X";
@@ -38,7 +37,7 @@ const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
 ---
 
 <Tag
-  class={`font-display ${className}`.trim()}
+  class={`font-display wrap-break-word ${className}`.trim()}
   data-scramble
   data-text={text}
   data-delay={String(delay)}
@@ -77,7 +76,9 @@ const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
       const initialCharCount = Math.max(
         1,
         Math.floor(
-          Number(element.getAttribute("data-initial-char-count") ?? finalText.length),
+          Number(
+            element.getAttribute("data-initial-char-count") ?? finalText.length,
+          ),
         ),
       );
       const charsSource = (
@@ -117,7 +118,9 @@ const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
             initialCharCount + (finalText.length - initialCharCount) * progress,
           ),
         );
-        const revealCount = Math.floor(progress * Math.min(currentLength, finalText.length));
+        const revealCount = Math.floor(
+          progress * Math.min(currentLength, finalText.length),
+        );
         let output = "";
 
         for (let index = 0; index < currentLength; index += 1) {
