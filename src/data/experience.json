@@ -34,7 +34,7 @@
         { "label": "Django", "icon": "siDjango" },
         { "label": "PostgreSQL", "icon": "siPostgresql" },
         { "label": "MySQL", "icon": "siMysql" },
-        { "label": "Amazon S3", "icon": "siAmazon" }
+        { "label": "Amazon S3", "icon": "aws" }
       ]
     },
     {

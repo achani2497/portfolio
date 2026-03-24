@@ -1,5 +1,5 @@
 ---
-import { getIcon } from "../../utils/getIcon";
+import Icon from "./Icon.astro";
 
 interface Props {
   href: string;
@@ -8,8 +8,6 @@ interface Props {
 }
 
 const { href, label, icon } = Astro.props;
-
-const iconData = getIcon(icon);
 ---
 
 <a
@@ -18,19 +16,7 @@ const iconData = getIcon(icon);
   rel="noopener noreferrer"
   class="group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-surface shadow-neumorphic transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-neumorphic-hover active:translate-y-0 active:shadow-neumorphic-inset w-full text-center justify-center"
 >
-  {
-    iconData && (
-      <svg
-        viewBox="0 0 24 24"
-        class="w-4 h-4 shrink-0 transition-all duration-200
-       text-text-primary group-hover:text-(--tech-color) group-hover:scale-110"
-        style={`--tech-color: #${iconData.hex}`}
-        fill="currentColor"
-      >
-        <path d={iconData.path} />
-      </svg>
-    )
-  }
+  <Icon icon={icon} />
 
   <span
     class="font-sans text-text-secondary group-hover:text-text-primary transition-colors duration-200"

@@ -1,0 +1,41 @@
+---
+import { getIconData } from "../../utils/getIcon";
+
+interface Props {
+  icon: string;
+  class?: string;
+}
+
+const { icon, class: className = "" } = Astro.props;
+
+const iconData = getIconData(icon);
+---
+
+{
+  iconData?.type === "simple" && (
+    <svg
+      viewBox="0 0 24 24"
+      class={`w-4 h-4 shrink-0 transition-all duration-200
+        ${className}
+        text-text-primary
+        group-hover:text-(--tech-color)
+        group-hover:scale-110`}
+      style={`--tech-color: #${iconData.icon.hex}`}
+      fill="currentColor"
+    >
+      <path d={iconData.icon.path} />
+    </svg>
+  )
+}
+
+{
+  iconData?.type === "lucide" && (
+    <iconData.icon
+      className={`w-4 h-4 shrink-0 transition-all duration-200
+        ${className}
+        text-text-primary
+        group-hover:text-lilac-600
+        group-hover:scale-110`}
+    />
+  )
+}
