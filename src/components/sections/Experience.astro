@@ -30,23 +30,8 @@ const experiences = [
   </div>
 </section>
 
-<script is:inline>
-  if (typeof window !== "undefined") {
-    const cards = document.querySelectorAll(".experience-card");
+<script>
+  import { applyFadeInEffect } from "../../utils/fadeInEffect";
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, index) => {
-          if (entry.isIntersecting) {
-            entry.target.style.transitionDelay = `${index * 0.2}s`;
-
-            entry.target.classList.remove("opacity-0", "translate-y-4");
-          }
-        });
-      },
-      { threshold: 0.3 },
-    );
-
-    cards.forEach((card) => observer.observe(card));
-  }
+  applyFadeInEffect(".experience-card");
 </script>

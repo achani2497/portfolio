@@ -1,0 +1,35 @@
+---
+import { technologies } from "../../data/technologies.json";
+import DisplayScramble from "../ui/DisplayScramble.astro";
+import Icon from "../ui/Icon.astro";
+---
+
+<section id="technologies" class="flex flex-col gap-6 sm:gap-8 px-4 sm:px-0">
+  <DisplayScramble
+    as="h1"
+    text="Tecnologías"
+    class="text-3xl tracking-wide"
+    delay={300}
+    duration={800}
+    scrambleStepMs={40}
+    initialCharCount={30}
+    scrambleChars="X"
+  />
+  <div class="gap-4 w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
+    {
+      technologies.map((technology) => (
+        <div class="group grid grid-cols-1 shadow-neumorphic rounded-xl bg-surface place-items-center gap-4 p-4 hover:-translate-y-1 transition-all duration-500 ease-in-out">
+          <Icon icon={technology.icon} />
+          <div class="flex flex-col items-center justify-center gap-1">
+            <span class="font-sans text-lg text-text-primary">
+              {technology.label}
+            </span>
+            <span class="font-sans text-sm text-text-secondary">
+              {technology.level}
+            </span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

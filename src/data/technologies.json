@@ -1,0 +1,18 @@
+{
+  "technologies": [
+    { "label": "React", "icon": "siReact", "level": "Avanzado" },
+    { "label": "TypeScript", "icon": "siTypescript", "level": "Intermedio" },
+    { "label": "Node.js", "icon": "siNodedotjs", "level": "Intermedio" },
+    { "label": "Express.js", "icon": "siExpress", "level": "Intermedio" },
+    { "label": "MongoDB", "icon": "siMongodb", "level": "Intermedio" },
+    { "label": "React Native", "icon": "siReact", "level": "Básico" },
+    { "label": "Angular", "icon": "siAngular", "level": "Básico" },
+    { "label": "NestJS", "icon": "siNestjs", "level": "Intermedio" },
+    { "label": "Django", "icon": "siDjango", "level": "Básico" },
+    { "label": "PostgreSQL", "icon": "siPostgresql", "level": "Intermedio" },
+    { "label": "MySQL", "icon": "siMysql", "level": "Intermedio" },
+    { "label": "Amazon S3", "icon": "aws", "level": "Intermedio" },
+    { "label": "Vue", "icon": "siVuedotjs", "level": "Intermedio" },
+    { "label": "Laravel", "icon": "siLaravel", "level": "Intermedio" }
+  ]
+}
