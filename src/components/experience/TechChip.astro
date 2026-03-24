@@ -1,63 +1,34 @@
 ---
-import type { SimpleIcon } from "simple-icons";
-import {
-  siAngular,
-  siDjango,
-  siExpress,
-  siLaravel,
-  siMongodb,
-  siMysql,
-  siNodedotjs,
-  siNestjs,
-  siPhp,
-  siPostgresql,
-  siReact,
-  siTypescript,
-  siVuedotjs,
-} from "simple-icons";
+import { getIcon } from "../../utils/getIcon";
 
 interface Props {
   label: string;
-  icon?: string;
+  icon: string;
 }
 
-const { label } = Astro.props;
+const { label, icon } = Astro.props;
 
-const techIconMap: Record<string, SimpleIcon> = {
-  React: siReact,
-  "React Native": siReact,
-  TypeScript: siTypescript,
-  "Node.js": siNodedotjs,
-  "Express.js": siExpress,
-  MongoDB: siMongodb,
-  Angular: siAngular,
-  NestJS: siNestjs,
-  Django: siDjango,
-  PostgreSQL: siPostgresql,
-  MySQL: siMysql,
-  Vue: siVuedotjs,
-  Laravel: siLaravel,
-  PHP: siPhp,
-};
-
-const iconData = techIconMap[label];
+const iconData = getIcon(icon);
 ---
 
 <div
-  class="flex items-center gap-2 px-3 py-1.5 rounded-full
-  bg-surface shadow-neumorphic-inset text-text-secondary text-sm"
+  class="group flex items-center gap-2 px-3 py-1.5 rounded-full
+  bg-surface text-text-secondary text-sm shadow-neumorphic-inset
+  transition-all duration-200 ease-out hover:text-text-primary"
 >
   {
     iconData && (
       <svg
-        aria-hidden="true"
         viewBox="0 0 24 24"
-        class="w-4 h-4 shrink-0 fill-current"
-        role="img"
+        class="w-4 h-4 shrink-0 transition-all duration-200
+         text-text-primary group-hover:text-(--tech-color) group-hover:scale-110"
+        style={`--tech-color: #${iconData.hex}`}
+        fill="currentColor"
       >
-        <path d={iconData.path}></path>
+        <path d={iconData.path} />
       </svg>
     )
   }
+
   <span>{label}</span>
 </div>
