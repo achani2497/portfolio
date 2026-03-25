@@ -4,9 +4,10 @@ import { getIconData } from "../../utils/getIcon";
 interface Props {
   icon: string;
   class?: string;
+  changeColorOnHover?: boolean;
 }
 
-const { icon, class: className = "" } = Astro.props;
+const { icon, class: className = "", changeColorOnHover = true } = Astro.props;
 
 const iconData = getIconData(icon);
 ---
@@ -18,7 +19,7 @@ const iconData = getIconData(icon);
       class={`w-4 h-4 shrink-0 transition-all duration-200
         ${className}
         text-text-primary
-        group-hover:text-(--tech-color)
+        ${changeColorOnHover ? "group-hover:text-(--tech-color)" : ""}
         group-hover:scale-110`}
       style={`--tech-color: #${iconData.icon.hex}`}
       fill="currentColor"
@@ -34,7 +35,7 @@ const iconData = getIconData(icon);
       className={`w-4 h-4 shrink-0 transition-all duration-200
         ${className}
         text-text-primary
-        group-hover:text-lilac-600
+        ${changeColorOnHover ? "group-hover:text-lilac-600" : ""}
         group-hover:scale-110`}
     />
   )

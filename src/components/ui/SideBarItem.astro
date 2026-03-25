@@ -1,11 +1,12 @@
 ---
+import Icon from "./Icon.astro";
 interface Props {
-  icon: any;
+  icon: string;
   label: string;
   id: string;
 }
 
-const { icon: Icon, label, id } = Astro.props;
+const { icon, label, id } = Astro.props;
 ---
 
 <div
@@ -13,13 +14,13 @@ const { icon: Icon, label, id } = Astro.props;
   class="sidebar-item z-10 relative flex w-full items-center py-2 px-3 rounded-full cursor-pointer text-text-secondary text-left"
 >
   {/* ICONO */}
-  <Icon className="w-5 h-5 shrink-0" />
+  <Icon icon={icon} class="w-5 h-5 shrink-0" changeColorOnHover={false} />
 
   {/* LABEL */}
   <span
     class="whitespace-nowrap overflow-hidden
          max-w-0 opacity-0 p-0
-         group-hover:max-w-64 group-hover:opacity-100 group-hover:pl-3
+         group-hover:max-w-64 group-hover:opacity-100 text-text-primary group-hover:pl-3
          transition-[max-width,opacity,padding-left] duration-600 ease-in-out"
   >
     {label}
