@@ -6,7 +6,7 @@ const items = [
   // { id: "assistant", icon: "ai", label: "Asistente virtual" },
   { id: "experience", icon: "experience", label: "Experiencia y Educación" },
   { id: "technologies", icon: "technologies", label: "Tecnologías" },
-  // { id: "contact", icon: "mail", label: "Contacto" },
+  { id: "contact", icon: "contact", label: "Contacto" },
 ];
 ---
 
@@ -66,7 +66,8 @@ const items = [
         const section = document.getElementById(id);
 
         if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
+          const y = section.getBoundingClientRect().top + window.scrollY;
+          smoothScrollTo(y - 20, 650);
         }
 
         moveIndicator(index);
@@ -78,6 +79,7 @@ const items = [
       document.getElementById(item.getAttribute("data-id")),
     );
 
+    // observer para mover el indicador segun la posicion del user en el browser
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -105,4 +107,30 @@ const items = [
       });
     }
   });
+
+  function smoothScrollTo(targetY, duration = 500) {
+    const startY = window.scrollY;
+    const diff = targetY - startY;
+    let start;
+
+    function step(timestamp) {
+      if (!start) start = timestamp;
+      const time = timestamp - start;
+      const percent = Math.min(time / duration, 1);
+
+      // easing (easeInOutCubic)
+      const ease =
+        percent < 0.5
+          ? 4 * percent * percent * percent
+          : 1 - Math.pow(-2 * percent + 2, 3) / 2;
+
+      window.scrollTo(0, startY + diff * ease);
+
+      if (time < duration) {
+        requestAnimationFrame(step);
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
 </script>

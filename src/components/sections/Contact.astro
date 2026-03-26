@@ -1,0 +1,52 @@
+---
+import DisplayScramble from "../ui/DisplayScramble.astro";
+import Icon from "../ui/Icon.astro";
+---
+
+<section id="contact" class="w-full">
+  <div
+    class="flex flex-col gap-16 items-center justify-between w-full h-auto bg-surface rounded-4xl shadow-neumorphic py-20 px-32"
+  >
+    <div class="flex flex-col gap-4 items-center justify-center">
+      <span class="text-xl font-sans text-text-secondary"> ¡Hablemos! </span>
+      <DisplayScramble
+        as="h1"
+        text="¿Te interesa mi trabajo?"
+        class="text-4xl font-bold tracking-wide text-center"
+        delay={200}
+        duration={800}
+        scrambleStepMs={40}
+        initialCharCount={30}
+        scrambleChars="X"
+      />
+      <span class="text-lg font-sans text-text-secondary text-center">
+        Coordinemos una llamada y comentame la propuesta. Estoy abierto a nuevas
+        oportunidades y desafíos técnicos en proyectos con impacto real.
+      </span>
+    </div>
+    <a
+      class="group flex items-center gap-2 p-4 rounded-full shadow-neumorphic
+    transition-[translate, transform, box-shadow,background] duration-300 ease-out
+    
+    hover:-translate-y-1 hover:shadow-neumorphic-hover
+    active:translate-y-0
+    
+    bg-linear-to-r from-[#D4CDEE] to-[#BCAEEF]
+    hover:from-[#BCAEEF] hover:to-[#D4CDEE]
+    
+    cursor-pointer
+    
+    animate-float hover:animate-none will-change-transform
+    [animation-delay:1s]"
+      href="https://calendar.app.google/UN5BnTAkxnHJyN8b8"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="font-sans text-text-primary/80"> Armemos una reunión! </span>
+      <Icon
+        icon="siGooglecalendar"
+        class="w-5 h-5 duration-400 text-text-primary/80"
+      />
+    </a>
+  </div>
+</section>

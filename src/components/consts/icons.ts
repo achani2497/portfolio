@@ -4,6 +4,7 @@ import {
     siExpress,
     siGithub,
     siGmail,
+    siGooglecalendar,
     siLaravel,
     siMongodb,
     siMysql,
@@ -13,7 +14,7 @@ import {
     siPostgresql,
     siReact,
     siTypescript,
-    siVuedotjs,
+    siVuedotjs
 } from "simple-icons";
 
 import type { SimpleIcon } from "simple-icons";
@@ -34,4 +35,5 @@ export const icons: Record<string, SimpleIcon> = {
     siVuedotjs,
     siLaravel,
     siPhp,
+    siGooglecalendar,
 } as const;

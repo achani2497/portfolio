@@ -20,6 +20,8 @@
   --shadow-neumorphic-inset: var(--app-shadow-neumorphic-inset);
 
   --radius-soft: 1rem;
+
+  --animate-float: float 2.5s ease-in-out infinite;
 }
 
 /* LIGHT MODE */
@@ -77,4 +79,21 @@
   .font-display {
     font-weight: 900;
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.4rem);
+  }
+}
+
+html, body {
+  scroll-behavior: smooth !important;
+}
+
+.group{
+  scroll-behavior: smooth !important;
 }

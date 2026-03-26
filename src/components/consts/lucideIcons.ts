@@ -4,6 +4,7 @@ import {
     CodeXml,
     Home,
     Linkedin,
+    MessagesSquare,
     type LucideIcon,
 } from "lucide-react";
 
@@ -14,5 +15,6 @@ export const lucideIcons: Record<string, LucideIcon> = {
     // Sidebar icons
     home: Home,
     experience: BriefcaseBusiness,
-    technologies: CodeXml
+    technologies: CodeXml,
+    contact: MessagesSquare,
 };
