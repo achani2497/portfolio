@@ -18,8 +18,7 @@ const iconData = getIconData(icon);
       viewBox="0 0 24 24"
       class={`w-4 h-4 shrink-0 transition-all duration-200
         ${className}
-        text-text-primary
-        ${changeColorOnHover ? "group-hover:text-(--tech-color)" : ""}
+        text-(--tech-color)
         group-hover:scale-110`}
       style={`--tech-color: #${iconData.icon.hex}`}
       fill="currentColor"
