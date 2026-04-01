@@ -4,7 +4,7 @@ import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
 ---
 
-<section id="technologies" class="flex flex-col gap-6 sm:gap-8 px-4 sm:px-0">
+<section id="technologies" class="flex flex-col gap-6 px-4 sm:gap-8 sm:px-0">
   <DisplayScramble
     as="h1"
     text="Tecnologías"
@@ -15,16 +15,16 @@ import Icon from "../ui/Icon.astro";
     initialCharCount={30}
     scrambleChars="X"
   />
-  <div class="gap-4 w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6">
+  <div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
     {
       technologies.map((technology) => (
-        <div class="group grid grid-cols-1 shadow-neumorphic rounded-xl bg-surface place-items-center gap-4 p-4 hover:-translate-y-1 transition-all duration-500 ease-in-out">
+        <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
           <Icon icon={technology.icon} />
           <div class="flex flex-col items-center justify-center gap-1">
-            <span class="font-sans text-lg text-text-primary">
+            <span class="text-text-primary font-sans text-lg">
               {technology.label}
             </span>
-            <span class="font-sans text-sm text-text-secondary">
+            <span class="text-text-secondary font-sans text-sm">
               {technology.level}
             </span>
           </div>

@@ -38,21 +38,20 @@ const CornerIcon =
 ---
 
 <div
-  class="experience-card relative bg-surface rounded-4xl p-8 shadow-neumorphic flex flex-col gap-6
-  opacity-0 translate-y-4 transition-all duration-400 ease-out hover:-translate-y-1"
+  class="experience-card bg-surface shadow-neumorphic relative flex translate-y-4 flex-col gap-6 rounded-4xl p-8 opacity-0 transition-all duration-400 ease-out hover:-translate-y-1"
 >
   <!-- CORNER ICON -->
   <div
-    class="absolute top-6 right-6 w-12 h-12 rounded-full shadow-neumorphic-inset bg-surface flex items-center justify-center text-text-secondary"
+    class="shadow-neumorphic-inset bg-surface text-text-secondary absolute top-6 right-6 flex h-12 w-12 items-center justify-center rounded-full"
   >
-    <CornerIcon className="w-5 h-5" />
+    <CornerIcon className="h-5 w-5" />
   </div>
 
   <!-- HEADER -->
-  <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
     <!-- LOGO -->
     <div
-      class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-elevated shadow-neumorphic flex items-center justify-center"
+      class="bg-elevated shadow-neumorphic flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl sm:h-16 sm:w-16"
     >
       {
         logo ? (
@@ -63,7 +62,7 @@ const CornerIcon =
             class="size-full object-fill"
           />
         ) : (
-          <span class="font-display text-sm tracking-wide text-text-secondary">
+          <span class="font-display text-text-secondary text-sm tracking-wide">
             {companyInitials}
           </span>
         )
@@ -74,13 +73,13 @@ const CornerIcon =
     <div class="flex flex-col">
       <!-- <h3 class="font-display text-2xl tracking-tight text-text-primary"> -->
       <h3
-        class="font-display text-xl sm:text-2xl tracking-tight text-text-primary"
+        class="font-display text-text-primary text-xl tracking-tight sm:text-2xl"
       >
         {role}
       </h3>
 
       <span class="text-text-secondary">
-        <span class="font-sans font-bold text-text-secondary">
+        <span class="text-text-secondary font-sans font-bold">
           {company}
         </span>
         •
@@ -91,7 +90,7 @@ const CornerIcon =
 
   <!-- DESCRIPTION -->
   <p
-    class="text-text-secondary leading-relaxed whitespace-pre-line w-full text-justify"
+    class="text-text-secondary w-full text-justify leading-relaxed whitespace-pre-line"
   >
     {description}
   </p>

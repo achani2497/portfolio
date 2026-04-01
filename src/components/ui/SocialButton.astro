@@ -14,12 +14,12 @@ const { href, label, icon } = Astro.props;
   href={href}
   target="_blank"
   rel="noopener noreferrer"
-  class="group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-surface shadow-neumorphic transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-neumorphic-hover active:translate-y-0 active:shadow-neumorphic-inset w-full text-center justify-center"
+  class="group bg-surface shadow-neumorphic hover:shadow-neumorphic-hover active:shadow-neumorphic-inset inline-flex w-full items-center justify-center gap-3 rounded-full px-6 py-3 text-center transition-all duration-200 ease-out hover:-translate-y-1 active:translate-y-0"
 >
   <Icon icon={icon} />
 
   <span
-    class="font-sans text-text-secondary group-hover:text-text-primary transition-colors duration-200"
+    class="text-text-secondary group-hover:text-text-primary font-sans transition-colors duration-200"
   >
     {label}
   </span>
