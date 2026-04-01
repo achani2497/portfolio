@@ -25,64 +25,45 @@
 }
 
 /* LIGHT MODE */
-/* :root {
-    --app-color-base: #EFEAF8;        
-  
-    --app-color-surface: #F5F2FB;     
-    --app-color-elevated: #FFFFFF;
-  
-    --app-color-lilac-500: #E4DCF6;
-    --app-color-lilac-600: #D6CDF2;
-    --app-color-lilac-700: #C7BCEB;
-  
-    --app-color-text-primary: #2C2835;
-    --app-color-text-secondary: #5B5668;
-    --app-color-text-muted: #8C8799;
-  
-    --app-shadow-neumorphic:
-      0.375rem 0.375rem 0.75rem rgba(175, 165, 215, 0.25),
-      -0.375rem -0.375rem 0.75rem #FFFFFF;
 
-    --app-shadow-neumorphic-hover: 0 0 0.75rem rgba(199, 188, 235, 0.6);
-  
-    --app-shadow-neumorphic-inset:
-      inset 0.25rem 0.25rem 0.5rem rgba(175, 165, 215, 0.25),
-      inset -0.25rem -0.25rem 0.5rem #FFFFFF;
-  } */
+:root {
+  --app-color-base: #E7E0F5;
 
-  :root {
-    --app-color-base: #E7E0F5;
-  
-    --app-color-surface: #EFE9FA;
-    --app-color-elevated: #FDFDFD;
-  
-    --app-color-lilac-500: #DED6F4;
-    --app-color-lilac-600: #CFC6ED;
-    --app-color-lilac-700: #BFB4E6;
-  
-    --app-color-text-primary: #2A2533;
-    --app-color-text-secondary: #59536A;
-    --app-color-text-muted: #8A839C;
-  
-    --app-shadow-neumorphic:
-      0.375rem 0.375rem 0.75rem rgba(190, 180, 230, 0.3),
-      -0.375rem -0.375rem 0.75rem #fdfdfd;
-  
-    --app-shadow-neumorphic-hover:
-      0 0 0.75rem rgba(207, 198, 237, 0.55);
-  
-    --app-shadow-neumorphic-inset:
-      inset 0.25rem 0.25rem 0.5rem rgba(190, 180, 230, 0.3),
-      inset -0.25rem -0.25rem 0.5rem #FDFDFD;
-  
-    --app-shadow-neumorphic-button-inset:
-      inset 0.1875rem 0.1875rem 0.375rem rgba(190, 180, 230, 0.3),
-      inset -0.1875rem -0.1875rem 0.375rem #FDFDFD;
-  }
+  --app-color-surface: #EFE9FA;
+  --app-color-elevated: #FDFDFD;
+
+  --app-color-lilac-500: #DED6F4;
+  --app-color-lilac-600: #CFC6ED;
+  --app-color-lilac-700: #BFB4E6;
+
+  --app-color-text-primary: #2A2533;
+  --app-color-text-secondary: #59536A;
+  --app-color-text-muted: #8A839C;
+
+  --app-shadow-neumorphic:
+    0.375rem 0.375rem 0.75rem rgba(190, 180, 230, 0.3),
+    -0.375rem -0.375rem 0.75rem #fdfdfd;
+
+  --app-shadow-neumorphic-hover:
+    0 0 0.75rem rgba(207, 198, 237, 0.55);
+
+  --app-shadow-neumorphic-inset:
+    inset 0.25rem 0.25rem 0.5rem rgba(190, 180, 230, 0.3),
+    inset -0.25rem -0.25rem 0.5rem #FDFDFD;
+
+  --app-shadow-neumorphic-button-inset:
+    inset 0.1875rem 0.1875rem 0.375rem rgba(190, 180, 230, 0.3),
+    inset -0.1875rem -0.1875rem 0.375rem #FDFDFD;
+
+  --app-wave-gradient-third-level: 0.9;
+  --app-wave-gradient-second-level: 0.8;
+  --app-wave-gradient-first-level: 0.7;
+}
 
 /* DARK MODE */
 .dark {
   --app-color-base: #1E1B2E;
+
   --app-color-surface: #26233A;
   --app-color-elevated: #2E2A45;
 
@@ -95,14 +76,22 @@
   --app-color-text-muted: #A8A3C2;
 
   --app-shadow-neumorphic:
-    0.375rem 0.375rem 0.75rem rgba(0,0,0,0.4),
-    -0.375rem -0.375rem 0.75rem rgba(255,255,255,0.05);
+    0.375rem 0.375rem 0.75rem rgba(0,0,0,0.6),
+    -0.375rem -0.375rem 0.75rem rgba(255,255,255,0.04);
 
-  --app-shadow-neumorphic-hover: 0 0 0.75rem rgba(199, 188, 235, 0.6);
+  --app-shadow-neumorphic-hover: 0 0 1rem rgba(120,110,180,0.5);
 
   --app-shadow-neumorphic-inset:
-    inset 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.4),
-    inset -0.25rem -0.25rem 0.5rem rgba(255,255,255,0.05);
+    inset 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.6),
+    inset -0.25rem -0.25rem 0.5rem rgba(255,255,255,0.04);
+
+  --app-shadow-neumorphic-button-inset:
+    inset 0.1875rem 0.1875rem 0.375rem rgba(0,0,0,0.7),
+    inset -0.1875rem -0.1875rem 0.375rem rgba(255,255,255,0.05);
+
+  --app-wave-gradient-third-level: 0.5;
+  --app-wave-gradient-second-level: 0.4;
+  --app-wave-gradient-first-level: 0.3;
 }
 
 @layer utilities {

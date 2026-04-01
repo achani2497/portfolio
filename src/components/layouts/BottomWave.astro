@@ -1,15 +1,25 @@
-<div class="absolute bottom-0 left-0 w-full h-dvh -z-10">
+<div class="absolute bottom-0 left-0 -z-10 h-dvh w-full">
   <svg
     viewBox="0 0 1440 400"
-    class="w-full h-full rotate-180"
+    class="h-full w-full rotate-180"
     preserveAspectRatio="none"
   >
     <defs>
       <linearGradient id="waveGradientBottom" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--app-color-lilac-700)"></stop>
-        <stop offset="40%" stop-color="var(--app-color-lilac-600)"></stop>
-        <stop offset="75%" stop-color="var(--app-color-lilac-500)"></stop>
-        <stop offset="100%" stop-color="var(--app-color-base)"></stop>
+        <stop
+          offset="0%"
+          stop-color="var(--app-color-lilac-700)"
+          stop-opacity="var(--app-wave-gradient-third-level)"></stop>
+        <stop
+          offset="40%"
+          stop-color="var(--app-color-lilac-600)"
+          stop-opacity="var(--app-wave-gradient-second-level)"></stop>
+        <stop
+          offset="70%"
+          stop-color="var(--app-color-lilac-500)"
+          stop-opacity="var(--app-wave-gradient-first-level)"></stop>
+        <stop offset="100%" stop-color="var(--app-color-base)" stop-opacity="0"
+        ></stop>
       </linearGradient>
     </defs>
 

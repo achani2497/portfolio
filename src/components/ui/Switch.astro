@@ -1,0 +1,44 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<div class="fixed top-5 right-5">
+  <button
+    id="theme-toggle"
+    class="bg-surface shadow-neumorphic-inset relative flex h-10 w-22 items-center overflow-hidden rounded-3xl px-1 transition-all duration-300"
+  >
+    <!-- thumb -->
+    <div class="flex w-full items-center justify-around">
+      <Icon icon="sun" />
+      <Icon icon="moon" />
+    </div>
+    <div
+      id="theme-thumb"
+      class="bg-elevated shadow-neumorphic absolute h-7 w-10 rounded-full transition-all duration-300 hover:cursor-pointer"
+    >
+    </div>
+  </button>
+</div>
+
+<script is:inline>
+  const root = document.documentElement;
+  const toggle = document.getElementById("theme-toggle");
+  const thumb = document.getElementById("theme-thumb");
+
+  function applyTheme() {
+    const isDark = root.classList.contains("dark");
+
+    // mover thumb
+    thumb.style.transform = isDark
+      ? "translateX(2.25rem)"
+      : "translateX(.25rem)";
+  }
+
+  applyTheme();
+
+  toggle?.addEventListener("click", () => {
+    const nowDark = root.classList.toggle("dark");
+    localStorage.setItem("theme", nowDark ? "dark" : "light");
+    applyTheme();
+  });
+</script>
