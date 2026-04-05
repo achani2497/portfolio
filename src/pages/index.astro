@@ -3,12 +3,14 @@ import Sidebar from "../components/layouts/Sidebar.astro";
 import Intro from "../components/sections/Intro.astro";
 import Layout from "../layouts/Layout.astro";
 // import ChatSection from "../components/sections/ChatSection.astro";
+import Analytics from "@vercel/analytics/astro";
 import Contact from "../components/sections/Contact.astro";
 import Experience from "../components/sections/Experience.astro";
 import Technologies from "../components/sections/Technologies.astro";
 ---
 
 <Layout>
+  <Analytics />
   <Sidebar />
   <Intro />
   <!-- <ChatSection /> -->
