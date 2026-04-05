@@ -2,19 +2,18 @@
 import Icon from "./Icon.astro";
 ---
 
-<div class="fixed top-5 right-5">
+<div class="fixed top-3 right-3 z-50 md:top-5 md:right-5">
   <button
     id="theme-toggle"
-    class="bg-surface shadow-neumorphic-inset relative flex h-10 w-22 items-center overflow-hidden rounded-3xl px-1 transition-all duration-300"
+    class="bg-surface shadow-neumorphic-inset relative flex h-8 w-18 items-center overflow-hidden rounded-3xl px-1 transition-all duration-300 md:h-10 md:w-22"
   >
-    <!-- thumb -->
     <div class="flex w-full items-center justify-around">
       <Icon icon="sun" />
       <Icon icon="moon" />
     </div>
     <div
       id="theme-thumb"
-      class="bg-elevated shadow-neumorphic absolute h-7 w-10 rounded-full transition-all duration-300 hover:cursor-pointer"
+      class="bg-elevated shadow-neumorphic absolute h-6 w-8 rounded-full transition-all duration-300 hover:cursor-pointer md:h-7 md:w-10"
     >
     </div>
   </button>
@@ -24,17 +23,25 @@ import Icon from "./Icon.astro";
   const root = document.documentElement;
   const toggle = document.getElementById("theme-toggle");
   const thumb = document.getElementById("theme-thumb");
+  const mdQuery = window.matchMedia("(min-width: 768px)");
 
   function applyTheme() {
     const isDark = root.classList.contains("dark");
+    const isDesktop = mdQuery.matches;
 
-    // mover thumb
-    thumb.style.transform = isDark
-      ? "translateX(2.25rem)"
-      : "translateX(.25rem)";
+    if (isDesktop) {
+      thumb.style.transform = isDark
+        ? "translateX(2.25rem)"
+        : "translateX(.25rem)";
+    } else {
+      thumb.style.transform = isDark
+        ? "translateX(2rem)"
+        : "translateX(.25rem)";
+    }
   }
 
   applyTheme();
+  mdQuery.addEventListener("change", applyTheme);
 
   toggle?.addEventListener("click", () => {
     const nowDark = root.classList.toggle("dark");

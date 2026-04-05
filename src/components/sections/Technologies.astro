@@ -4,11 +4,11 @@ import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
 ---
 
-<section id="technologies" class="flex flex-col gap-6 px-4 sm:gap-8 sm:px-0">
+<section id="technologies" class="flex flex-col gap-6 sm:gap-8">
   <DisplayScramble
     as="h1"
     text="Tecnologías"
-    class="text-3xl tracking-wide"
+    class="text-2xl tracking-wide md:text-3xl"
     delay={200}
     duration={800}
     scrambleStepMs={40}
@@ -21,7 +21,7 @@ import Icon from "../ui/Icon.astro";
         <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
           <Icon icon={technology.icon} />
           <div class="flex flex-col items-center justify-center gap-1">
-            <span class="text-text-primary font-sans text-lg">
+            <span class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]">
               {technology.label}
             </span>
             <span class="text-text-secondary font-sans text-sm">

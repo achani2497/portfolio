@@ -1,5 +1,6 @@
 ---
 import SideBarItem from "../ui/SideBarItem.astro";
+import Icon from "../ui/Icon.astro";
 
 const items = [
   { id: "intro", icon: "home", label: "Introducción" },
@@ -10,12 +11,12 @@ const items = [
 ];
 ---
 
+<!-- DESKTOP SIDEBAR -->
 <aside
   id="sidebar"
-  class="group bg-surface shadow-neumorphic pointer-events-none fixed top-1/2 left-6 z-50 flex w-fit max-w-20 -translate-x-2 -translate-y-1/2 flex-col items-stretch gap-2 overflow-hidden rounded-3xl p-2 opacity-0 transition-[opacity,transform,max-width] duration-600 ease-in-out hover:max-w-[24rem]"
+  class="group bg-surface shadow-neumorphic pointer-events-none fixed top-1/2 left-6 z-50 hidden w-fit max-w-20 -translate-x-2 -translate-y-1/2 flex-col items-stretch gap-2 overflow-hidden rounded-3xl p-2 opacity-0 transition-[opacity,transform,max-width] duration-600 ease-in-out hover:max-w-[24rem] md:flex"
   style="visibility: hidden;"
 >
-  <!-- INDICADOR -->
   <div
     id="sidebar-indicator"
     class="bg-surface shadow-neumorphic-inset pointer-events-none absolute right-2 left-2 z-0 rounded-full transition-all duration-300 ease-in-out"
@@ -30,13 +31,46 @@ const items = [
   }
 </aside>
 
+<!-- MOBILE PILL NAV -->
+<nav
+  id="mobile-nav"
+  class="bg-surface shadow-neumorphic pointer-events-none fixed bottom-[1dvh] left-1/2 z-50 flex -translate-x-1/2 translate-y-2 items-center gap-1 rounded-full p-2 opacity-0 transition-[opacity,transform] duration-600 ease-in-out md:hidden"
+>
+  <div
+    id="mobile-indicator"
+    class="bg-surface shadow-neumorphic-inset pointer-events-none absolute top-2 bottom-2 z-0 rounded-full transition-all duration-300 ease-in-out"
+    style="left: 0px; width: 0px;"
+  >
+  </div>
+
+  {
+    items.map((item) => (
+      <div
+        data-id={item.id}
+        class="mobile-nav-item text-text-secondary relative z-10 flex cursor-pointer items-center justify-center rounded-full p-3"
+      >
+        <Icon
+          icon={item.icon}
+          class="h-5 w-5 shrink-0"
+          changeColorOnHover={false}
+        />
+      </div>
+    ))
+  }
+</nav>
+
 <script is:inline>
   window.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.querySelector("#sidebar");
-    const items = document.querySelectorAll(".sidebar-item");
-    const indicator = document.getElementById("sidebar-indicator");
+    const mobileNav = document.querySelector("#mobile-nav");
+    const desktopItems = document.querySelectorAll(".sidebar-item");
+    const mobileItems = document.querySelectorAll(".mobile-nav-item");
+    const desktopIndicator = document.getElementById("sidebar-indicator");
+    const mobileIndicator = document.getElementById("mobile-indicator");
 
-    // animación inicial de aparición del sidebar
+    var activeIndex = 0;
+
+    // Animación de entrada
     if (sidebar) {
       setTimeout(() => {
         sidebar.classList.remove(
@@ -44,49 +78,83 @@ const items = [
           "-translate-x-2",
           "pointer-events-none",
         );
-
         sidebar.style.visibility = "visible";
       }, 400);
     }
 
-    function moveIndicator(index) {
-      const item = items[index];
-      if (!item || !indicator) return;
-
-      indicator.style.top = `${item.offsetTop}px`;
-      indicator.style.height = `${item.offsetHeight}px`;
-
-      activeIndex = index;
+    if (mobileNav) {
+      setTimeout(() => {
+        mobileNav.classList.remove(
+          "opacity-0",
+          "translate-y-2",
+          "pointer-events-none",
+        );
+      }, 400);
     }
 
-    // click
-    items.forEach((item, index) => {
-      item.addEventListener("click", () => {
-        const id = item.getAttribute("data-id");
-        const section = document.getElementById(id);
+    function moveDesktopIndicator(index) {
+      var item = desktopItems[index];
+      if (!item || !desktopIndicator) return;
+      desktopIndicator.style.top = item.offsetTop + "px";
+      desktopIndicator.style.height = item.offsetHeight + "px";
+    }
 
+    function moveMobileIndicator(index) {
+      var item = mobileItems[index];
+      if (!item || !mobileIndicator) return;
+      mobileIndicator.style.left = item.offsetLeft + "px";
+      mobileIndicator.style.width = item.offsetWidth + "px";
+    }
+
+    function moveIndicator(index) {
+      activeIndex = index;
+      moveDesktopIndicator(index);
+      moveMobileIndicator(index);
+    }
+
+    // Click – desktop
+    desktopItems.forEach(function (item, index) {
+      item.addEventListener("click", function () {
+        var id = item.getAttribute("data-id");
+        var section = document.getElementById(id);
         if (section) {
-          const y = section.getBoundingClientRect().top + window.scrollY;
+          var y = section.getBoundingClientRect().top + window.scrollY;
           smoothScrollTo(y - 20, 650);
         }
-
         moveIndicator(index);
       });
     });
 
-    // scroll tracking
-    const sections = Array.from(items).map((item) =>
-      document.getElementById(item.getAttribute("data-id")),
-    );
+    // Click – mobile
+    mobileItems.forEach(function (item, index) {
+      item.addEventListener("click", function () {
+        var id = item.getAttribute("data-id");
+        var section = document.getElementById(id);
+        if (section) {
+          var y = section.getBoundingClientRect().top + window.scrollY;
+          smoothScrollTo(y - 20, 650);
+        }
+        moveIndicator(index);
+      });
+    });
 
-    // observer para mover el indicador segun la posicion del user en el browser
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+    // Scroll tracking con IntersectionObserver
+    var sectionIds = Array.from(desktopItems).map(function (item) {
+      return item.getAttribute("data-id");
+    });
+    var sections = sectionIds.map(function (id) {
+      return document.getElementById(id);
+    });
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            const index = sections.findIndex((sec) => sec === entry.target);
-            if (index !== -1) {
-              moveIndicator(index);
+            var idx = sections.findIndex(function (sec) {
+              return sec === entry.target;
+            });
+            if (idx !== -1) {
+              moveIndicator(idx);
             }
           }
         });
@@ -96,30 +164,30 @@ const items = [
       },
     );
 
-    sections.forEach((section) => {
+    sections.forEach(function (section) {
       if (section) observer.observe(section);
     });
 
-    // estado inicial
-    if (items.length > 0) {
-      requestAnimationFrame(() => {
+    // Estado inicial
+    if (desktopItems.length > 0 || mobileItems.length > 0) {
+      requestAnimationFrame(function () {
         moveIndicator(0);
       });
     }
   });
 
-  function smoothScrollTo(targetY, duration = 500) {
-    const startY = window.scrollY;
-    const diff = targetY - startY;
-    let start;
+  function smoothScrollTo(targetY, duration) {
+    duration = duration || 500;
+    var startY = window.scrollY;
+    var diff = targetY - startY;
+    var start;
 
     function step(timestamp) {
       if (!start) start = timestamp;
-      const time = timestamp - start;
-      const percent = Math.min(time / duration, 1);
+      var time = timestamp - start;
+      var percent = Math.min(time / duration, 1);
 
-      // easing (easeInOutCubic)
-      const ease =
+      var ease =
         percent < 0.5
           ? 4 * percent * percent * percent
           : 1 - Math.pow(-2 * percent + 2, 3) / 2;

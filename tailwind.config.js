@@ -21,12 +21,6 @@ export default {
                 }
             },
 
-            boxShadow: {
-                neumorphic: "var(--shadow-neumorphic)",
-                "neumorphic-inset": "var(--shadow-neumorphic-inset)",
-                "neumorphic-hover": "var(--app-shadow-neumorphic-hover)"
-            },
-
             borderRadius: {
                 soft: "1rem"
             },

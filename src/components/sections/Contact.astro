@@ -5,14 +5,18 @@ import Icon from "../ui/Icon.astro";
 
 <section id="contact" class="w-full">
   <div
-    class="bg-surface shadow-neumorphic flex h-auto w-full flex-col items-center justify-between gap-16 rounded-4xl px-32 py-20"
+    class="bg-surface shadow-neumorphic flex h-auto w-full flex-col items-center justify-between gap-8 rounded-2xl px-6 py-10 md:gap-16 md:rounded-4xl md:px-32 md:py-20"
   >
-    <div class="flex flex-col items-center justify-center gap-4">
-      <span class="text-text-secondary font-sans text-xl"> ¡Hablemos! </span>
+    <div
+      class="mx-auto flex max-w-full flex-col items-center justify-center gap-4"
+    >
+      <span class="text-text-secondary font-sans text-[1rem] md:text-[1.25rem]">
+        ¡Hablemos!
+      </span>
       <DisplayScramble
         as="h1"
         text="¿Te interesa mi trabajo?"
-        class="text-center text-4xl font-bold tracking-wide"
+        class="text-center text-2xl font-bold tracking-wide md:text-4xl"
         delay={200}
         duration={800}
         scrambleStepMs={40}
@@ -20,7 +24,7 @@ import Icon from "../ui/Icon.astro";
         scrambleChars="X"
       />
       <div
-        class="text-text-secondary flex flex-col text-center font-sans text-lg"
+        class="text-text-secondary flex flex-col text-center font-sans text-[1rem] md:text-[1.125rem]"
       >
         <span> Coordinemos una llamada y comentame la propuesta. </span>
         <span>

@@ -37,7 +37,7 @@ const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
 ---
 
 <Tag
-  class={`scrambled-text font-display wrap-break-word ${className}`.trim()}
+  class={`scrambled-text font-display wrap-break-word max-w-full ${className}`.trim()}
   data-scramble
   data-text={text}
   data-delay={String(delay)}

@@ -10,12 +10,12 @@ const experiences = [
 ];
 ---
 
-<section id="experience" class="flex flex-col gap-6 px-4 sm:gap-8 sm:px-0">
+<section id="experience" class="flex flex-col gap-6 sm:gap-8">
   <!-- TITLE -->
   <DisplayScramble
     as="h1"
     text="Experiencia y Formación"
-    class="text-3xl tracking-wide"
+    class="text-2xl tracking-wide md:text-3xl"
     delay={300}
     duration={800}
     scrambleStepMs={40}
@@ -24,7 +24,7 @@ const experiences = [
   />
 
   <!-- CARDS -->
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-6 md:gap-8">
     {experiences.map((exp) => <ExperienceCard {...exp} />)}
   </div>
 </section>

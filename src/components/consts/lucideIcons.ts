@@ -1,5 +1,6 @@
 import {
   BriefcaseBusiness,
+  ChevronDown,
   Cloud,
   CodeXml,
   Home,
@@ -22,4 +23,6 @@ export const lucideIcons: Record<string, LucideIcon> = {
   // Theme icons
   sun: Sun,
   moon: Moon,
+  // UI icons
+  chevronDown: ChevronDown,
 };
