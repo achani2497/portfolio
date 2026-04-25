@@ -23,33 +23,29 @@
 /* LIGHT MODE */
 
 :root {
-  --app-color-base: #E7E0F5;
+  --app-color-base: #e7e0f5;
 
-  --app-color-surface: #EFE9FA;
-  --app-color-elevated: #FDFDFD;
+  --app-color-surface: #efe9fa;
+  --app-color-elevated: #fdfdfd;
 
-  --app-color-lilac-500: #DED6F4;
-  --app-color-lilac-600: #CFC6ED;
-  --app-color-lilac-700: #BFB4E6;
+  --app-color-lilac-500: #ded6f4;
+  --app-color-lilac-600: #cfc6ed;
+  --app-color-lilac-700: #bfb4e6;
 
-  --app-color-text-primary: #2A2533;
-  --app-color-text-secondary: #59536A;
-  --app-color-text-muted: #8A839C;
+  --app-color-text-primary: #2a2533;
+  --app-color-text-secondary: #59536a;
+  --app-color-text-muted: #8a839c;
 
   --app-shadow-neumorphic:
-    6px 6px 12px rgba(190, 180, 230, 0.3),
-    -6px -6px 12px #fdfdfd;
+    6px 6px 12px rgba(190, 180, 230, 0.3), -6px -6px 12px #fdfdfd;
 
-  --app-shadow-neumorphic-hover:
-    0 0 12px rgba(207, 198, 237, 0.55);
+  --app-shadow-neumorphic-hover: 0 0 12px rgba(207, 198, 237, 0.55);
 
   --app-shadow-neumorphic-inset:
-    inset 4px 4px 8px rgba(190, 180, 230, 0.3),
-    inset -4px -4px 8px #FDFDFD;
+    inset 4px 4px 8px rgba(190, 180, 230, 0.3), inset -4px -4px 8px #fdfdfd;
 
   --app-shadow-neumorphic-button-inset:
-    inset 3px 3px 6px rgba(190, 180, 230, 0.3),
-    inset -3px -3px 6px #FDFDFD;
+    inset 3px 3px 6px rgba(190, 180, 230, 0.3), inset -3px -3px 6px #fdfdfd;
 
   --app-wave-gradient-third-level: 0.9;
   --app-wave-gradient-second-level: 0.8;
@@ -58,32 +54,31 @@
 
 /* DARK MODE */
 .dark {
-  --app-color-base: #1E1B2E;
+  --app-color-base: #1e1b2e;
 
-  --app-color-surface: #26233A;
-  --app-color-elevated: #2E2A45;
+  --app-color-surface: #26233a;
+  --app-color-elevated: #2e2a45;
 
-  --app-color-lilac-500: #3A345F;
-  --app-color-lilac-600: #4A4375;
-  --app-color-lilac-700: #5A538A;
+  --app-color-lilac-500: #3a345f;
+  --app-color-lilac-600: #4a4375;
+  --app-color-lilac-700: #5a538a;
 
-  --app-color-text-primary: #F4F2FF;
-  --app-color-text-secondary: #CFCBE6;
-  --app-color-text-muted: #A8A3C2;
+  --app-color-text-primary: #f4f2ff;
+  --app-color-text-secondary: #cfcbe6;
+  --app-color-text-muted: #a8a3c2;
 
   --app-shadow-neumorphic:
-    6px 6px 12px rgba(0,0,0,0.6),
-    -6px -6px 12px rgba(255,255,255,0.04);
+    6px 6px 12px rgba(0, 0, 0, 0.6), -6px -6px 12px rgba(255, 255, 255, 0.04);
 
-  --app-shadow-neumorphic-hover: 0 0 16px rgba(120,110,180,0.5);
+  --app-shadow-neumorphic-hover: 0 0 16px rgba(120, 110, 180, 0.5);
 
   --app-shadow-neumorphic-inset:
-    inset 4px 4px 8px rgba(0,0,0,0.6),
-    inset -4px -4px 8px rgba(255,255,255,0.04);
+    inset 4px 4px 8px rgba(0, 0, 0, 0.6),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.04);
 
   --app-shadow-neumorphic-button-inset:
-    inset 3px 3px 6px rgba(0,0,0,0.7),
-    inset -3px -3px 6px rgba(255,255,255,0.05);
+    inset 3px 3px 6px rgba(0, 0, 0, 0.7),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.05);
 
   --app-wave-gradient-third-level: 0.5;
   --app-wave-gradient-second-level: 0.4;
@@ -112,7 +107,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -120,7 +116,7 @@
   }
 }
 
-html {
+/* html {
   overflow-x: hidden;
   scroll-behavior: smooth !important;
 }
@@ -131,4 +127,4 @@ body {
 
 .group{
   scroll-behavior: smooth !important;
-}
+} */

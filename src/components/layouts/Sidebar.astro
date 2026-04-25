@@ -19,7 +19,7 @@ const items = [
 >
   <div
     id="sidebar-indicator"
-    class="bg-surface shadow-neumorphic-inset pointer-events-none absolute right-2 left-2 z-0 rounded-full transition-all duration-300 ease-in-out"
+    class="bg-surface shadow-neumorphic-inset pointer-events-none absolute right-2 left-2 z-0 rounded-full transition-[top,height,left,width] duration-400 ease-linear"
     style="top: 0px;"
   >
   </div>
@@ -59,146 +59,8 @@ const items = [
   }
 </nav>
 
-<script is:inline>
-  window.addEventListener("DOMContentLoaded", () => {
-    const sidebar = document.querySelector("#sidebar");
-    const mobileNav = document.querySelector("#mobile-nav");
-    const desktopItems = document.querySelectorAll(".sidebar-item");
-    const mobileItems = document.querySelectorAll(".mobile-nav-item");
-    const desktopIndicator = document.getElementById("sidebar-indicator");
-    const mobileIndicator = document.getElementById("mobile-indicator");
+<script>
+  import { initializeSidebarNavigation } from "../../utils/sidebarClient";
 
-    var activeIndex = 0;
-
-    // Animación de entrada
-    if (sidebar) {
-      setTimeout(() => {
-        sidebar.classList.remove(
-          "opacity-0",
-          "-translate-x-2",
-          "pointer-events-none",
-        );
-        sidebar.style.visibility = "visible";
-      }, 400);
-    }
-
-    if (mobileNav) {
-      setTimeout(() => {
-        mobileNav.classList.remove(
-          "opacity-0",
-          "translate-y-2",
-          "pointer-events-none",
-        );
-      }, 400);
-    }
-
-    function moveDesktopIndicator(index) {
-      var item = desktopItems[index];
-      if (!item || !desktopIndicator) return;
-      desktopIndicator.style.top = item.offsetTop + "px";
-      desktopIndicator.style.height = item.offsetHeight + "px";
-    }
-
-    function moveMobileIndicator(index) {
-      var item = mobileItems[index];
-      if (!item || !mobileIndicator) return;
-      mobileIndicator.style.left = item.offsetLeft + "px";
-      mobileIndicator.style.width = item.offsetWidth + "px";
-    }
-
-    function moveIndicator(index) {
-      activeIndex = index;
-      moveDesktopIndicator(index);
-      moveMobileIndicator(index);
-    }
-
-    // Click – desktop
-    desktopItems.forEach(function (item, index) {
-      item.addEventListener("click", function () {
-        var id = item.getAttribute("data-id");
-        var section = document.getElementById(id);
-        if (section) {
-          var y = section.getBoundingClientRect().top + window.scrollY;
-          smoothScrollTo(y - 20, 650);
-        }
-        moveIndicator(index);
-      });
-    });
-
-    // Click – mobile
-    mobileItems.forEach(function (item, index) {
-      item.addEventListener("click", function () {
-        var id = item.getAttribute("data-id");
-        var section = document.getElementById(id);
-        if (section) {
-          var y = section.getBoundingClientRect().top + window.scrollY;
-          smoothScrollTo(y - 20, 650);
-        }
-        moveIndicator(index);
-      });
-    });
-
-    // Scroll tracking con IntersectionObserver
-    var sectionIds = Array.from(desktopItems).map(function (item) {
-      return item.getAttribute("data-id");
-    });
-    var sections = sectionIds.map(function (id) {
-      return document.getElementById(id);
-    });
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var idx = sections.findIndex(function (sec) {
-              return sec === entry.target;
-            });
-            if (idx !== -1) {
-              moveIndicator(idx);
-            }
-          }
-        });
-      },
-      {
-        rootMargin: "-40% 0px -40% 0px",
-      },
-    );
-
-    sections.forEach(function (section) {
-      if (section) observer.observe(section);
-    });
-
-    // Estado inicial
-    if (desktopItems.length > 0 || mobileItems.length > 0) {
-      requestAnimationFrame(function () {
-        moveIndicator(0);
-      });
-    }
-  });
-
-  function smoothScrollTo(targetY, duration) {
-    duration = duration || 500;
-    var startY = window.scrollY;
-    var diff = targetY - startY;
-    var start;
-
-    function step(timestamp) {
-      if (!start) start = timestamp;
-      var time = timestamp - start;
-      var percent = Math.min(time / duration, 1);
-
-      var ease =
-        percent < 0.5
-          ? 4 * percent * percent * percent
-          : 1 - Math.pow(-2 * percent + 2, 3) / 2;
-
-      window.scrollTo(0, startY + diff * ease);
-
-      if (time < duration) {
-        requestAnimationFrame(step);
-      }
-    }
-
-    requestAnimationFrame(step);
-  }
+  window.addEventListener("DOMContentLoaded", initializeSidebarNavigation);
 </script>
