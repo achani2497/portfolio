@@ -1,13 +1,36 @@
 ---
 import SideBarItem from "../ui/SideBarItem.astro";
 import Icon from "../ui/Icon.astro";
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+
+const dictionary = getDictionary(DEFAULT_LOCALE);
 
 const items = [
-  { id: "intro", icon: "home", label: "Introducción" },
+  {
+    id: "intro",
+    icon: "home",
+    label: dictionary.sidebar.intro,
+    i18nKey: "sidebar.intro",
+  },
   // { id: "assistant", icon: "ai", label: "Asistente virtual" },
-  { id: "experience", icon: "experience", label: "Experiencia y Educación" },
-  { id: "technologies", icon: "technologies", label: "Tecnologías" },
-  { id: "contact", icon: "contact", label: "Contacto" },
+  {
+    id: "experience",
+    icon: "experience",
+    label: dictionary.sidebar.experience,
+    i18nKey: "sidebar.experience",
+  },
+  {
+    id: "technologies",
+    icon: "technologies",
+    label: dictionary.sidebar.technologies,
+    i18nKey: "sidebar.technologies",
+  },
+  {
+    id: "contact",
+    icon: "contact",
+    label: dictionary.sidebar.contact,
+    i18nKey: "sidebar.contact",
+  },
 ];
 ---
 
@@ -26,7 +49,14 @@ const items = [
 
   {
     items.map((item) => {
-      return <SideBarItem icon={item.icon} label={item.label} id={item.id} />;
+      return (
+        <SideBarItem
+          icon={item.icon}
+          label={item.label}
+          id={item.id}
+          i18nKey={item.i18nKey}
+        />
+      );
     })
   }
 </aside>

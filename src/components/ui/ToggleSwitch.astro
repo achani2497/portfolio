@@ -1,0 +1,25 @@
+---
+interface Props {
+  id: string;
+  thumbId: string;
+  ariaLabel: string;
+}
+
+const { id, thumbId, ariaLabel } = Astro.props;
+---
+
+<button
+  id={id}
+  aria-label={ariaLabel}
+  class="bg-surface shadow-neumorphic-inset relative flex h-8 w-18 items-center overflow-hidden rounded-3xl px-1 transition-all duration-300 md:h-10 md:w-22"
+>
+  <div class="flex w-full items-center justify-around">
+    <slot name="left" />
+    <slot name="right" />
+  </div>
+  <div
+    id={thumbId}
+    class="bg-elevated shadow-neumorphic absolute h-6 w-8 rounded-full transition-all duration-300 hover:cursor-pointer md:h-7 md:w-10"
+  >
+  </div>
+</button>

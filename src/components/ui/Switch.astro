@@ -1,23 +1,16 @@
 ---
 import Icon from "./Icon.astro";
+import ToggleSwitch from "./ToggleSwitch.astro";
 ---
 
-<div class="fixed top-3 right-3 z-50 md:top-5 md:right-5">
-  <button
-    id="theme-toggle"
-    class="bg-surface shadow-neumorphic-inset relative flex h-8 w-18 items-center overflow-hidden rounded-3xl px-1 transition-all duration-300 md:h-10 md:w-22"
-  >
-    <div class="flex w-full items-center justify-around">
-      <Icon icon="sun" />
-      <Icon icon="moon" />
-    </div>
-    <div
-      id="theme-thumb"
-      class="bg-elevated shadow-neumorphic absolute h-6 w-8 rounded-full transition-all duration-300 hover:cursor-pointer md:h-7 md:w-10"
-    >
-    </div>
-  </button>
-</div>
+<ToggleSwitch id="theme-toggle" thumbId="theme-thumb" ariaLabel="Theme switch">
+  <Fragment slot="left">
+    <Icon icon="sun" />
+  </Fragment>
+  <Fragment slot="right">
+    <Icon icon="moon" />
+  </Fragment>
+</ToggleSwitch>
 
 <script is:inline>
   const root = document.documentElement;

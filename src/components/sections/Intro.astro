@@ -1,16 +1,23 @@
 ---
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import SocialButton from "../ui/SocialButton.astro";
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+
+const dictionary = getDictionary(DEFAULT_LOCALE);
 ---
 
 <section class="relative w-full" id="intro">
   <div class="mx-auto flex flex-col gap-4">
-    <h2 class="text-text-secondary -mb-4 font-sans text-[0.875rem] md:text-[1.125rem]">
-      Full Stack Developer
+    <h2
+      data-i18n="intro.role"
+      class="text-text-secondary -mb-4 font-sans text-[0.875rem] md:text-[1.125rem]"
+    >
+      {dictionary.intro.role}
     </h2>
     <DisplayScramble
       as="h1"
-      text="Alejandro Ismael Chañi"
+      text={dictionary.intro.name}
+      i18nKey="intro.name"
       class="text-3xl tracking-wide md:text-5xl"
       delay={200}
       duration={800}
@@ -19,34 +26,32 @@ import SocialButton from "../ui/SocialButton.astro";
       scrambleChars="X"
     />
     <p
-      class="text-text-secondary mb-6 max-w-xl text-justify font-sans text-[1rem] leading-relaxed md:text-[1.25rem] md:text-left"
+      data-i18n="intro.about"
+      class="text-text-secondary mb-6 max-w-xl text-justify font-sans text-[1rem] leading-relaxed md:text-left md:text-[1.25rem]"
     >
-      Ingeniero en Sistemas de Información y Desarrollador Full Stack con 5 años
-      de experiencia construyendo aplicaciones web escalables y orientadas a
-      producto. Con experiencia principalmente en React y Node.js, trabajando en
-      Frontend y Backend, participando en el diseño e implementación de features
-      end-to-end, decisiones técnicas y mejora continua de la calidad del
-      software. Mi foco es formar parte de proyectos con impacto real y
-      evolucionar hacia roles de liderazgo técnico.
+      {dictionary.intro.about}
     </p>
 
     <div class="flex flex-col gap-4 md:flex-row md:gap-6">
       <SocialButton
         href="https://github.com/achani2497"
-        label="GitHub"
+        label={dictionary.intro.github}
         icon="siGithub"
+        i18nKey="intro.github"
       />
 
       <SocialButton
         href="https://linkedin.com/in/alejandro-chañi"
-        label="LinkedIn"
+        label={dictionary.intro.linkedin}
         icon="linkedin"
+        i18nKey="intro.linkedin"
       />
 
       <SocialButton
         href="mailto:alejandro.chani24@gmail.com"
-        label="Email"
+        label={dictionary.intro.email}
         icon="siGmail"
+        i18nKey="intro.email"
       />
     </div>
   </div>

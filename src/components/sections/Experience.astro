@@ -1,20 +1,18 @@
 ---
 import ExperienceCard from "../experience/ExperienceCard.astro";
 import DisplayScramble from "../ui/DisplayScramble.astro";
-import experienceData from "../../data/experience.json";
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
 
-const experiences = [
-  ...experienceData.workExperience,
-  experienceData.education,
-  experienceData.assistantTeaching,
-];
+const dictionary = getDictionary(DEFAULT_LOCALE);
+const experiences = dictionary.experience.items;
 ---
 
 <section id="experience" class="flex flex-col gap-6 sm:gap-8">
   <!-- TITLE -->
   <DisplayScramble
     as="h1"
-    text="Experiencia y Formación"
+    text={dictionary.experience.title}
+    i18nKey="experience.title"
     class="text-2xl tracking-wide md:text-3xl"
     delay={300}
     duration={800}
@@ -25,7 +23,11 @@ const experiences = [
 
   <!-- CARDS -->
   <div class="flex flex-col gap-6 md:gap-8">
-    {experiences.map((exp) => <ExperienceCard {...exp} />)}
+    {
+      experiences.map((exp, index) => (
+        <ExperienceCard {...exp} i18nKeyPrefix={`experience.items.${index}`} />
+      ))
+    }
   </div>
 </section>
 

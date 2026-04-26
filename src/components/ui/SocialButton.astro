@@ -5,9 +5,10 @@ interface Props {
   href: string;
   label: string;
   icon: string;
+  i18nKey?: string;
 }
 
-const { href, label, icon } = Astro.props;
+const { href, label, icon, i18nKey } = Astro.props;
 ---
 
 <a
@@ -19,6 +20,7 @@ const { href, label, icon } = Astro.props;
   <Icon icon={icon} />
 
   <span
+    data-i18n={i18nKey}
     class="text-text-secondary group-hover:text-text-primary font-sans transition-colors duration-200"
   >
     {label}

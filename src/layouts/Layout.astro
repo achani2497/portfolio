@@ -2,10 +2,14 @@
 import BottomWave from "../components/layouts/BottomWave.astro";
 import Wave from "../components/layouts/Wave.astro";
 import Switch from "../components/ui/Switch.astro";
+import LanguageSwitch from "../components/ui/LanguageSwitch.astro";
+import { getDictionary, DEFAULT_LOCALE } from "../i18n";
 import "../styles/global.css";
+
+const dictionary = getDictionary(DEFAULT_LOCALE);
 ---
 
-<html lang="es">
+<html lang={DEFAULT_LOCALE}>
   <head>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,6 +31,7 @@ import "../styles/global.css";
     <meta name="theme-color" content="#E7E0F5" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={dictionary.meta.description} />
 
     <script is:inline>
       (function () {
@@ -43,16 +48,54 @@ import "../styles/global.css";
         }
       })();
     </script>
-    <title>Alejandro Chañi - Portfolio</title>
+    <script is:inline>
+      (function () {
+        const root = document.documentElement;
+        const savedLocale = localStorage.getItem("locale");
+        if (savedLocale === "en" || savedLocale === "es") {
+          root.dataset.locale = savedLocale;
+          root.lang = savedLocale;
+          return;
+        }
+
+        const candidates =
+          navigator.languages && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language];
+
+        const detected = candidates.find((candidate) => {
+          const normalized = candidate.toLowerCase();
+          return normalized.startsWith("en") || normalized.startsWith("es");
+        });
+
+        const initialLocale =
+          typeof detected === "string" &&
+          detected.toLowerCase().startsWith("es")
+            ? "es"
+            : "en";
+        root.dataset.locale = initialLocale;
+        root.lang = initialLocale;
+      })();
+    </script>
+    <title>{dictionary.meta.title}</title>
   </head>
   <body class="bg-base text-text-primary relative font-sans">
+    <div
+      class="fixed top-3 right-3 z-50 flex flex-col gap-2 md:top-5 md:right-5 md:flex-row md:gap-3"
+    >
+      <Switch />
+      <LanguageSwitch />
+    </div>
     <main
       class="mx-auto flex max-w-5xl flex-col gap-16 px-5 py-16 md:gap-28 md:px-12 md:py-32"
     >
       <Wave />
-      <Switch />
       <slot />
       <BottomWave />
     </main>
+    <script>
+      import { initializeLocale } from "../utils/localeClient";
+      initializeLocale();
+    </script>
   </body>
 </html>

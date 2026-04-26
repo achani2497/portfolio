@@ -1,6 +1,7 @@
 ---
 interface Props {
   text: string;
+  i18nKey?: string;
   as?: string;
   class?: string;
   delay?: number;
@@ -13,6 +14,7 @@ interface Props {
 
 const {
   text,
+  i18nKey,
   as = "span",
   class: className = "",
   delay = 0,
@@ -39,6 +41,7 @@ const initialScramble = Array.from({ length: safeInitialCharCount }, () =>
 <Tag
   class={`scrambled-text font-display wrap-break-word max-w-full ${className}`.trim()}
   data-scramble
+  data-i18n={i18nKey}
   data-text={text}
   data-delay={String(delay)}
   data-duration={String(duration)}

@@ -13,9 +13,11 @@ interface Props {
   company: string;
   companyInitials: string;
   period: string;
+  status?: string;
   description: string;
   logo?: string;
   techs?: Tech[];
+  i18nKeyPrefix?: string;
 }
 
 const {
@@ -24,9 +26,11 @@ const {
   company,
   companyInitials,
   period,
+  status,
   description,
   logo,
   techs,
+  i18nKeyPrefix,
 } = Astro.props;
 
 const CornerIcon =
@@ -72,23 +76,46 @@ const CornerIcon =
     <!-- INFO -->
     <div class="flex flex-col">
       <h3
+        data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.role` : undefined}
         class="font-display text-text-primary text-xl tracking-tight sm:text-2xl"
       >
         {role}
       </h3>
 
       <span class="text-text-secondary">
-        <span class="text-text-secondary font-sans font-bold">
+        <span
+          data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.company` : undefined}
+          class="text-text-secondary font-sans font-bold"
+        >
           {company}
         </span>
         •
-        {period}
+        <span data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.period` : undefined}>
+          {period}
+        </span>
+        {
+          status && (
+            <>
+              {" "}
+              •{" "}
+              <span
+                data-i18n={
+                  i18nKeyPrefix ? `${i18nKeyPrefix}.status` : undefined
+                }
+                class="font-bold"
+              >
+                {status}
+              </span>
+            </>
+          )
+        }
       </span>
     </div>
   </div>
 
   <!-- DESCRIPTION -->
   <p
+    data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.description` : undefined}
     class="text-text-secondary w-full text-justify leading-relaxed whitespace-pre-line"
   >
     {description}

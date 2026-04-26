@@ -1,0 +1,58 @@
+---
+import ToggleSwitch from "./ToggleSwitch.astro";
+---
+
+<ToggleSwitch
+  id="language-toggle"
+  thumbId="language-thumb"
+  ariaLabel="Language switch"
+>
+  <Fragment slot="left">
+    <span class="text-sm leading-none select-none" aria-hidden="true">🇺🇸</span>
+  </Fragment>
+  <Fragment slot="right">
+    <span class="text-sm leading-none select-none" aria-hidden="true">🇦🇷</span>
+  </Fragment>
+</ToggleSwitch>
+
+<script>
+  import { onLocaleChange, setLocale } from "../../utils/localeClient";
+
+  const toggle = document.getElementById("language-toggle");
+  const thumb = document.getElementById("language-thumb");
+  const mdQuery = window.matchMedia("(min-width: 768px)");
+  const root = document.documentElement;
+
+  const getCurrentLocale = () => (root.dataset.locale === "es" ? "es" : "en");
+
+  function applyLocaleThumb() {
+    if (!thumb) return;
+    const isSpanish = getCurrentLocale() === "es";
+    const isDesktop = mdQuery.matches;
+
+    if (isDesktop) {
+      thumb.style.transform = isSpanish
+        ? "translateX(2.25rem)"
+        : "translateX(.25rem)";
+      return;
+    }
+
+    thumb.style.transform = isSpanish
+      ? "translateX(2rem)"
+      : "translateX(.25rem)";
+  }
+
+  applyLocaleThumb();
+  mdQuery.addEventListener("change", applyLocaleThumb);
+
+  const unsubscribe = onLocaleChange(applyLocaleThumb);
+
+  toggle?.addEventListener("click", () => {
+    const nextLocale = getCurrentLocale() === "en" ? "es" : "en";
+    setLocale(nextLocale);
+  });
+
+  window.addEventListener("beforeunload", () => {
+    unsubscribe();
+  });
+</script>
