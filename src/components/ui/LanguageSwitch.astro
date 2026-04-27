@@ -3,28 +3,34 @@ import ToggleSwitch from "./ToggleSwitch.astro";
 ---
 
 <div
-  class="bg-surface/45 inline-flex h-8 items-center gap-0.5 rounded-full px-1 backdrop-blur-[2px] md:h-10 md:px-1.5"
+  id="language-switch-wrapper"
+  class="inline-flex h-8 items-center gap-0.5 rounded-full px-1 md:h-10 md:px-1.5"
 >
+  <div id="language-switch-glass-bg" aria-hidden="true"></div>
   <span
     id="language-label-en"
     class="text-text-muted -mr-0.5 inline-flex h-8 items-center rounded-full px-2 text-xs leading-none font-bold select-none md:h-10 md:px-2.5 md:text-sm"
     aria-hidden="true">EN</span
   >
 
-  <ToggleSwitch
-    id="language-toggle"
-    thumbId="language-thumb"
-    ariaLabel="Language switch"
-  >
-    <Fragment slot="left">
-      <span class="text-sm leading-none select-none" aria-hidden="true">🇺🇸</span
-      >
-    </Fragment>
-    <Fragment slot="right">
-      <span class="text-sm leading-none select-none" aria-hidden="true">🇦🇷</span
-      >
-    </Fragment>
-  </ToggleSwitch>
+  <div id="language-toggle-slot">
+    <ToggleSwitch
+      id="language-toggle"
+      thumbId="language-thumb"
+      ariaLabel="Language switch"
+    >
+      <Fragment slot="left">
+        <span class="text-sm leading-none select-none" aria-hidden="true"
+          >🇺🇸</span
+        >
+      </Fragment>
+      <Fragment slot="right">
+        <span class="text-sm leading-none select-none" aria-hidden="true"
+          >🇦🇷</span
+        >
+      </Fragment>
+    </ToggleSwitch>
+  </div>
 
   <span
     id="language-label-es"
@@ -38,10 +44,14 @@ import ToggleSwitch from "./ToggleSwitch.astro";
 
   const toggle = document.getElementById("language-toggle");
   const thumb = document.getElementById("language-thumb");
+  const switchWrapper = document.getElementById("language-switch-wrapper");
   const enLabel = document.getElementById("language-label-en");
   const esLabel = document.getElementById("language-label-es");
   const mdQuery = window.matchMedia("(min-width: 768px)");
   const root = document.documentElement;
+  const compactScrollThreshold = 250;
+
+  let isCompactLayout = false;
 
   const getCurrentLocale = () => (root.dataset.locale === "es" ? "es" : "en");
 
@@ -68,8 +78,24 @@ import ToggleSwitch from "./ToggleSwitch.astro";
       : "translateX(.25rem)";
   }
 
+  function applyMobileCompactLayout() {
+    if (!switchWrapper) return;
+
+    const shouldUseCompactLayout =
+      !mdQuery.matches && window.scrollY > compactScrollThreshold;
+
+    if (shouldUseCompactLayout === isCompactLayout) return;
+    isCompactLayout = shouldUseCompactLayout;
+    switchWrapper.classList.toggle("is-compact", shouldUseCompactLayout);
+  }
+
   applyLocaleThumb();
+  applyMobileCompactLayout();
   mdQuery.addEventListener("change", applyLocaleThumb);
+  mdQuery.addEventListener("change", applyMobileCompactLayout);
+  window.addEventListener("scroll", applyMobileCompactLayout, {
+    passive: true,
+  });
 
   const unsubscribe = onLocaleChange(applyLocaleThumb);
 
@@ -82,3 +108,107 @@ import ToggleSwitch from "./ToggleSwitch.astro";
     unsubscribe();
   });
 </script>
+
+<style>
+  @media (max-width: 767px) {
+    #language-switch-wrapper {
+      position: relative;
+      overflow: visible;
+      isolation: isolate;
+      transition:
+        transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        width 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      transform-origin: top center;
+    }
+
+    #language-switch-glass-bg {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      left: -2.2rem;
+      right: -2.2rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(191, 180, 230, 0.55);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px) saturate(135%);
+      transition:
+        left 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        right 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        top 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        bottom 620ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    :global(.dark) #language-switch-glass-bg {
+      border-color: rgba(255, 255, 255, 0.11);
+      background: rgba(31, 28, 48, 0.18);
+    }
+
+    #language-toggle-slot {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    #language-label-en,
+    #language-label-es {
+      position: absolute;
+      top: 50%;
+      transition:
+        top 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        left 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        right 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+
+    #language-label-en {
+      left: -1.6rem;
+      margin-right: 0;
+      transform: translateY(-50%);
+    }
+
+    #language-label-es {
+      right: -1.6rem;
+      margin-left: 0;
+      transform: translateY(-50%);
+    }
+
+    #language-switch-wrapper.is-compact {
+      transform: translateY(0.15rem);
+      width: 4.5rem;
+      padding-inline: 0;
+    }
+
+    #language-switch-wrapper.is-compact #language-switch-glass-bg {
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: -1.55rem;
+      border-radius: 0.9rem;
+      border-color: rgba(191, 180, 230, 0.45);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px) saturate(135%);
+    }
+
+    :global(.dark)
+      #language-switch-wrapper.is-compact
+      #language-switch-glass-bg {
+      border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(31, 28, 48, 0.15);
+    }
+
+    #language-switch-wrapper.is-compact #language-label-en {
+      top: calc(80%);
+      left: 0.28rem;
+      transform: translateY(0);
+    }
+
+    #language-switch-wrapper.is-compact #language-label-es {
+      top: calc(80%);
+      right: 0.28rem;
+      transform: translateY(0);
+    }
+  }
+</style>
