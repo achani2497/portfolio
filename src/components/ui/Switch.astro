@@ -1,14 +1,15 @@
 ---
-import Icon from "./Icon.astro";
 import ToggleSwitch from "./ToggleSwitch.astro";
 ---
 
 <ToggleSwitch id="theme-toggle" thumbId="theme-thumb" ariaLabel="Theme switch">
   <Fragment slot="left">
-    <Icon icon="sun" />
+    <span class="text-base leading-none select-none" aria-hidden="true">☀️</span
+    >
   </Fragment>
   <Fragment slot="right">
-    <Icon icon="moon" />
+    <span class="text-base leading-none select-none" aria-hidden="true">🌕</span
+    >
   </Fragment>
 </ToggleSwitch>
 

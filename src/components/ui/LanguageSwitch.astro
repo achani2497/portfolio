@@ -2,24 +2,44 @@
 import ToggleSwitch from "./ToggleSwitch.astro";
 ---
 
-<ToggleSwitch
-  id="language-toggle"
-  thumbId="language-thumb"
-  ariaLabel="Language switch"
+<div
+  class="bg-surface/45 inline-flex h-8 items-center gap-0.5 rounded-full px-1 backdrop-blur-[2px] md:h-10 md:px-1.5"
 >
-  <Fragment slot="left">
-    <span class="text-sm leading-none select-none" aria-hidden="true">🇺🇸</span>
-  </Fragment>
-  <Fragment slot="right">
-    <span class="text-sm leading-none select-none" aria-hidden="true">🇦🇷</span>
-  </Fragment>
-</ToggleSwitch>
+  <span
+    id="language-label-en"
+    class="text-text-muted -mr-0.5 inline-flex h-8 items-center rounded-full px-2 text-xs leading-none font-bold select-none md:h-10 md:px-2.5 md:text-sm"
+    aria-hidden="true">EN</span
+  >
+
+  <ToggleSwitch
+    id="language-toggle"
+    thumbId="language-thumb"
+    ariaLabel="Language switch"
+  >
+    <Fragment slot="left">
+      <span class="text-sm leading-none select-none" aria-hidden="true">🇺🇸</span
+      >
+    </Fragment>
+    <Fragment slot="right">
+      <span class="text-sm leading-none select-none" aria-hidden="true">🇦🇷</span
+      >
+    </Fragment>
+  </ToggleSwitch>
+
+  <span
+    id="language-label-es"
+    class="text-text-muted -ml-0.5 inline-flex h-8 items-center rounded-full px-2 text-xs leading-none font-bold select-none md:h-10 md:px-2.5 md:text-sm"
+    aria-hidden="true">ES</span
+  >
+</div>
 
 <script>
   import { onLocaleChange, setLocale } from "../../utils/localeClient";
 
   const toggle = document.getElementById("language-toggle");
   const thumb = document.getElementById("language-thumb");
+  const enLabel = document.getElementById("language-label-en");
+  const esLabel = document.getElementById("language-label-es");
   const mdQuery = window.matchMedia("(min-width: 768px)");
   const root = document.documentElement;
 
@@ -29,6 +49,12 @@ import ToggleSwitch from "./ToggleSwitch.astro";
     if (!thumb) return;
     const isSpanish = getCurrentLocale() === "es";
     const isDesktop = mdQuery.matches;
+    thumb.textContent = "";
+
+    enLabel?.classList.toggle("text-text-primary", !isSpanish);
+    enLabel?.classList.toggle("text-text-muted", isSpanish);
+    esLabel?.classList.toggle("text-text-primary", isSpanish);
+    esLabel?.classList.toggle("text-text-muted", !isSpanish);
 
     if (isDesktop) {
       thumb.style.transform = isSpanish
