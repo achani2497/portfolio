@@ -1,5 +1,6 @@
 ---
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import { SITE_PROFILE } from "../../config/site";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
 const currentYear = new Date().getFullYear();
@@ -7,7 +8,7 @@ const currentYear = new Date().getFullYear();
 
 <footer class="-my-10 text-center font-sans text-xs sm:text-sm md:-my-14">
   <p class="text-text-secondary/70">
-    <span>{`© ${currentYear} Alejandro Ismael Chañi. `}</span>
+    <span>{`© ${currentYear} ${SITE_PROFILE.fullName}. `}</span>
     <span data-i18n="footer.rightsReserved"
       >{dictionary.footer.rightsReserved}</span
     >

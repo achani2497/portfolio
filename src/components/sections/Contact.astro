@@ -2,6 +2,7 @@
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import { SITE_LINKS } from "../../config/site";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
 ---
@@ -38,7 +39,7 @@ const dictionary = getDictionary(DEFAULT_LOCALE);
     </div>
     <a
       class="group shadow-neumorphic transition-[translate, transform, box-shadow,background] hover:shadow-neumorphic-hover animate-float flex cursor-pointer items-center gap-2 rounded-full bg-linear-to-r from-[var(--app-color-lilac-500)] to-[var(--app-color-lilac-700)] p-4 duration-300 ease-out will-change-transform [animation-delay:1s] hover:-translate-y-1 hover:animate-none hover:from-[var(--app-color-lilac-600)] hover:to-[var(--app-color-lilac-700)] active:translate-y-0"
-      href="https://calendar.app.google/UN5BnTAkxnHJyN8b8"
+      href={SITE_LINKS.calendar}
       target="_blank"
       rel="noopener noreferrer"
     >

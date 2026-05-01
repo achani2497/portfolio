@@ -2,17 +2,23 @@
 import ExperienceCard from "../experience/ExperienceCard.astro";
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
-import experienceData from "../../data/experience.json";
+import { EXPERIENCE_ORDER, experienceStructure } from "../../data/experiences";
+import { technologyCatalog } from "../../data/technologies";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
-let workExperienceIndex = 0;
-const experiences = dictionary.experience.items.map((item) => {
-  if (item.kind !== "work") return item;
+const experiences = EXPERIENCE_ORDER.map((experienceId) => {
+  const structure = experienceStructure[experienceId];
+  const copy = dictionary.experience.itemsById[experienceId];
+  const techs = structure.techIds?.map((techId) => {
+    const technology = technologyCatalog[techId];
+    return { label: technology.label, icon: technology.icon };
+  });
 
-  const techs = experienceData.workExperience[workExperienceIndex]?.techs;
-  workExperienceIndex += 1;
-
-  return { ...item, techs };
+  return {
+    ...structure,
+    ...copy,
+    techs,
+  };
 });
 ---
 
@@ -33,8 +39,8 @@ const experiences = dictionary.experience.items.map((item) => {
   <!-- CARDS -->
   <div class="flex flex-col gap-6 md:gap-8">
     {
-      experiences.map((exp, index) => (
-        <ExperienceCard {...exp} i18nKeyPrefix={`experience.items.${index}`} />
+      experiences.map((exp) => (
+        <ExperienceCard {...exp} i18nKeyPrefix={`experience.itemsById.${exp.id}`} />
       ))
     }
   </div>

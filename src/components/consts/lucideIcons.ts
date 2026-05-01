@@ -11,7 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export const lucideIcons: Record<string, LucideIcon> = {
+export const lucideIcons = {
   // Missing techs icons on simple-icons
   linkedin: Linkedin,
   aws: Cloud,
@@ -25,4 +25,6 @@ export const lucideIcons: Record<string, LucideIcon> = {
   moon: Moon,
   // UI icons
   chevronDown: ChevronDown,
-};
+} as const satisfies Record<string, LucideIcon>;
+
+export type LucideIconKey = keyof typeof lucideIcons;

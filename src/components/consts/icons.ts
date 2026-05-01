@@ -20,7 +20,7 @@ import {
 
 import type { SimpleIcon } from "simple-icons";
 
-export const icons: Record<string, SimpleIcon> = {
+export const icons = {
   siGithub,
   siGmail,
   siReact,
@@ -38,4 +38,6 @@ export const icons: Record<string, SimpleIcon> = {
   siPhp,
   siGooglecalendar,
   siTailwindcss
-} as const;
+} as const satisfies Record<string, SimpleIcon>;
+
+export type SimpleIconKey = keyof typeof icons;

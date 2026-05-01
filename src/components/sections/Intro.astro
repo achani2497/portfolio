@@ -2,8 +2,14 @@
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import SocialButton from "../ui/SocialButton.astro";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import { SITE_LINKS, SOCIAL_LINKS } from "../../config/site";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
+const socialLabelByKey = {
+  github: dictionary.intro.github,
+  linkedin: dictionary.intro.linkedin,
+  email: dictionary.intro.email,
+} as const;
 ---
 
 <section class="relative w-full" id="intro">
@@ -33,26 +39,16 @@ const dictionary = getDictionary(DEFAULT_LOCALE);
     </p>
 
     <div class="flex flex-col gap-4 md:flex-row md:gap-6">
-      <SocialButton
-        href="https://github.com/achani2497"
-        label={dictionary.intro.github}
-        icon="siGithub"
-        i18nKey="intro.github"
-      />
-
-      <SocialButton
-        href="https://linkedin.com/in/alejandro-chañi"
-        label={dictionary.intro.linkedin}
-        icon="linkedin"
-        i18nKey="intro.linkedin"
-      />
-
-      <SocialButton
-        href="mailto:alejandro.chani24@gmail.com"
-        label={dictionary.intro.email}
-        icon="siGmail"
-        i18nKey="intro.email"
-      />
+      {
+        SOCIAL_LINKS.map((link) => (
+          <SocialButton
+            href={SITE_LINKS[link.key]}
+            label={socialLabelByKey[link.key]}
+            icon={link.icon}
+            i18nKey={`intro.${link.key}`}
+          />
+        ))
+      }
     </div>
   </div>
 </section>

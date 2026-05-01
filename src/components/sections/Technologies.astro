@@ -1,12 +1,11 @@
 ---
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
-import technologiesData from "../../data/technologies.json";
+import { featuredTechnologies } from "../../data/technologies";
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
-import type { TechnologyItem } from "../../i18n/types";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
-const technologies = technologiesData.technologies as TechnologyItem[];
+const technologies = featuredTechnologies;
 ---
 
 <section id="technologies" class="flex flex-col gap-6 sm:gap-8">

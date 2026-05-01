@@ -5,6 +5,7 @@ import Wave from "../components/layouts/Wave.astro";
 import Switch from "../components/ui/Switch.astro";
 import LanguageSwitch from "../components/ui/LanguageSwitch.astro";
 import { getDictionary, DEFAULT_LOCALE } from "../i18n";
+import { BRANDING } from "../config/site";
 import "../styles/global.css";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
@@ -29,7 +30,7 @@ const dictionary = getDictionary(DEFAULT_LOCALE);
     <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Meta -->
-    <meta name="theme-color" content="#E7E0F5" />
+    <meta name="theme-color" content={BRANDING.themeColor} />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={dictionary.meta.description} />

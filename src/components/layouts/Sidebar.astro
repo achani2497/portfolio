@@ -2,36 +2,14 @@
 import SideBarItem from "../ui/SideBarItem.astro";
 import Icon from "../ui/Icon.astro";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import { SECTION_NAVIGATION } from "../../config/navigation";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
 
-const items = [
-  {
-    id: "intro",
-    icon: "home",
-    label: dictionary.sidebar.intro,
-    i18nKey: "sidebar.intro",
-  },
-  // { id: "assistant", icon: "ai", label: "Asistente virtual" },
-  {
-    id: "experience",
-    icon: "experience",
-    label: dictionary.sidebar.experience,
-    i18nKey: "sidebar.experience",
-  },
-  {
-    id: "technologies",
-    icon: "technologies",
-    label: dictionary.sidebar.technologies,
-    i18nKey: "sidebar.technologies",
-  },
-  {
-    id: "contact",
-    icon: "contact",
-    label: dictionary.sidebar.contact,
-    i18nKey: "sidebar.contact",
-  },
-];
+const items = SECTION_NAVIGATION.map((item) => ({
+  ...item,
+  label: dictionary.sidebar[item.id],
+}));
 ---
 
 <!-- DESKTOP SIDEBAR -->

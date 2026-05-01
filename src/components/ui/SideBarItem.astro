@@ -1,7 +1,8 @@
 ---
 import Icon from "./Icon.astro";
+import type { IconKey } from "../../utils/getIcon";
 interface Props {
-  icon: string;
+  icon: IconKey;
   label: string;
   id: string;
   i18nKey?: string;

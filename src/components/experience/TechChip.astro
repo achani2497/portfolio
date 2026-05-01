@@ -1,9 +1,10 @@
 ---
 import Icon from "../ui/Icon.astro";
+import type { IconKey } from "../../utils/getIcon";
 
 interface Props {
   label: string;
-  icon: string;
+  icon: IconKey;
 }
 
 const { label, icon } = Astro.props;

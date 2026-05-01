@@ -1,28 +1,13 @@
+import type { ExperienceId } from "../data/experiences";
+import type { TechnologyLevelKey } from "../data/technologies";
+
 export type Locale = "en" | "es";
 
-export type TechnologyLevelKey = "basic" | "intermediate" | "advanced";
-
-export type TechnologyItem = {
-  label: string;
-  icon: string;
-  level: TechnologyLevelKey;
-};
-
-export type ExperienceTech = {
-  label: string;
-  icon: string;
-};
-
-export type ExperienceItem = {
-  kind: "work" | "education";
+export type ExperienceCopyItem = {
   role: string;
-  company: string;
-  companyInitials: string;
   period: string;
   status?: string;
   description: string;
-  logo?: string;
-  techs?: ExperienceTech[];
 };
 
 export type AppDictionary = {
@@ -46,7 +31,7 @@ export type AppDictionary = {
   };
   experience: {
     title: string;
-    items: ExperienceItem[];
+    itemsById: Record<ExperienceId, ExperienceCopyItem>;
   };
   technologies: {
     title: string;

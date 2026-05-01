@@ -1,14 +1,16 @@
 ---
 import { BookOpen, BriefcaseBusiness, GraduationCap } from "lucide-react";
 import TechChip from "./TechChip.astro";
+import type { IconKey } from "../../utils/getIcon";
+import type { ExperienceStructureItem } from "../../data/experiences";
 
 interface Tech {
   label: string;
-  icon: string;
+  icon: IconKey;
 }
 
 interface Props {
-  kind?: string;
+  kind?: ExperienceStructureItem["kind"];
   role: string;
   company: string;
   companyInitials: string;
@@ -83,12 +85,7 @@ const CornerIcon =
       </h3>
 
       <span class="text-text-secondary">
-        <span
-          data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.company` : undefined}
-          class="text-text-secondary font-sans font-bold"
-        >
-          {company}
-        </span>
+        <span class="text-text-secondary font-sans font-bold">{company}</span>
         •
         <span data-i18n={i18nKeyPrefix ? `${i18nKeyPrefix}.period` : undefined}>
           {period}
