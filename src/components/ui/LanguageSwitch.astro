@@ -20,14 +20,22 @@ import ToggleSwitch from "./ToggleSwitch.astro";
       ariaLabel="Language switch"
     >
       <Fragment slot="left">
-        <span class="text-sm leading-none select-none" aria-hidden="true"
-          >🇺🇸</span
-        >
+        <img
+          src="/flags/united_states.svg"
+          alt=""
+          aria-hidden="true"
+          class="h-3.5 w-5 rounded-[2px] object-cover select-none"
+          draggable="false"
+        />
       </Fragment>
       <Fragment slot="right">
-        <span class="text-sm leading-none select-none" aria-hidden="true"
-          >🇦🇷</span
-        >
+        <img
+          src="/flags/argentina.svg"
+          alt=""
+          aria-hidden="true"
+          class="h-3.5 w-5 rounded-[2px] object-cover select-none"
+          draggable="false"
+        />
       </Fragment>
     </ToggleSwitch>
   </div>
@@ -55,16 +63,21 @@ import ToggleSwitch from "./ToggleSwitch.astro";
 
   const getCurrentLocale = () => (root.dataset.locale === "es" ? "es" : "en");
 
+  function applyLabelState(label: HTMLElement | null, isActive: boolean) {
+    if (!label) return;
+    label.classList.toggle("text-text-primary", isActive);
+    label.classList.toggle("text-text-muted", !isActive);
+    label.classList.toggle("opacity-100", isActive);
+    label.classList.toggle("opacity-60", !isActive);
+  }
+
   function applyLocaleThumb() {
     if (!thumb) return;
     const isSpanish = getCurrentLocale() === "es";
     const isDesktop = mdQuery.matches;
     thumb.textContent = "";
-
-    enLabel?.classList.toggle("text-text-primary", !isSpanish);
-    enLabel?.classList.toggle("text-text-muted", isSpanish);
-    esLabel?.classList.toggle("text-text-primary", isSpanish);
-    esLabel?.classList.toggle("text-text-muted", !isSpanish);
+    applyLabelState(enLabel, !isSpanish);
+    applyLabelState(esLabel, isSpanish);
 
     if (isDesktop) {
       thumb.style.transform = isSpanish
