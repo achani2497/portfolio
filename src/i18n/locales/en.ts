@@ -33,13 +33,6 @@ export const enDictionary: AppDictionary = {
         description:
           "Batuta project:\n• Development and refactoring of backend modules, designing and implementing REST APIs with Express.js and TypeScript, and optimizing MongoDB queries to improve performance and support the product's scalability.\n• Participation in frontend module design and full interface development with React, focusing on user experience, performance, and code quality.\n• Refactoring of legacy frontend and backend modules, reducing technical debt and improving code maintainability.\n• Proposal and progressive rollout of an architecture based on Clean Architecture, defining responsibilities and technical guidelines for the project.\n• Contribution to technical design and architecture decisions, working closely with other team roles.",
         logo: "devecoop.png",
-        techs: [
-          { label: "React", icon: "siReact" },
-          { label: "TypeScript", icon: "siTypescript" },
-          { label: "Node.js", icon: "siNodedotjs" },
-          { label: "Express.js", icon: "siExpress" },
-          { label: "MongoDB", icon: "siMongodb" },
-        ],
       },
       {
         kind: "work",
@@ -50,18 +43,6 @@ export const enDictionary: AppDictionary = {
         description:
           "• End-to-end feature development in product-oriented applications, participating in different projects and business contexts, including critical flows in both frontend and backend.\n• Development of web and mobile frontend interfaces and backend services, working with different stacks depending on the project, integrating external services and Amazon S3 storage.\n• Design and implementation of UI components and REST APIs, participating in requirements analysis and technical design, and proposing improvements that were applied in the final product.",
         logo: "kovix.svg",
-        techs: [
-          { label: "React", icon: "siReact" },
-          { label: "React Native", icon: "siReact" },
-          { label: "TypeScript", icon: "siTypescript" },
-          { label: "Angular", icon: "siAngular" },
-          { label: "Express.js", icon: "siExpress" },
-          { label: "NestJS", icon: "siNestjs" },
-          { label: "Django", icon: "siDjango" },
-          { label: "PostgreSQL", icon: "siPostgresql" },
-          { label: "MySQL", icon: "siMysql" },
-          { label: "Amazon S3", icon: "aws" },
-        ],
       },
       {
         kind: "work",
@@ -72,14 +53,6 @@ export const enDictionary: AppDictionary = {
         description:
           "• End-to-end design and development of web applications, including an internal management app still in use that centralizes billing and project tracking data, with direct impact on work organization and internal processes.\n• Development of a web application for end users to report equipment failures through QR codes, improving report efficiency and traceability.\n• Development and maintenance of frontend and backend features, as well as the company's institutional website, participating in requirements gathering, solution design, and full feature delivery.",
         logo: "ingeray.svg",
-        techs: [
-          { label: "Vue", icon: "siVuedotjs" },
-          { label: "React", icon: "siReact" },
-          { label: "Express.js", icon: "siExpress" },
-          { label: "Laravel", icon: "siLaravel" },
-          { label: "PHP", icon: "siPhp" },
-          { label: "MySQL", icon: "siMysql" },
-        ],
       },
       {
         kind: "education",
@@ -119,5 +92,9 @@ export const enDictionary: AppDictionary = {
     line2:
       "I am open to new opportunities and technical challenges in projects with real impact.",
     cta: "Let's set up a meeting!",
+  },
+  footer: {
+    rightsReserved: "All rights reserved.",
+    authorship: "Site designed and developed by me.",
   },
 };

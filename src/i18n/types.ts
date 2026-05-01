@@ -59,4 +59,8 @@ export type AppDictionary = {
     line2: string;
     cta: string;
   };
+  footer: {
+    rightsReserved: string;
+    authorship: string;
+  };
 };

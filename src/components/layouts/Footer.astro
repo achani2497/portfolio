@@ -1,0 +1,18 @@
+---
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+
+const dictionary = getDictionary(DEFAULT_LOCALE);
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="-my-10 text-center font-sans text-xs sm:text-sm md:-my-14">
+  <p class="text-text-secondary/70">
+    <span>{`© ${currentYear} Alejandro Ismael Chañi. `}</span>
+    <span data-i18n="footer.rightsReserved"
+      >{dictionary.footer.rightsReserved}</span
+    >
+  </p>
+  <p data-i18n="footer.authorship" class="text-text-secondary/70 mt-1">
+    {dictionary.footer.authorship}
+  </p>
+</footer>

@@ -2,9 +2,18 @@
 import ExperienceCard from "../experience/ExperienceCard.astro";
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import experienceData from "../../data/experience.json";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
-const experiences = dictionary.experience.items;
+let workExperienceIndex = 0;
+const experiences = dictionary.experience.items.map((item) => {
+  if (item.kind !== "work") return item;
+
+  const techs = experienceData.workExperience[workExperienceIndex]?.techs;
+  workExperienceIndex += 1;
+
+  return { ...item, techs };
+});
 ---
 
 <section id="experience" class="flex flex-col gap-6 sm:gap-8">
