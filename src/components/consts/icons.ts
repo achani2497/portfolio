@@ -13,8 +13,9 @@ import {
   siPhp,
   siPostgresql,
   siReact,
+  siTailwindcss,
   siTypescript,
-  siVuedotjs,
+  siVuedotjs
 } from "simple-icons";
 
 import type { SimpleIcon } from "simple-icons";
@@ -36,4 +37,5 @@ export const icons: Record<string, SimpleIcon> = {
   siLaravel,
   siPhp,
   siGooglecalendar,
+  siTailwindcss
 } as const;

@@ -106,22 +106,11 @@ export const enDictionary: AppDictionary = {
   },
   technologies: {
     title: "Technologies",
-    items: [
-      { label: "React", icon: "siReact", level: "Advanced" },
-      { label: "TypeScript", icon: "siTypescript", level: "Intermediate" },
-      { label: "Node.js", icon: "siNodedotjs", level: "Intermediate" },
-      { label: "Express.js", icon: "siExpress", level: "Intermediate" },
-      { label: "MongoDB", icon: "siMongodb", level: "Intermediate" },
-      { label: "React Native", icon: "siReact", level: "Basic" },
-      { label: "Angular", icon: "siAngular", level: "Basic" },
-      { label: "NestJS", icon: "siNestjs", level: "Intermediate" },
-      { label: "Django", icon: "siDjango", level: "Basic" },
-      { label: "PostgreSQL", icon: "siPostgresql", level: "Intermediate" },
-      { label: "MySQL", icon: "siMysql", level: "Intermediate" },
-      { label: "Amazon S3", icon: "aws", level: "Intermediate" },
-      { label: "Vue", icon: "siVuedotjs", level: "Intermediate" },
-      { label: "Laravel", icon: "siLaravel", level: "Intermediate" },
-    ],
+    levels: {
+      basic: "Basic",
+      intermediate: "Intermediate",
+      advanced: "Advanced",
+    },
   },
   contact: {
     eyebrow: "Let's talk!",

@@ -1,9 +1,11 @@
 export type Locale = "en" | "es";
 
+export type TechnologyLevelKey = "basic" | "intermediate" | "advanced";
+
 export type TechnologyItem = {
   label: string;
   icon: string;
-  level: string;
+  level: TechnologyLevelKey;
 };
 
 export type ExperienceTech = {
@@ -48,7 +50,7 @@ export type AppDictionary = {
   };
   technologies: {
     title: string;
-    items: TechnologyItem[];
+    levels: Record<TechnologyLevelKey, string>;
   };
   contact: {
     eyebrow: string;

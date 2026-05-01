@@ -1,10 +1,12 @@
 ---
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import technologiesData from "../../data/technologies.json";
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
-import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
+import type { TechnologyItem } from "../../i18n/types";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
-const technologies = dictionary.technologies.items;
+const technologies = technologiesData.technologies as TechnologyItem[];
 ---
 
 <section id="technologies" class="flex flex-col gap-6 sm:gap-8">
@@ -21,21 +23,18 @@ const technologies = dictionary.technologies.items;
   />
   <div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
     {
-      technologies.map((technology, index) => (
+      technologies.map((technology) => (
         <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
           <Icon icon={technology.icon} />
           <div class="flex flex-col items-center justify-center gap-1">
-            <span
-              data-i18n={`technologies.items.${index}.label`}
-              class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]"
-            >
+            <span class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]">
               {technology.label}
             </span>
             <span
-              data-i18n={`technologies.items.${index}.level`}
+              data-i18n={`technologies.levels.${technology.level}`}
               class="text-text-secondary font-sans text-sm"
             >
-              {technology.level}
+              {dictionary.technologies.levels[technology.level]}
             </span>
           </div>
         </div>
