@@ -1,0 +1,30 @@
+.moonie-sprite {
+  --sprite-width: calc(var(--frame-width) * var(--sprite-scale));
+  --sprite-height: calc(var(--frame-height) * var(--sprite-scale));
+  --sheet-width: calc(var(--sprite-width) * var(--frame-count));
+
+  display: inline-block;
+  flex: none;
+  width: var(--sprite-width);
+  height: var(--sprite-height);
+  background-image: var(--sprite-image);
+  background-repeat: no-repeat;
+  background-size: var(--sheet-width) 100%;
+  image-rendering: pixelated;
+  animation: moonie-frames var(--sprite-duration) steps(var(--frame-count)) infinite;
+}
+
+@keyframes moonie-frames {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: calc(-1 * var(--sheet-width));
+  }
+}
+
+.moonie-chat {
+  font-family: "Doto", var(--font-sans, ui-sans-serif);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
