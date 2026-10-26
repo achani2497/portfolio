@@ -1,15 +1,22 @@
 ---
-import { getIconData } from "../../utils/getIcon";
 import type { IconKey } from "../../utils/getIcon";
+import { getIconData } from "../../utils/getIcon";
 
 interface Props {
   icon: IconKey;
   class?: string;
   changeColorOnHover?: boolean;
   inheritColor?: boolean;
+  scaleOnHover?: boolean;
 }
 
-const { icon, class: className = "", changeColorOnHover = true, inheritColor = false } = Astro.props;
+const {
+  icon,
+  class: className = "",
+  changeColorOnHover = true,
+  inheritColor = false,
+  scaleOnHover = true,
+} = Astro.props;
 
 const iconData = getIconData(icon);
 ---
@@ -18,7 +25,8 @@ const iconData = getIconData(icon);
   iconData?.type === "simple" && (
     <svg
       viewBox="0 0 24 24"
-      class={`h-4 w-4 shrink-0 transition-all duration-200 ${className} text-(--tech-color) group-hover:scale-110`}
+      data-tech-icon={icon}
+      class={`h-5 w-5 shrink-0 transition-all duration-200 ${className} text-(--tech-color) ${scaleOnHover ? "group-hover:scale-150" : ""}`}
       style={`--tech-color: #${iconData.icon.hex}`}
       fill="currentColor"
     >
@@ -30,7 +38,7 @@ const iconData = getIconData(icon);
 {
   iconData?.type === "lucide" && (
     <iconData.icon
-      className={`h-4 w-4 shrink-0 transition-all duration-200 ${className} ${inheritColor ? "" : "text-text-primary"} ${changeColorOnHover ? "group-hover:text-lilac-600" : ""} group-hover:scale-110`}
+      className={`h-5 w-5 shrink-0 transition-all duration-200 ${className} ${inheritColor ? "" : "text-text-primary"} ${changeColorOnHover ? "group-hover:text-lilac-600" : ""} ${scaleOnHover ? "group-hover:scale-150" : ""}`}
     />
   )
 }

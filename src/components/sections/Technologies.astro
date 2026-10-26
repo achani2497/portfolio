@@ -1,14 +1,13 @@
 ---
+import { mainStack, secondaryTechnologies } from "../../data/technologies";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
-import { featuredTechnologies } from "../../data/technologies";
 import DisplayScramble from "../ui/DisplayScramble.astro";
 import Icon from "../ui/Icon.astro";
 
 const dictionary = getDictionary(DEFAULT_LOCALE);
-const technologies = featuredTechnologies;
 ---
 
-<section id="technologies" class="flex flex-col gap-6 sm:gap-8">
+<section id="technologies" class="flex flex-col gap-10 sm:gap-12">
   <DisplayScramble
     as="h1"
     text={dictionary.technologies.title}
@@ -20,24 +19,64 @@ const technologies = featuredTechnologies;
     initialCharCount={30}
     scrambleChars="X"
   />
-  <div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
-    {
-      technologies.map((technology) => (
-        <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
-          <Icon icon={technology.icon} />
-          <div class="flex flex-col items-center justify-center gap-1">
-            <span class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]">
-              {technology.label}
-            </span>
-            <span
-              data-i18n={`technologies.levels.${technology.level}`}
-              class="text-text-secondary font-sans text-sm"
-            >
-              {dictionary.technologies.levels[technology.level]}
-            </span>
+
+  <!-- Main Stack -->
+  <div class="flex flex-col gap-6 sm:gap-8">
+    <h2
+      data-i18n="technologies.mainStack"
+      class="font-display text-text-secondary text-xl tracking-wide md:text-2xl"
+    >
+      {dictionary.technologies.mainStack}
+    </h2>
+    <div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+      {
+        mainStack.map((tech) => (
+          <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
+            <Icon icon={tech.icon} />
+            <div class="flex flex-col items-center justify-center gap-1">
+              <span class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]">
+                {tech.label}
+              </span>
+              <span
+                data-i18n={`technologies.levels.${tech.level}`}
+                class="text-text-secondary font-sans text-sm"
+              >
+                {dictionary.technologies.levels[tech.level]}
+              </span>
+            </div>
           </div>
-        </div>
-      ))
-    }
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Secondary Technologies -->
+  <div class="flex flex-col gap-6 sm:gap-8">
+    <h2
+      data-i18n="technologies.secondaryTechnologies"
+      class="font-display text-text-secondary text-xl tracking-wide md:text-2xl"
+    >
+      {dictionary.technologies.secondaryTechnologies}
+    </h2>
+    <div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
+      {
+        secondaryTechnologies.map((tech) => (
+          <div class="group shadow-neumorphic bg-surface grid grid-cols-1 place-items-center gap-4 rounded-xl p-4 transition-all duration-500 ease-in-out hover:-translate-y-1">
+            <Icon icon={tech.icon} />
+            <div class="flex flex-col items-center justify-center gap-1">
+              <span class="text-text-primary font-sans text-[1rem] md:text-[1.125rem]">
+                {tech.label}
+              </span>
+              <span
+                data-i18n={`technologies.levels.${tech.level}`}
+                class="text-text-secondary font-sans text-sm"
+              >
+                {dictionary.technologies.levels[tech.level]}
+              </span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>

@@ -1,6 +1,6 @@
 ---
-import Icon from "../ui/Icon.astro";
 import type { IconKey } from "../../utils/getIcon";
+import Icon from "../ui/Icon.astro";
 
 interface Props {
   label: string;
@@ -11,7 +11,7 @@ const { label, icon } = Astro.props;
 ---
 
 <div
-  class="group bg-surface text-text-secondary shadow-neumorphic-inset hover:text-text-primary flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition-all duration-200 ease-out"
+  class="group bg-surface text-text-secondary shadow-neumorphic-inset hover:text-text-primary flex items-center gap-2 rounded-full px-3 py-1.5 text-sm transition-all duration-200 ease-out hover:text-[1rem]"
 >
   <Icon icon={icon} />
   <span>{label}</span>

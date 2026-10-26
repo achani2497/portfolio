@@ -35,6 +35,8 @@ export type AppDictionary = {
   };
   technologies: {
     title: string;
+    mainStack: string;
+    secondaryTechnologies: string;
     levels: Record<TechnologyLevelKey, string>;
   };
   contact: {

@@ -1,6 +1,6 @@
 ---
-import Icon from "./Icon.astro";
 import type { IconKey } from "../../utils/getIcon";
+import Icon from "./Icon.astro";
 interface Props {
   icon: IconKey;
   label: string;
@@ -16,7 +16,12 @@ const { icon, label, id, i18nKey } = Astro.props;
   class="sidebar-item text-text-secondary relative z-10 flex w-full cursor-pointer items-center rounded-full px-3 py-2 text-left"
 >
   {/* ICONO */}
-  <Icon icon={icon} class="h-5 w-5 shrink-0" changeColorOnHover={false} />
+  <Icon
+    icon={icon}
+    class="h-5 w-5 shrink-0"
+    changeColorOnHover={false}
+    scaleOnHover={false}
+  />
 
   {/* LABEL */}
   <span
