@@ -1,4 +1,5 @@
 import type { ChatEvent, Option } from "../../../types/chat";
+import { isRecord } from "./guards";
 
 const OPTION_ACTIONS = new Set<string>([
   "download-cv",
@@ -78,10 +79,6 @@ export function createSseParser(): SseParser {
   };
 
   return { push, flush };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function isOption(value: unknown): value is Option {

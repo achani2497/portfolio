@@ -8,12 +8,14 @@ export const enChat = {
     ariaLabel: "Message",
     send: "Send",
     stop: "Stop",
+    stopTitle: "Stop generating",
     retry: "Retry",
     dismiss: "Dismiss",
   },
   status: {
     thinking: "Thinking...",
     loading: "Loading...",
+    stopped: "Stopped.",
   },
   limits: {
     messagesLeft: "{count} messages left",

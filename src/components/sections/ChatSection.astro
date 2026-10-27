@@ -1,8 +1,14 @@
 ---
 import Chat from "../chat/Chat";
 import { CHAT_API } from "../../config/chat";
+import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
 
 const { url: backendUrl, configured } = CHAT_API;
+const unavailable = getDictionary(DEFAULT_LOCALE).chat.unavailable;
+const emptyState = {
+  en: getDictionary("en").chat.emptyState,
+  es: getDictionary("es").chat.emptyState,
+} as const;
 ---
 
 <section id="chat" class="w-full">
@@ -11,13 +17,49 @@ const { url: backendUrl, configured } = CHAT_API;
   >
     {
       configured && backendUrl ? (
-        <Chat client:idle backendUrl={backendUrl} />
+        <Chat client:only="react" backendUrl={backendUrl}>
+          <div
+            slot="fallback"
+            class="moonie-chat flex flex-col gap-6"
+            aria-hidden="true"
+          >
+            <div class="flex flex-col items-center gap-2 py-2">
+              <p class="text-text-secondary text-center text-sm">
+                <span class="chat-fallback-en">{emptyState.en}</span>
+                <span class="chat-fallback-es">{emptyState.es}</span>
+              </p>
+            </div>
+            <div class="flex w-full items-center gap-2 opacity-60">
+              <div class="shadow-neumorphic-inset bg-surface h-12 w-full rounded-2xl"></div>
+              <div class="bg-lilac-600 h-12 w-24 shrink-0 rounded-full" />
+            </div>
+          </div>
+        </Chat>
       ) : (
         <p class="text-text-secondary py-8 text-center text-sm">
-          Chat is temporarily unavailable. Please use the contact section
-          instead.
+          <span data-i18n="chat.unavailable.title" class="font-semibold">
+            {unavailable.title}
+          </span>{" "}
+          <span data-i18n="chat.unavailable.description">
+            {unavailable.description}
+          </span>
         </p>
       )
     }
   </div>
 </section>
+
+<style>
+  .chat-fallback-en,
+  .chat-fallback-es {
+    display: none;
+  }
+
+  :global(html[lang="en"]) .chat-fallback-en {
+    display: inline;
+  }
+
+  :global(html[lang="es"]) .chat-fallback-es {
+    display: inline;
+  }
+</style>

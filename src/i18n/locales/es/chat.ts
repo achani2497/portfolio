@@ -8,12 +8,14 @@ export const esChat = {
     ariaLabel: "Mensaje",
     send: "Enviar",
     stop: "Detener",
+    stopTitle: "Detener la respuesta",
     retry: "Reintentar",
     dismiss: "Descartar",
   },
   status: {
     thinking: "Pensando...",
     loading: "Cargando...",
+    stopped: "Detenido.",
   },
   limits: {
     messagesLeft: "Quedan {count} mensajes",

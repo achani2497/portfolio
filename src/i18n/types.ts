@@ -55,12 +55,14 @@ export type AppDictionary = {
       ariaLabel: string;
       send: string;
       stop: string;
+      stopTitle: string;
       retry: string;
       dismiss: string;
     };
     status: {
       thinking: string;
       loading: string;
+      stopped: string;
     };
     limits: {
       messagesLeft: string;

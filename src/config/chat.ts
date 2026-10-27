@@ -1,6 +1,10 @@
 const DEV_FALLBACK_URL = "http://localhost:3000/api/v1/new-message";
 const SCHEDULE_ENDPOINT = "schedule-meeting";
 
+export const CHAT_USER_ID_KEY = "moonie-user-id";
+export const CHAT_SCHEDULE_TIMEOUT_MS = 15000;
+export const CHAT_STREAM_INACTIVITY_TIMEOUT_MS = 60000;
+
 export type ChatApiConfig = {
   readonly url: string | null;
   readonly configured: boolean;

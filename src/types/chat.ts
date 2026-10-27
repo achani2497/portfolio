@@ -4,6 +4,8 @@ export type ChatPhase = "thinking" | "streaming" | "done";
 
 export type ChatStatus = string;
 
+export type StreamStopReason = "user" | "unmount";
+
 export type OptionAction = "download-cv" | "schedule-meeting" | "open-calendar";
 
 export type Option = {
@@ -26,4 +28,5 @@ export type ChatMessageData = {
   options?: Option[];
   pendingValue?: string | null;
   optionsLocked?: boolean;
+  streaming?: boolean;
 };

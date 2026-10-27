@@ -1,8 +1,10 @@
 import type { ChatMessageData, ChatRole } from "../../../types/chat";
 
-const AUTHOR_BY_ROLE: Record<ChatRole, string> = {
-  user: "🙂 Usuario",
-  assistant: "🤖 Moonie (asistente)",
+export type ChatExportLabels = {
+  header: string;
+  exportedAt: string;
+  userRole: string;
+  assistantRole: string;
 };
 
 function formatStamp(date: Date): string {
@@ -13,24 +15,32 @@ function formatDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+function authorForRole(role: ChatRole, labels: ChatExportLabels): string {
+  return role === "user" ? labels.userRole : labels.assistantRole;
+}
+
 export function buildChatMarkdown(
   messages: readonly ChatMessageData[],
+  labels: ChatExportLabels,
   now: Date = new Date(),
 ): string {
   const lines = messages.map(
-    (message) => `### ${AUTHOR_BY_ROLE[message.role]}\n${message.content}`,
+    (message) =>
+      `### ${authorForRole(message.role, labels)}\n${message.content}`,
   );
+  const exportedAt = labels.exportedAt.replace("{date}", formatStamp(now));
 
-  return `# Conversación con Moonie\n\n_Exportada el ${formatStamp(now)}_\n\n${lines.join("\n\n")}\n`;
+  return `# ${labels.header}\n\n_${exportedAt}_\n\n${lines.join("\n\n")}\n`;
 }
 
 export function downloadChatMarkdown(
   messages: readonly ChatMessageData[],
+  labels: ChatExportLabels,
   now: Date = new Date(),
 ): void {
   if (messages.length === 0) return;
 
-  const markdown = buildChatMarkdown(messages, now);
+  const markdown = buildChatMarkdown(messages, labels, now);
   const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");

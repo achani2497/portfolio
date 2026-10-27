@@ -1,11 +1,6 @@
 import MoonieSprite, { MOONIE_PHASES } from "./MoonieSprite";
 import type { ReactNode } from "react";
-import type {
-  ChatPhase,
-  ChatRole,
-  ChatStatus,
-  Option,
-} from "../../types/chat";
+import type { ChatPhase, ChatRole, ChatStatus, Option } from "../../types/chat";
 
 type ChatMessageProps = {
   role: ChatRole;
@@ -15,6 +10,7 @@ type ChatMessageProps = {
   leaving?: boolean;
   options?: Option[];
   optionsPendingValue?: string | null;
+  optionsPendingLabel?: string;
   optionsLocked?: boolean;
   optionsDisabled?: boolean;
   onOptionClick?: (option: Option) => void;
@@ -91,6 +87,7 @@ export default function ChatMessage({
   leaving = false,
   options,
   optionsPendingValue = null,
+  optionsPendingLabel,
   optionsLocked = false,
   optionsDisabled = false,
   onOptionClick,
@@ -145,7 +142,9 @@ export default function ChatMessage({
                   onClick={() => onOptionClick?.(option)}
                   className="bg-lilac-600 hover:bg-lilac-700 text-text-primary rounded-full px-3 py-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isPending ? "Agendando..." : option.label}
+                  {isPending
+                    ? (optionsPendingLabel ?? option.label)
+                    : option.label}
                 </button>
               );
             })}
