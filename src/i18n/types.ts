@@ -46,6 +46,54 @@ export type AppDictionary = {
     line2: string;
     cta: string;
   };
+  chat: {
+    title: string;
+    description: string;
+    emptyState: string;
+    input: {
+      placeholder: string;
+      ariaLabel: string;
+      send: string;
+      stop: string;
+      retry: string;
+      dismiss: string;
+    };
+    status: {
+      thinking: string;
+      loading: string;
+    };
+    limits: {
+      messagesLeft: string;
+      messageLeft: string;
+      limitReached: string;
+    };
+    export: {
+      label: string;
+      buttonTitle: string;
+      header: string;
+      exportedAt: string;
+      userRole: string;
+      assistantRole: string;
+    };
+    errors: {
+      network: string;
+      timeout: string;
+      interruptedStream: string;
+      generic: string;
+      scheduleFailure: string;
+      scheduleSuccess: string;
+    };
+    unavailable: {
+      title: string;
+      description: string;
+    };
+    options: {
+      scheduleMeeting: string;
+      downloadCv: string;
+      openCalendar: string;
+      schedulePending: string;
+    };
+  };
   footer: {
     rightsReserved: string;
     authorship: string;

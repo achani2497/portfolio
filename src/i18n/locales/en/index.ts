@@ -1,4 +1,5 @@
 import type { AppDictionary } from "../../types";
+import { enChat } from "./chat";
 import { enContact } from "./contact";
 import { enExperience } from "./experience";
 import { enFooter } from "./footer";
@@ -14,5 +15,6 @@ export const enDictionary: AppDictionary = {
   experience: enExperience,
   technologies: enTechnologies,
   contact: enContact,
+  chat: enChat,
   footer: enFooter,
 };

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import type { ChatPhase } from "../../types/chat";
 import "../../styles/moonie.css";
 
 export type MoonieSheet = {
@@ -32,7 +33,7 @@ export const MOONIE_SHEETS = {
 
 export type MoonieVariant = keyof typeof MOONIE_SHEETS;
 
-export type MooniePhase = "thinking" | "streaming" | "done";
+export type MooniePhase = ChatPhase;
 
 // streaming and done are placeholders until the barking and closing sprites exist.
 export const MOONIE_PHASES: Record<

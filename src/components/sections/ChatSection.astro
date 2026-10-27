@@ -1,0 +1,23 @@
+---
+import Chat from "../chat/Chat";
+import { CHAT_API } from "../../config/chat";
+
+const { url: backendUrl, configured } = CHAT_API;
+---
+
+<section id="chat" class="w-full">
+  <div
+    class="bg-surface shadow-neumorphic flex h-auto w-full flex-col gap-6 rounded-2xl px-6 py-8 md:rounded-4xl md:px-12"
+  >
+    {
+      configured && backendUrl ? (
+        <Chat client:idle backendUrl={backendUrl} />
+      ) : (
+        <p class="text-text-secondary py-8 text-center text-sm">
+          Chat is temporarily unavailable. Please use the contact section
+          instead.
+        </p>
+      )
+    }
+  </div>
+</section>

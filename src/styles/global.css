@@ -1,4 +1,7 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: "Inter", sans-serif;
   --font-display: "Doto", sans-serif;
@@ -15,9 +18,16 @@
   --color-text-secondary: var(--app-color-text-secondary);
   --color-text-muted: var(--app-color-text-muted);
 
+  --color-success: var(--app-color-success);
+  --color-warning: var(--app-color-warning);
+  --color-danger: var(--app-color-danger);
+
   --radius-soft: 1rem;
 
   --animate-float: float 2.5s ease-in-out infinite;
+  --animate-bounce-dot: bounce-dot 0.9s ease-in-out infinite;
+  --animate-fade-out: fade-out 0.2s ease forwards;
+  --animate-fade-in: fade-in 0.2s ease;
 }
 
 /* LIGHT MODE */
@@ -35,6 +45,10 @@
   --app-color-text-primary: #2a2533;
   --app-color-text-secondary: #59536a;
   --app-color-text-muted: #8a839c;
+
+  --app-color-success: #15803d;
+  --app-color-warning: #b45309;
+  --app-color-danger: #b91c1c;
 
   --app-shadow-neumorphic:
     6px 6px 12px rgba(190, 180, 230, 0.3), -6px -6px 12px #fdfdfd;
@@ -67,6 +81,10 @@
   --app-color-text-secondary: #cfcbe6;
   --app-color-text-muted: #a8a3c2;
 
+  --app-color-success: #6ee7b7;
+  --app-color-warning: #fcd34d;
+  --app-color-danger: #fca5a5;
+
   --app-shadow-neumorphic:
     6px 6px 12px rgba(0, 0, 0, 0.6), -6px -6px 12px rgba(255, 255, 255, 0.04);
 
@@ -83,6 +101,19 @@
   --app-wave-gradient-third-level: 0.5;
   --app-wave-gradient-second-level: 0.4;
   --app-wave-gradient-first-level: 0.3;
+
+  /* icon overrides — brand colors that are too dark against dark surface.
+     !important is required because the default hex is set via inline style,
+     which has higher specificity than any stylesheet rule. */
+  [data-tech-icon="siExpress"] {
+    --tech-color: #ffffff !important;
+  }
+  [data-tech-icon="siDjango"] {
+    --tech-color: #44b78b !important;
+  }
+  [data-tech-icon="siAngular"] {
+    --tech-color: #dd0031 !important;
+  }
 }
 
 @utility shadow-neumorphic {
@@ -114,6 +145,62 @@
   50% {
     transform: translateY(-0.4rem);
   }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.scrollbar-moonie {
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-color-text-muted) transparent;
+}
+
+.scrollbar-moonie::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-moonie::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-moonie::-webkit-scrollbar-thumb {
+  background: var(--app-color-text-muted);
+  border-radius: 9999px;
+}
+
+.scrollbar-moonie::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+}
+
+.moonie-chat :is(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--app-color-text-primary);
+  outline-offset: 2px;
 }
 
 /* html {

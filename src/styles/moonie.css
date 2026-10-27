@@ -28,3 +28,13 @@
   font-weight: 500;
   letter-spacing: 0.01em;
 }
+
+.moonie-chat :is(p, li) {
+  font-family: var(--font-sans, "Inter", ui-sans-serif, sans-serif);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moonie-sprite {
+    animation: none;
+  }
+}
