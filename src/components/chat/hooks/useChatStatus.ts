@@ -2,24 +2,31 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const LEAVING_FADE_MS = 250;
 
+export type ChatStatusKind = "loading" | "info";
+
 type ChatStatusState = {
   current: string | null;
   leaving: string | null;
+  kind: ChatStatusKind;
 };
 
 type ChatStatusController = {
   status: string | null;
   leavingStatus: string | null;
-  show: (value: string) => void;
+  statusKind: ChatStatusKind;
+  show: (value: string, kind?: ChatStatusKind) => void;
   clear: () => void;
   reset: () => void;
 };
 
+const INITIAL_STATE: ChatStatusState = {
+  current: null,
+  leaving: null,
+  kind: "loading",
+};
+
 export function useChatStatus(): ChatStatusController {
-  const [state, setState] = useState<ChatStatusState>({
-    current: null,
-    leaving: null,
-  });
+  const [state, setState] = useState<ChatStatusState>(INITIAL_STATE);
   const stateRef = useRef<ChatStatusState>(state);
   const leavingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -36,9 +43,9 @@ export function useChatStatus(): ChatStatusController {
   }, []);
 
   const show = useCallback(
-    (value: string) => {
+    (value: string, kind: ChatStatusKind = "loading") => {
       clearTimer();
-      commit({ current: value, leaving: null });
+      commit({ current: value, leaving: null, kind });
     },
     [clearTimer, commit],
   );
@@ -48,16 +55,24 @@ export function useChatStatus(): ChatStatusController {
     if (current === null) return;
 
     clearTimer();
-    commit({ current: null, leaving: current });
+    commit({
+      current: null,
+      leaving: current,
+      kind: stateRef.current.kind,
+    });
     leavingTimer.current = setTimeout(() => {
       leavingTimer.current = null;
-      commit({ current: stateRef.current.current, leaving: null });
+      commit({
+        current: stateRef.current.current,
+        leaving: null,
+        kind: stateRef.current.kind,
+      });
     }, LEAVING_FADE_MS);
   }, [clearTimer, commit]);
 
   const reset = useCallback(() => {
     clearTimer();
-    commit({ current: null, leaving: null });
+    commit(INITIAL_STATE);
   }, [clearTimer, commit]);
 
   useEffect(() => {
@@ -69,6 +84,7 @@ export function useChatStatus(): ChatStatusController {
   return {
     status: state.current,
     leavingStatus: state.leaving,
+    statusKind: state.kind,
     show,
     clear,
     reset,

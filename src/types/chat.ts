@@ -6,6 +6,15 @@ export type ChatStatus = string;
 
 export type StreamStopReason = "user" | "unmount";
 
+export type ChatErrorCode =
+  "network" | "timeout" | "interruptedStream" | "generic" | "http";
+
+export type ChatErrorState = {
+  code: ChatErrorCode;
+  message?: string; // server-owned text
+  retryable: boolean;
+};
+
 export type OptionAction = "download-cv" | "schedule-meeting" | "open-calendar";
 
 export type Option = {

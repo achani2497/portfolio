@@ -1,14 +1,17 @@
 import { useEffect, useRef } from "react";
 import { deriveScheduleUrl } from "../../config/chat";
+import type { Option } from "../../types/chat";
 import { downloadChatMarkdown } from "./lib/exportChat";
 import { useChatDictionary } from "./hooks/useChatDictionary";
 import { useChatEngine } from "./hooks/useChatEngine";
+import ChatErrorBubble from "./ChatErrorBubble";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
 import MoonieSprite from "./MoonieSprite";
 
 // Dev-only sprite preview in the empty state; always false in a production build.
 const SHOW_SPRITE_PREVIEW = import.meta.env.DEV;
+const NEAR_BOTTOM_PX = 48;
 
 type ChatProps = {
   backendUrl: string;
@@ -22,16 +25,73 @@ export default function Chat({ backendUrl }: ChatProps) {
   const dictionary = useChatDictionary();
   const scheduleUrl = deriveScheduleUrl(backendUrl);
   const engine = useChatEngine({ backendUrl, scheduleUrl, dictionary });
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const shouldRestoreFocusRef = useRef(false);
+  const isNearBottomRef = useRef(true);
 
   useEffect(() => {
+    if (engine.isBusy || !shouldRestoreFocusRef.current) return;
+    shouldRestoreFocusRef.current = false;
+
+    const active = document.activeElement;
+    const root = rootRef.current;
+    const canRestore =
+      active === null ||
+      active === document.body ||
+      (root !== null && root.contains(active));
+
+    if (canRestore) {
+      inputRef.current?.focus({ preventScroll: true });
+    }
+  }, [engine.isBusy]);
+
+  useEffect(() => {
+    if (!isNearBottomRef.current) return;
     const container = containerRef.current;
     if (container === null) return;
     container.scrollTo({ top: container.scrollHeight });
   }, [engine.messages, engine.status, engine.leavingStatus]);
 
+  const handleScroll = () => {
+    const container = containerRef.current;
+    if (container === null) return;
+    isNearBottomRef.current =
+      container.scrollHeight - container.scrollTop - container.clientHeight <=
+      NEAR_BOTTOM_PX;
+  };
+
   const handleExport = () => {
     downloadChatMarkdown(engine.messages, dictionary.export);
+  };
+
+  const handleSend = (text: string) => {
+    shouldRestoreFocusRef.current = true;
+    isNearBottomRef.current = true;
+    void engine.sendMessage(text);
+  };
+
+  const handleRetry = () => {
+    shouldRestoreFocusRef.current = true;
+    isNearBottomRef.current = true;
+    void engine.retry();
+  };
+
+  const handleDismiss = () => {
+    engine.dismissError();
+    const input = inputRef.current;
+    if (input !== null && !input.disabled) {
+      input.focus({ preventScroll: true });
+      return;
+    }
+    containerRef.current?.focus({ preventScroll: true });
+  };
+
+  const handleOptionClick = (messageId: string, option: Option) => {
+    shouldRestoreFocusRef.current = true;
+    isNearBottomRef.current = true;
+    void engine.scheduleOption(messageId, option);
   };
 
   const limitLabel =
@@ -46,8 +106,15 @@ export default function Chat({ backendUrl }: ChatProps) {
               : dictionary.limits.messagesLeft,
           );
 
+  const errorMessage =
+    engine.error === null
+      ? null
+      : engine.error.code === "http"
+        ? engine.error.message || dictionary.errors.generic
+        : dictionary.errors[engine.error.code];
+
   return (
-    <div className="moonie-chat flex flex-col gap-6">
+    <div ref={rootRef} className="moonie-chat flex flex-col gap-6">
       {limitLabel !== null ? (
         <div className="flex items-center justify-between">
           <span
@@ -70,6 +137,7 @@ export default function Chat({ backendUrl }: ChatProps) {
         aria-live="polite"
         aria-busy={engine.isStreaming}
         tabIndex={0}
+        onScroll={handleScroll}
         className="scrollbar-moonie flex max-h-[24rem] w-full flex-col overflow-y-auto pb-4"
       >
         {engine.messages.length === 0 ? (
@@ -96,9 +164,7 @@ export default function Chat({ backendUrl }: ChatProps) {
               optionsPendingLabel={dictionary.options.schedulePending}
               optionsLocked={message.optionsLocked ?? false}
               optionsDisabled={engine.isStreaming || engine.isScheduling}
-              onOptionClick={(option) =>
-                engine.scheduleOption(message.id, option)
-              }
+              onOptionClick={(option) => handleOptionClick(message.id, option)}
             />
           ))
         )}
@@ -107,7 +173,8 @@ export default function Chat({ backendUrl }: ChatProps) {
             role="assistant"
             content=""
             status={engine.status}
-            phase="thinking"
+            phase={engine.statusKind === "loading" ? "thinking" : "done"}
+            showDots={engine.statusKind === "loading"}
           />
         ) : null}
         {engine.leavingStatus ? (
@@ -115,22 +182,32 @@ export default function Chat({ backendUrl }: ChatProps) {
             role="assistant"
             content=""
             status={engine.leavingStatus}
-            phase="thinking"
+            phase={engine.statusKind === "loading" ? "thinking" : "done"}
+            showDots={engine.statusKind === "loading"}
             leaving
           />
         ) : null}
       </div>
+      {engine.error && errorMessage !== null ? (
+        <ChatErrorBubble
+          message={errorMessage}
+          retryable={engine.error.retryable && !engine.isLimitReached}
+          retryLabel={dictionary.input.retry}
+          dismissLabel={dictionary.input.dismiss}
+          onRetry={handleRetry}
+          onDismiss={handleDismiss}
+        />
+      ) : null}
       <div className="flex w-full items-center gap-2">
         <ChatInput
-          disabled={
-            !engine.isReady || engine.isStreaming || engine.isScheduling
-          }
+          disabled={engine.isBusy}
+          inputRef={inputRef}
           labels={{
             placeholder: dictionary.input.placeholder,
             ariaLabel: dictionary.input.ariaLabel,
             send: dictionary.input.send,
           }}
-          onSend={engine.sendMessage}
+          onSend={handleSend}
         />
         {engine.isStreaming ? (
           <button

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type {
+  ChatErrorCode,
+  ChatErrorState,
   ChatMessageData,
   ChatPhase,
   Option,
@@ -12,6 +14,7 @@ import { scheduleMeeting } from "../lib/chatApi";
 import { isAbortError } from "../lib/guards";
 import type { ChatDictionary } from "./useChatDictionary";
 import { useChatStatus } from "./useChatStatus";
+import type { ChatStatusKind } from "./useChatStatus";
 import { useChatUserId } from "./useChatUserId";
 
 type UseChatEngineOptions = {
@@ -23,13 +26,19 @@ type UseChatEngineOptions = {
 export type ChatEngine = {
   messages: ChatMessageData[];
   isStreaming: boolean;
+  isBusy: boolean;
   status: string | null;
   leavingStatus: string | null;
+  statusKind: ChatStatusKind;
   messageLimit: number | null;
+  error: ChatErrorState | null;
+  isLimitReached: boolean;
   isScheduling: boolean;
   isReady: boolean;
   sendMessage: (text: string) => Promise<void>;
   stopStream: () => void;
+  retry: () => Promise<void>;
+  dismissError: () => void;
   scheduleOption: (messageId: string, option: Option) => Promise<void>;
 };
 
@@ -42,6 +51,7 @@ export function useChatEngine({
   const {
     status,
     leavingStatus,
+    statusKind,
     show: showStatus,
     clear: clearStatus,
     reset: resetStatus,
@@ -50,13 +60,20 @@ export function useChatEngine({
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [phase, setPhase] = useState<ChatPhase>("done");
   const [messageLimit, setMessageLimit] = useState<number | null>(null);
+  const [error, setError] = useState<ChatErrorState | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
 
   const chatInFlightRef = useRef(false);
   const scheduleInFlightRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
   const stopReasonRef = useRef<StreamStopReason | null>(null);
+  const lastRequestRef = useRef<{
+    text: string;
+    assistantId: string;
+  } | null>(null);
   const mountedRef = useRef(true);
+
+  const isLimitReached = messageLimit !== null && messageLimit <= 0;
 
   useEffect(() => {
     mountedRef.current = true;
@@ -159,11 +176,24 @@ export function useChatEngine({
     );
   };
 
+  const setChatError = (
+    code: ChatErrorCode,
+    retryable: boolean,
+    message?: string,
+  ) => {
+    resetStatus();
+    setError({
+      code,
+      retryable,
+      ...(message === undefined ? {} : { message }),
+    });
+  };
+
   const showStreamError = (error: unknown) => {
     const stopReason = stopReasonRef.current;
 
     if (stopReason === "user") {
-      showStatus(dictionary.status.stopped);
+      showStatus(dictionary.status.stopped, "info");
       return;
     }
 
@@ -172,26 +202,34 @@ export function useChatEngine({
     if (error instanceof ChatStreamError) {
       switch (error.code) {
         case "network":
-          showStatus(dictionary.errors.network);
+          setChatError("network", true);
           return;
         case "timeout":
-          showStatus(dictionary.errors.timeout);
+          setChatError("timeout", true);
           return;
         case "interrupted":
-          showStatus(dictionary.errors.interruptedStream);
+          setChatError("interruptedStream", true);
           return;
-        case "http":
-          showStatus(error.message || dictionary.errors.generic);
+        case "http": {
+          const status = error.status;
+          const retryable =
+            typeof status === "number" &&
+            (status >= 500 ||
+              status === 408 ||
+              status === 409 ||
+              status === 429);
+          setChatError("http", retryable, error.message || undefined);
           return;
+        }
       }
     }
 
     if (isAbortError(error)) {
-      showStatus(dictionary.errors.network);
+      setChatError("network", true);
       return;
     }
 
-    showStatus(dictionary.errors.generic);
+    setChatError("generic", true);
   };
 
   const stopStream = () => {
@@ -201,7 +239,10 @@ export function useChatEngine({
     controller.abort();
   };
 
-  const sendMessage = async (text: string): Promise<void> => {
+  const runRequest = async (
+    text: string,
+    appendUserMessage: boolean,
+  ): Promise<void> => {
     if (!userId) return;
     if (chatInFlightRef.current) return;
 
@@ -211,8 +252,11 @@ export function useChatEngine({
     const assistantId = createChatId();
     const controller = new AbortController();
     abortControllerRef.current = controller;
+    lastRequestRef.current = { text, assistantId };
 
-    addUserMessage(text);
+    if (appendUserMessage) {
+      addUserMessage(text);
+    }
     setPhase("thinking");
     showStatus(dictionary.status.thinking);
 
@@ -248,8 +292,7 @@ export function useChatEngine({
             }
             break;
           case "error":
-            showStatus(event.message || dictionary.errors.generic);
-            controller.abort();
+            setChatError("generic", false, event.message || undefined);
             break;
         }
       }
@@ -272,6 +315,31 @@ export function useChatEngine({
     }
   };
 
+  const sendMessage = async (text: string): Promise<void> => {
+    if (isLimitReached) return;
+    setError(null);
+    await runRequest(text, true);
+  };
+
+  const retry = async (): Promise<void> => {
+    const lastRequest = lastRequestRef.current;
+    if (lastRequest === null) return;
+    if (chatInFlightRef.current) return;
+    if (scheduleInFlightRef.current) return;
+    if (isLimitReached) return;
+
+    setError(null);
+    const failedAssistantId = lastRequest.assistantId;
+    setMessages((prev) =>
+      prev.filter((message) => message.id !== failedAssistantId),
+    );
+    await runRequest(lastRequest.text, false);
+  };
+
+  const dismissError = () => {
+    setError(null);
+  };
+
   const scheduleOption = async (
     messageId: string,
     option: Option,
@@ -280,6 +348,7 @@ export function useChatEngine({
     if (!userId) return;
     if (scheduleInFlightRef.current) return;
 
+    setError(null);
     scheduleInFlightRef.current = true;
     setIsScheduling(true);
     updateOptionState(messageId, option.value);
@@ -307,16 +376,26 @@ export function useChatEngine({
     }
   };
 
+  const isStreaming = phase !== "done";
+  const isReady = userId !== null;
+  const isBusy = !isReady || isStreaming || isScheduling || isLimitReached;
+
   return {
     messages,
-    isStreaming: phase !== "done",
+    isStreaming,
+    isBusy,
     status,
     leavingStatus,
+    statusKind,
     messageLimit,
+    error,
+    isLimitReached,
     isScheduling,
-    isReady: userId !== null,
+    isReady,
     sendMessage,
     stopStream,
+    retry,
+    dismissError,
     scheduleOption,
   };
 }

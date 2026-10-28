@@ -9,11 +9,13 @@ export type ChatStreamErrorCode =
 
 export class ChatStreamError extends Error {
   readonly code: ChatStreamErrorCode;
+  readonly status?: number;
 
-  constructor(code: ChatStreamErrorCode, message: string) {
+  constructor(code: ChatStreamErrorCode, message: string, status?: number) {
     super(message);
     this.name = "ChatStreamError";
     this.code = code;
+    this.status = status;
   }
 }
 
@@ -109,13 +111,13 @@ export async function* streamChatEvents({
   if (!response.ok || !response.body) {
     const errorMessage = await readErrorMessage(response);
     removeAbortListener();
-    throw new ChatStreamError("http", errorMessage);
+    throw new ChatStreamError("http", errorMessage, response.status);
   }
 
   if (!isEventStreamResponse(response)) {
     const errorMessage = await readErrorMessage(response);
     removeAbortListener();
-    throw new ChatStreamError("http", errorMessage);
+    throw new ChatStreamError("http", errorMessage, response.status);
   }
 
   const reader = response.body.getReader();

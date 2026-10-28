@@ -1,5 +1,8 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import type { ComponentProps } from "react";
 import MoonieSprite, { MOONIE_PHASES } from "./MoonieSprite";
-import type { ReactNode } from "react";
 import type { ChatPhase, ChatRole, ChatStatus, Option } from "../../types/chat";
 
 type ChatMessageProps = {
@@ -8,6 +11,7 @@ type ChatMessageProps = {
   phase?: ChatPhase;
   status?: ChatStatus;
   leaving?: boolean;
+  showDots?: boolean;
   options?: Option[];
   optionsPendingValue?: string | null;
   optionsPendingLabel?: string;
@@ -16,10 +20,15 @@ type ChatMessageProps = {
   onOptionClick?: (option: Option) => void;
 };
 
-const MARKDOWN_LINK_PATTERN = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
-const URL_PATTERN = /(https?:\/\/[^\s]+)/g;
-const URL_START = /^https?:\/\//;
-const LINK_CLASS = "underline underline-offset-2 hover:opacity-80";
+const REMARK_PLUGINS = [remarkGfm, remarkBreaks];
+
+const MARKDOWN_COMPONENTS = {
+  a: ({ children, href }: ComponentProps<"a">) => (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  ),
+};
 
 export function BouncingDots() {
   return (
@@ -35,56 +44,13 @@ export function BouncingDots() {
   );
 }
 
-function linkifyUrls(text: string, keyPrefix: string): ReactNode[] {
-  return text.split(URL_PATTERN).map((part, index) => {
-    if (URL_START.test(part)) {
-      return (
-        <a
-          key={`${keyPrefix}-${index}`}
-          href={part}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}
-        >
-          {part}
-        </a>
-      );
-    }
-    return part;
-  });
-}
-
-function renderContent(content: string, linkify: boolean): ReactNode {
-  if (!linkify) return content;
-  const parts = content.split(MARKDOWN_LINK_PATTERN);
-  const nodes: ReactNode[] = [];
-  for (let i = 0; i < parts.length; i += 3) {
-    nodes.push(...linkifyUrls(parts[i], `text-${i}`));
-    const label = parts[i + 1];
-    const url = parts[i + 2];
-    if (label !== undefined && url !== undefined) {
-      nodes.push(
-        <a
-          key={`link-${i}`}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}
-        >
-          {label}
-        </a>,
-      );
-    }
-  }
-  return nodes;
-}
-
 export default function ChatMessage({
   role,
   content,
   phase = "done",
   status,
   leaving = false,
+  showDots = true,
   options,
   optionsPendingValue = null,
   optionsPendingLabel,
@@ -114,14 +80,24 @@ export default function ChatMessage({
         } ${leaving ? "animate-fade-out" : !isUser && content ? "animate-fade-in" : ""}`}
       >
         {content ? (
-          <p className="text-sm break-words whitespace-pre-wrap">
-            {renderContent(content, !isUser)}
-          </p>
+          isUser ? (
+            <p className="text-sm break-words whitespace-pre-wrap">{content}</p>
+          ) : (
+            <div className="chat-markdown text-sm break-words">
+              <ReactMarkdown
+                remarkPlugins={REMARK_PLUGINS}
+                components={MARKDOWN_COMPONENTS}
+                skipHtml
+              >
+                {content}
+              </ReactMarkdown>
+            </div>
+          )
         ) : null}
         {!isUser && status ? (
           <p className="text-text-secondary mt-2 flex items-center gap-1.5 text-xs">
             <span>{status}</span>
-            {leaving ? null : <BouncingDots />}
+            {!leaving && showDots ? <BouncingDots /> : null}
           </p>
         ) : null}
         {!isUser && options && options.length > 0 ? (
