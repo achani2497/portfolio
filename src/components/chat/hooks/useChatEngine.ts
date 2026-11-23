@@ -13,13 +13,14 @@ import { ChatStreamError, streamChatEvents } from "../lib/chatStream";
 import { scheduleMeeting } from "../lib/chatApi";
 import { isAbortError } from "../lib/guards";
 import type { ChatDictionary } from "./useChatDictionary";
+import { getServerErrorMessage } from "./useChatDictionary";
 import { useChatStatus } from "./useChatStatus";
 import type { ChatStatusKind } from "./useChatStatus";
 import { useChatUserId } from "./useChatUserId";
 
 type UseChatEngineOptions = {
-  backendUrl: string;
-  scheduleUrl: string;
+  newMessageUrl: string;
+  scheduleMeetingUrl: string;
   dictionary: ChatDictionary;
 };
 
@@ -39,15 +40,19 @@ export type ChatEngine = {
   stopStream: () => void;
   retry: () => Promise<void>;
   dismissError: () => void;
-  scheduleOption: (messageId: string, option: Option) => Promise<void>;
+  scheduleOption: (
+    messageId: string,
+    option: Option,
+    optionKey: string,
+  ) => Promise<void>;
 };
 
 export function useChatEngine({
-  backendUrl,
-  scheduleUrl,
+  newMessageUrl,
+  scheduleMeetingUrl,
   dictionary,
 }: UseChatEngineOptions): ChatEngine {
-  const userId = useChatUserId();
+  const { userId, resetUserId } = useChatUserId();
   const {
     status,
     leavingStatus,
@@ -161,7 +166,7 @@ export function useChatEngine({
 
   const updateOptionState = (
     messageId: string,
-    pendingValue: string | null,
+    pendingKey: string | null,
     optionsLocked?: boolean,
   ) => {
     setMessages((prev) =>
@@ -169,7 +174,7 @@ export function useChatEngine({
         if (message.id !== messageId) return message;
         return {
           ...message,
-          pendingValue,
+          pendingKey,
           ...(optionsLocked === undefined ? {} : { optionsLocked }),
         };
       }),
@@ -180,13 +185,22 @@ export function useChatEngine({
     code: ChatErrorCode,
     retryable: boolean,
     message?: string,
+    errorKey?: string,
   ) => {
     resetStatus();
     setError({
       code,
       retryable,
       ...(message === undefined ? {} : { message }),
+      ...(errorKey === undefined ? {} : { errorKey }),
     });
+  };
+
+  const resetConversation = () => {
+    setMessages([]);
+    setMessageLimit(null);
+    lastRequestRef.current = null;
+    setError(null);
   };
 
   const showStreamError = (error: unknown) => {
@@ -212,13 +226,38 @@ export function useChatEngine({
           return;
         case "http": {
           const status = error.status;
+
+          if (status === 400 && error.errorKey === "invalid_body") {
+            resetUserId();
+            resetConversation();
+            setChatError(
+              "http",
+              false,
+              error.message || undefined,
+              error.errorKey,
+            );
+            return;
+          }
+
+          if (status === 429) {
+            setChatError(
+              "quota",
+              false,
+              error.message,
+              error.errorKey ?? "quota_exceeded",
+            );
+            return;
+          }
+
           const retryable =
             typeof status === "number" &&
-            (status >= 500 ||
-              status === 408 ||
-              status === 409 ||
-              status === 429);
-          setChatError("http", retryable, error.message || undefined);
+            (status >= 500 || status === 408 || status === 409);
+          setChatError(
+            "http",
+            retryable,
+            error.message || undefined,
+            error.errorKey,
+          );
           return;
         }
       }
@@ -262,7 +301,7 @@ export function useChatEngine({
 
     try {
       for await (const event of streamChatEvents({
-        url: backendUrl,
+        url: newMessageUrl,
         userId,
         message: text,
         signal: controller.signal,
@@ -292,7 +331,12 @@ export function useChatEngine({
             }
             break;
           case "error":
-            setChatError("generic", false, event.message || undefined);
+            setChatError(
+              "generic",
+              false,
+              event.message || undefined,
+              event.errorKey,
+            );
             break;
         }
       }
@@ -343,6 +387,7 @@ export function useChatEngine({
   const scheduleOption = async (
     messageId: string,
     option: Option,
+    optionKey: string,
   ): Promise<void> => {
     if (option.action !== "schedule-meeting") return;
     if (!userId) return;
@@ -351,18 +396,22 @@ export function useChatEngine({
     setError(null);
     scheduleInFlightRef.current = true;
     setIsScheduling(true);
-    updateOptionState(messageId, option.value);
+    updateOptionState(messageId, optionKey);
 
     try {
-      const result = await scheduleMeeting(scheduleUrl, userId, option.value);
+      const result = await scheduleMeeting(
+        scheduleMeetingUrl,
+        userId,
+        option.value,
+      );
       if (!mountedRef.current) return;
       updateOptionState(messageId, null, result.ok);
-      addAssistantMessage(
-        result.message ??
-          (result.ok
-            ? dictionary.errors.scheduleSuccess
-            : dictionary.errors.scheduleFailure),
-      );
+      const reply = result.ok
+        ? (result.message ?? dictionary.errors.scheduleSuccess)
+        : (getServerErrorMessage(dictionary, result.errorKey) ??
+          result.message ??
+          dictionary.errors.scheduleFailure);
+      addAssistantMessage(reply);
     } catch {
       if (mountedRef.current) {
         updateOptionState(messageId, null);

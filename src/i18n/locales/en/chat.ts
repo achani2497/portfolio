@@ -16,6 +16,7 @@ export const enChat = {
     thinking: "Thinking...",
     loading: "Loading...",
     stopped: "Stopped.",
+    done: "Response ready.",
   },
   limits: {
     messagesLeft: "{count} messages left",
@@ -36,8 +37,28 @@ export const enChat = {
     timeout: "The request took too long. Please try again.",
     interruptedStream: "The response was interrupted. Please try again.",
     generic: "Something went wrong. Please try again.",
+    quota: "You've reached today's message limit. Try again tomorrow.",
     scheduleFailure: "I couldn't schedule the meeting. Shall we try again?",
     scheduleSuccess: "Done, the meeting is scheduled.",
+  },
+  serverErrors: {
+    quota_exceeded: "You've reached today's message limit. Try again tomorrow.",
+    model_unavailable:
+      "Moonie can't respond right now. Please try again in a moment.",
+    chat_busy: "One moment, I'm still working on your last message.",
+    schedule_busy: "I'm already scheduling that meeting. Give me a second.",
+    meeting_already_scheduled:
+      "You already have a meeting scheduled with Ale. To change it, reach out by email.",
+    session_invalid:
+      "I couldn't validate your session. Please try again from the chat.",
+    schedule_failed:
+      "I couldn't schedule the meeting. Shall we try again?",
+    schedule_timeout:
+      "I couldn't confirm whether the meeting was created in time. Check your calendar before trying again.",
+    invalid_body: "That message couldn't be processed. Please try again.",
+    message_too_long: "That message is too long. Please send a shorter one.",
+    origin_not_allowed: "The chat isn't available from this site.",
+    generic: "Something went wrong. Please try again.",
   },
   unavailable: {
     title: "Chat unavailable",
@@ -46,7 +67,6 @@ export const enChat = {
   options: {
     scheduleMeeting: "Schedule meeting",
     downloadCv: "Download CV",
-    openCalendar: "Open calendar",
     schedulePending: "Scheduling...",
   },
 } as const;

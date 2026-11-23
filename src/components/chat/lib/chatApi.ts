@@ -6,6 +6,12 @@ const MAX_ERROR_MESSAGE_LENGTH = 300;
 export type ScheduleMeetingResult = {
   ok: boolean;
   message?: string;
+  errorKey?: string;
+};
+
+export type ErrorPayload = {
+  message: string;
+  errorKey?: string;
 };
 
 function truncateMessage(message: string): string {
@@ -14,6 +20,17 @@ function truncateMessage(message: string): string {
   return trimmed.length > MAX_ERROR_MESSAGE_LENGTH
     ? `${trimmed.slice(0, MAX_ERROR_MESSAGE_LENGTH)}...`
     : trimmed;
+}
+
+async function requestJson(
+  response: Response,
+): Promise<{ message?: string; errorKey?: string }> {
+  const data: unknown = await response.json().catch(() => null);
+  if (!isRecord(data)) return {};
+  return {
+    ...(typeof data.message === "string" ? { message: data.message } : {}),
+    ...(typeof data.errorKey === "string" ? { errorKey: data.errorKey } : {}),
+  };
 }
 
 export function isEventStreamResponse(response: Response): boolean {
@@ -30,10 +47,11 @@ export async function scheduleMeeting(
   value: string,
 ): Promise<ScheduleMeetingResult> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(
-    () => controller.abort(),
-    CHAT_SCHEDULE_TIMEOUT_MS,
-  );
+  let timedOut = false;
+  const timeoutId = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, CHAT_SCHEDULE_TIMEOUT_MS);
 
   try {
     const response = await fetch(url, {
@@ -43,44 +61,58 @@ export async function scheduleMeeting(
       signal: controller.signal,
     });
 
-    const data = (await response.json().catch(() => null)) as {
-      message?: unknown;
-    } | null;
+    const { message, errorKey } = await requestJson(response);
 
-    const message =
-      data && typeof data.message === "string" ? data.message : undefined;
-
-    return { ok: response.ok, message };
+    return {
+      ok: response.ok,
+      ...(message === undefined ? {} : { message }),
+      ...(errorKey === undefined ? {} : { errorKey }),
+    };
   } catch {
-    return { ok: false };
+    return {
+      ok: false,
+      ...(timedOut ? { errorKey: "schedule_timeout" } : {}),
+    };
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+export async function readErrorPayload(
+  response: Response,
+  fallback: string = "",
+): Promise<ErrorPayload> {
+  const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
+  const body = (await response.text().catch(() => "")).trim();
+  if (body === "") return { message: fallback };
+
+  if (contentType.includes("application/json") || body.startsWith("{")) {
+    try {
+      const parsed: unknown = JSON.parse(body);
+      if (isRecord(parsed) && typeof parsed.message === "string") {
+        return {
+          message: truncateMessage(parsed.message),
+          ...(typeof parsed.errorKey === "string"
+            ? { errorKey: parsed.errorKey }
+            : {}),
+        };
+      }
+    } catch {
+      return { message: fallback };
+    }
+    return { message: fallback };
+  }
+
+  if (contentType.includes("text/html") || body.startsWith("<")) {
+    return { message: fallback };
+  }
+
+  return { message: truncateMessage(body) };
 }
 
 export async function readErrorMessage(
   response: Response,
   fallback: string = "",
 ): Promise<string> {
-  const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
-  const body = (await response.text().catch(() => "")).trim();
-  if (body === "") return fallback;
-
-  if (contentType.includes("application/json") || body.startsWith("{")) {
-    try {
-      const parsed: unknown = JSON.parse(body);
-      if (isRecord(parsed) && typeof parsed.message === "string") {
-        return truncateMessage(parsed.message);
-      }
-    } catch {
-      return fallback;
-    }
-    return fallback;
-  }
-
-  if (contentType.includes("text/html") || body.startsWith("<")) {
-    return fallback;
-  }
-
-  return truncateMessage(body);
+  return (await readErrorPayload(response, fallback)).message;
 }

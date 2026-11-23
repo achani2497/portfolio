@@ -1,6 +1,6 @@
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type { ChatEvent } from "../../../types/chat";
-import { isEventStreamResponse, readErrorMessage } from "./chatApi";
+import { isEventStreamResponse, readErrorPayload } from "./chatApi";
 import { isAbortError } from "./guards";
 import { createSseParser, parseChatEvent } from "./sse";
 
@@ -10,12 +10,19 @@ export type ChatStreamErrorCode =
 export class ChatStreamError extends Error {
   readonly code: ChatStreamErrorCode;
   readonly status?: number;
+  readonly errorKey?: string;
 
-  constructor(code: ChatStreamErrorCode, message: string, status?: number) {
+  constructor(
+    code: ChatStreamErrorCode,
+    message: string,
+    status?: number,
+    errorKey?: string,
+  ) {
     super(message);
     this.name = "ChatStreamError";
     this.code = code;
     this.status = status;
+    this.errorKey = errorKey;
   }
 }
 
@@ -109,15 +116,25 @@ export async function* streamChatEvents({
   }
 
   if (!response.ok || !response.body) {
-    const errorMessage = await readErrorMessage(response);
+    const payload = await readErrorPayload(response);
     removeAbortListener();
-    throw new ChatStreamError("http", errorMessage, response.status);
+    throw new ChatStreamError(
+      "http",
+      payload.message,
+      response.status,
+      payload.errorKey,
+    );
   }
 
   if (!isEventStreamResponse(response)) {
-    const errorMessage = await readErrorMessage(response);
+    const payload = await readErrorPayload(response);
     removeAbortListener();
-    throw new ChatStreamError("http", errorMessage, response.status);
+    throw new ChatStreamError(
+      "http",
+      payload.message,
+      response.status,
+      payload.errorKey,
+    );
   }
 
   const reader = response.body.getReader();

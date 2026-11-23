@@ -7,15 +7,21 @@ export type ChatStatus = string;
 export type StreamStopReason = "user" | "unmount";
 
 export type ChatErrorCode =
-  "network" | "timeout" | "interruptedStream" | "generic" | "http";
+  | "network"
+  | "timeout"
+  | "interruptedStream"
+  | "generic"
+  | "http"
+  | "quota";
 
 export type ChatErrorState = {
   code: ChatErrorCode;
   message?: string; // server-owned text
+  errorKey?: string; // stable server key, translated by the client
   retryable: boolean;
 };
 
-export type OptionAction = "download-cv" | "schedule-meeting" | "open-calendar";
+export type OptionAction = "download-cv" | "schedule-meeting";
 
 export type Option = {
   label: string;
@@ -28,14 +34,14 @@ export type ChatEvent =
   | { type: "messageChunk"; content: string }
   | { type: "options"; options: Option[] }
   | { type: "done"; messageLimit?: number }
-  | { type: "error"; message: string };
+  | { type: "error"; message: string; errorKey?: string };
 
 export type ChatMessageData = {
   id: string;
   role: ChatRole;
   content: string;
   options?: Option[];
-  pendingValue?: string | null;
+  pendingKey?: string | null;
   optionsLocked?: boolean;
   streaming?: boolean;
 };

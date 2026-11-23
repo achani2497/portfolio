@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
-import { deriveScheduleUrl } from "../../config/chat";
+import { useEffect, useRef, useState } from "react";
 import type { Option } from "../../types/chat";
 import { downloadChatMarkdown } from "./lib/exportChat";
-import { useChatDictionary } from "./hooks/useChatDictionary";
+import { getServerErrorMessage, useChatDictionary } from "./hooks/useChatDictionary";
 import { useChatEngine } from "./hooks/useChatEngine";
+import ChatBadge from "./ChatBadge";
 import ChatErrorBubble from "./ChatErrorBubble";
 import ChatInput from "./ChatInput";
 import ChatMessage from "./ChatMessage";
@@ -14,22 +14,31 @@ const SHOW_SPRITE_PREVIEW = import.meta.env.DEV;
 const NEAR_BOTTOM_PX = 48;
 
 type ChatProps = {
-  backendUrl: string;
+  newMessageUrl: string;
+  scheduleMeetingUrl: string;
 };
 
 function formatLimitLabel(count: number, label: string): string {
   return label.replace("{count}", String(count));
 }
 
-export default function Chat({ backendUrl }: ChatProps) {
+export default function Chat({
+  newMessageUrl,
+  scheduleMeetingUrl,
+}: ChatProps) {
   const dictionary = useChatDictionary();
-  const scheduleUrl = deriveScheduleUrl(backendUrl);
-  const engine = useChatEngine({ backendUrl, scheduleUrl, dictionary });
+  const engine = useChatEngine({
+    newMessageUrl,
+    scheduleMeetingUrl,
+    dictionary,
+  });
   const rootRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const shouldRestoreFocusRef = useRef(false);
   const isNearBottomRef = useRef(true);
+  const wasStreamingRef = useRef(false);
+  const [showDoneAnnouncement, setShowDoneAnnouncement] = useState(false);
 
   useEffect(() => {
     if (engine.isBusy || !shouldRestoreFocusRef.current) return;
@@ -53,6 +62,25 @@ export default function Chat({ backendUrl }: ChatProps) {
     if (container === null) return;
     container.scrollTo({ top: container.scrollHeight });
   }, [engine.messages, engine.status, engine.leavingStatus]);
+
+  useEffect(() => {
+    const wasStreaming = wasStreamingRef.current;
+    wasStreamingRef.current = engine.isStreaming;
+
+    if (engine.isStreaming) {
+      setShowDoneAnnouncement(false);
+      return;
+    }
+
+    if (engine.error !== null || engine.status !== null) {
+      setShowDoneAnnouncement(false);
+      return;
+    }
+
+    if (!wasStreaming) return;
+
+    setShowDoneAnnouncement(true);
+  }, [engine.isStreaming, engine.error, engine.status]);
 
   const handleScroll = () => {
     const container = containerRef.current;
@@ -88,10 +116,14 @@ export default function Chat({ backendUrl }: ChatProps) {
     containerRef.current?.focus({ preventScroll: true });
   };
 
-  const handleOptionClick = (messageId: string, option: Option) => {
+  const handleOptionClick = (
+    messageId: string,
+    option: Option,
+    optionKey: string,
+  ) => {
     shouldRestoreFocusRef.current = true;
     isNearBottomRef.current = true;
-    void engine.scheduleOption(messageId, option);
+    void engine.scheduleOption(messageId, option, optionKey);
   };
 
   const limitLabel =
@@ -109,32 +141,44 @@ export default function Chat({ backendUrl }: ChatProps) {
   const errorMessage =
     engine.error === null
       ? null
-      : engine.error.code === "http"
-        ? engine.error.message || dictionary.errors.generic
-        : dictionary.errors[engine.error.code];
+      : (getServerErrorMessage(dictionary, engine.error.errorKey) ??
+        engine.error.message ??
+        (engine.error.code === "http"
+          ? dictionary.errors.generic
+          : dictionary.errors[engine.error.code]));
+
+  const statusAnnouncement =
+    errorMessage === null
+      ? (engine.status ?? (showDoneAnnouncement ? dictionary.status.done : ""))
+      : "";
 
   return (
     <div ref={rootRef} className="moonie-chat flex flex-col gap-6">
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {statusAnnouncement}
+      </div>
       {limitLabel !== null ? (
         <div className="flex items-center justify-between">
-          <span
-            className={[
-              "rounded-full px-3 py-1 text-xs font-semibold",
+          <ChatBadge
+            tone={
               (engine.messageLimit ?? 0) >= 10
-                ? "bg-emerald-500/15 text-emerald-600 dark:bg-emerald-400/15 dark:text-emerald-300"
+                ? "success"
                 : (engine.messageLimit ?? 0) >= 5
-                  ? "bg-amber-500/15 text-amber-600 dark:bg-amber-400/15 dark:text-amber-300"
-                  : "bg-red-500/15 text-red-600 dark:bg-red-400/15 dark:text-red-300",
-            ].join(" ")}
+                  ? "warning"
+                  : "danger"
+            }
           >
             {limitLabel}
-          </span>
+          </ChatBadge>
         </div>
       ) : null}
       <div
         ref={containerRef}
-        role="log"
-        aria-live="polite"
         aria-busy={engine.isStreaming}
         tabIndex={0}
         onScroll={handleScroll}
@@ -160,11 +204,13 @@ export default function Chat({ backendUrl }: ChatProps) {
               content={message.content}
               phase={message.streaming ? "streaming" : "done"}
               options={message.options}
-              optionsPendingValue={message.pendingValue ?? null}
+              optionsPendingKey={message.pendingKey ?? null}
               optionsPendingLabel={dictionary.options.schedulePending}
               optionsLocked={message.optionsLocked ?? false}
               optionsDisabled={engine.isStreaming || engine.isScheduling}
-              onOptionClick={(option) => handleOptionClick(message.id, option)}
+              onOptionClick={(option, optionKey) =>
+                handleOptionClick(message.id, option, optionKey)
+              }
             />
           ))
         )}

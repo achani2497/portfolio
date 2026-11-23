@@ -1,71 +1,54 @@
-const DEV_FALLBACK_URL = "http://localhost:3000/api/v1/new-message";
-const SCHEDULE_ENDPOINT = "schedule-meeting";
+const DEFAULT_API_BASE_URL = "http://localhost:3000/api/v1";
+const NEW_MESSAGE_PATH = "new-message";
+const SCHEDULE_MEETING_PATH = "schedule-meeting";
 
 export const CHAT_USER_ID_KEY = "moonie-user-id";
-export const CHAT_SCHEDULE_TIMEOUT_MS = 15000;
+export const CHAT_SCHEDULE_TIMEOUT_MS = 25000;
 export const CHAT_STREAM_INACTIVITY_TIMEOUT_MS = 60000;
+export const CHAT_MAX_MESSAGE_CHARS = 2000;
 
 export type ChatApiConfig = {
-  readonly url: string | null;
+  readonly baseUrl: string | null;
+  readonly newMessageUrl: string | null;
+  readonly scheduleMeetingUrl: string | null;
   readonly configured: boolean;
 };
 
-function parseHttpUrl(value: string): string | null {
+const UNCONFIGURED_CHAT_API: ChatApiConfig = {
+  baseUrl: null,
+  newMessageUrl: null,
+  scheduleMeetingUrl: null,
+  configured: false,
+};
+
+function parseHttpBaseUrl(value: string): string | null {
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:"
-      ? url.toString()
-      : null;
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.toString().replace(/\/+$/, "");
   } catch {
     return null;
   }
 }
 
+function buildEndpointUrl(baseUrl: string, path: string): string {
+  return `${baseUrl}/${path}`;
+}
+
 function resolveChatApiConfig(): ChatApiConfig {
   const envValue: unknown = import.meta.env.PUBLIC_MOONIE_API_URL;
   const envUrl = typeof envValue === "string" ? envValue.trim() : "";
+  const envBase = envUrl === "" ? null : parseHttpBaseUrl(envUrl);
+  const baseUrl = envBase ?? (import.meta.env.DEV ? DEFAULT_API_BASE_URL : null);
 
-  if (envUrl) {
-    const url = parseHttpUrl(envUrl);
-    if (url) {
-      return { url, configured: true };
-    }
-  }
+  if (baseUrl === null) return UNCONFIGURED_CHAT_API;
 
-  if (import.meta.env.DEV) {
-    return { url: DEV_FALLBACK_URL, configured: true };
-  }
-
-  return { url: null, configured: false };
+  return {
+    baseUrl,
+    newMessageUrl: buildEndpointUrl(baseUrl, NEW_MESSAGE_PATH),
+    scheduleMeetingUrl: buildEndpointUrl(baseUrl, SCHEDULE_MEETING_PATH),
+    configured: true,
+  };
 }
 
 export const CHAT_API: ChatApiConfig = resolveChatApiConfig();
-
-export function deriveScheduleUrl(messageUrl: string): string {
-  let url: URL;
-
-  try {
-    url = new URL(messageUrl);
-  } catch {
-    return messageUrl;
-  }
-
-  const segments = url.pathname.split("/");
-
-  let lastSegmentIndex = -1;
-  for (let index = segments.length - 1; index >= 0; index -= 1) {
-    if (segments[index] !== "") {
-      lastSegmentIndex = index;
-      break;
-    }
-  }
-
-  if (lastSegmentIndex === -1) {
-    url.pathname = `/${SCHEDULE_ENDPOINT}`;
-  } else {
-    segments[lastSegmentIndex] = SCHEDULE_ENDPOINT;
-    url.pathname = segments.join("/");
-  }
-
-  return url.toString();
-}

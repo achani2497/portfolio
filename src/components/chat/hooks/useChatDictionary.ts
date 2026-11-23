@@ -5,6 +5,17 @@ import { getResolvedLocale, onLocaleChange } from "../../../utils/localeClient";
 
 export type ChatDictionary = AppDictionary["chat"];
 
+export function getServerErrorMessage(
+  dictionary: ChatDictionary,
+  errorKey?: string,
+): string | undefined {
+  if (errorKey === undefined) return undefined;
+  if (!Object.prototype.hasOwnProperty.call(dictionary.serverErrors, errorKey)) {
+    return undefined;
+  }
+  return (dictionary.serverErrors as Record<string, string>)[errorKey];
+}
+
 function subscribe(callback: () => void): () => void {
   return onLocaleChange(() => callback());
 }

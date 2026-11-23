@@ -78,7 +78,9 @@
 }
 
 .moonie-chat .chat-markdown a {
+  color: var(--app-color-text-primary);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
@@ -97,8 +99,10 @@
 
 .moonie-chat .chat-markdown pre {
   margin-block: 0.5rem;
+  max-width: 100%;
   padding: 0.75rem;
   overflow-x: auto;
+  border: 1px solid var(--app-color-lilac-600);
   border-radius: 0.75rem;
   background-color: var(--app-color-base);
 }
@@ -139,15 +143,18 @@
 }
 
 .moonie-chat .chat-markdown table {
+  display: block;
   width: 100%;
+  max-width: 100%;
   margin-block: 0.5rem;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: 0.85em;
 }
 
 .moonie-chat .chat-markdown :is(th, td) {
   padding: 0.35rem 0.5rem;
-  border: 1px solid var(--app-color-lilac-600);
+  border: 1px solid var(--app-color-text-muted);
   text-align: left;
 }
 
@@ -160,7 +167,7 @@
 .moonie-chat .chat-markdown hr {
   margin-block: 0.75rem;
   border: 0;
-  border-top: 1px solid var(--app-color-lilac-600);
+  border-top: 1px solid var(--app-color-text-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {

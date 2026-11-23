@@ -1,11 +1,11 @@
 import type { ChatEvent, Option } from "../../../types/chat";
 import { isRecord } from "./guards";
 
-const OPTION_ACTIONS = new Set<string>([
-  "download-cv",
-  "schedule-meeting",
-  "open-calendar",
-]);
+const OPTION_ACTIONS = new Set<string>(["download-cv", "schedule-meeting"]);
+
+function stripLeadingBom(text: string): string {
+  return text.startsWith("\uFEFF") ? text.slice(1) : text;
+}
 
 export type SseParser = {
   push: (chunk: string) => string[];
@@ -25,7 +25,8 @@ export function createSseParser(): SseParser {
     return data;
   };
 
-  const processLine = (line: string): string | null => {
+  const processLine = (rawLine: string): string | null => {
+    const line = stripLeadingBom(rawLine);
     if (line === "") return dispatch();
     if (line.startsWith(":")) return null;
 
@@ -42,7 +43,7 @@ export function createSseParser(): SseParser {
   };
 
   const push = (chunk: string): string[] => {
-    buffer += chunk;
+    buffer = stripLeadingBom(buffer + chunk);
     const events: string[] = [];
 
     for (;;) {
@@ -117,14 +118,23 @@ export function parseChatEvent(data: string): ChatEvent | null {
     }
     case "done": {
       const { messageLimit } = parsed;
-      if (messageLimit === undefined) return { type: "done" };
-      if (typeof messageLimit !== "number" || !Number.isFinite(messageLimit))
-        return null;
-      return { type: "done", messageLimit };
+      const hasValidLimit =
+        typeof messageLimit === "number" &&
+        Number.isInteger(messageLimit) &&
+        messageLimit >= 0;
+      return hasValidLimit
+        ? { type: "done", messageLimit }
+        : { type: "done" };
     }
     case "error":
       return typeof parsed.message === "string"
-        ? { type: "error", message: parsed.message }
+        ? {
+            type: "error",
+            message: parsed.message,
+            ...(typeof parsed.errorKey === "string"
+              ? { errorKey: parsed.errorKey }
+              : {}),
+          }
         : null;
     default:
       return null;

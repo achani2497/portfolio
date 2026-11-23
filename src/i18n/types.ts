@@ -17,6 +17,7 @@ export type AppDictionary = {
   };
   sidebar: {
     intro: string;
+    chat: string;
     experience: string;
     technologies: string;
     contact: string;
@@ -63,6 +64,7 @@ export type AppDictionary = {
       thinking: string;
       loading: string;
       stopped: string;
+      done: string;
     };
     limits: {
       messagesLeft: string;
@@ -82,8 +84,23 @@ export type AppDictionary = {
       timeout: string;
       interruptedStream: string;
       generic: string;
+      quota: string;
       scheduleFailure: string;
       scheduleSuccess: string;
+    };
+    serverErrors: {
+      quota_exceeded: string;
+      model_unavailable: string;
+      chat_busy: string;
+      schedule_busy: string;
+      meeting_already_scheduled: string;
+      session_invalid: string;
+      schedule_failed: string;
+      schedule_timeout: string;
+      invalid_body: string;
+      message_too_long: string;
+      origin_not_allowed: string;
+      generic: string;
     };
     unavailable: {
       title: string;
@@ -92,7 +109,6 @@ export type AppDictionary = {
     options: {
       scheduleMeeting: string;
       downloadCv: string;
-      openCalendar: string;
       schedulePending: string;
     };
   };

@@ -3,21 +3,29 @@ import Chat from "../chat/Chat";
 import { CHAT_API } from "../../config/chat";
 import { DEFAULT_LOCALE, getDictionary } from "../../i18n";
 
-const { url: backendUrl, configured } = CHAT_API;
+const { newMessageUrl, scheduleMeetingUrl, configured } = CHAT_API;
 const unavailable = getDictionary(DEFAULT_LOCALE).chat.unavailable;
+const chatTitle = getDictionary(DEFAULT_LOCALE).chat.title;
 const emptyState = {
   en: getDictionary("en").chat.emptyState,
   es: getDictionary("es").chat.emptyState,
 } as const;
 ---
 
-<section id="chat" class="w-full">
+<section id="chat" class="w-full" aria-labelledby="chat-heading">
+  <h2 id="chat-heading" class="sr-only" data-i18n="chat.title">
+    {chatTitle}
+  </h2>
   <div
     class="bg-surface shadow-neumorphic flex h-auto w-full flex-col gap-6 rounded-2xl px-6 py-8 md:rounded-4xl md:px-12"
   >
     {
-      configured && backendUrl ? (
-        <Chat client:only="react" backendUrl={backendUrl}>
+      configured && newMessageUrl && scheduleMeetingUrl ? (
+        <Chat
+          client:only="react"
+          newMessageUrl={newMessageUrl}
+          scheduleMeetingUrl={scheduleMeetingUrl}
+        >
           <div
             slot="fallback"
             class="moonie-chat flex flex-col gap-6"

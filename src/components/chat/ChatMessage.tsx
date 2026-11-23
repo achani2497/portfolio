@@ -13,11 +13,11 @@ type ChatMessageProps = {
   leaving?: boolean;
   showDots?: boolean;
   options?: Option[];
-  optionsPendingValue?: string | null;
+  optionsPendingKey?: string | null;
   optionsPendingLabel?: string;
   optionsLocked?: boolean;
   optionsDisabled?: boolean;
-  onOptionClick?: (option: Option) => void;
+  onOptionClick?: (option: Option, optionKey: string) => void;
 };
 
 const REMARK_PLUGINS = [remarkGfm, remarkBreaks];
@@ -52,7 +52,7 @@ export default function ChatMessage({
   leaving = false,
   showDots = true,
   options,
-  optionsPendingValue = null,
+  optionsPendingKey = null,
   optionsPendingLabel,
   optionsLocked = false,
   optionsDisabled = false,
@@ -77,7 +77,7 @@ export default function ChatMessage({
           isUser
             ? "bg-lilac-600 text-text-primary"
             : "bg-elevated shadow-neumorphic text-text-primary"
-        } ${leaving ? "animate-fade-out" : !isUser && content ? "animate-fade-in" : ""}`}
+        } ${leaving ? "motion-safe:animate-fade-out" : !isUser && content ? "motion-safe:animate-fade-in" : ""}`}
       >
         {content ? (
           isUser ? (
@@ -102,20 +102,21 @@ export default function ChatMessage({
         ) : null}
         {!isUser && options && options.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-2">
-            {options.map((option) => {
+            {options.map((option, index) => {
               const isSchedule = option.action === "schedule-meeting";
-              const isPending = optionsPendingValue === option.value;
+              const optionKey = `${option.action}:${option.value}:${index}`;
+              const isPending = optionsPendingKey === optionKey;
               const disabled =
                 optionsDisabled ||
                 optionsLocked ||
                 !isSchedule ||
-                optionsPendingValue !== null;
+                optionsPendingKey !== null;
               return (
                 <button
-                  key={option.value}
+                  key={optionKey}
                   type="button"
                   disabled={disabled}
-                  onClick={() => onOptionClick?.(option)}
+                  onClick={() => onOptionClick?.(option, optionKey)}
                   className="bg-lilac-600 hover:bg-lilac-700 text-text-primary rounded-full px-3 py-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isPending

@@ -5,6 +5,7 @@ import {
   CodeXml,
   Home,
   Linkedin,
+  MessageCircle,
   MessagesSquare,
   Moon,
   Sun,
@@ -17,6 +18,7 @@ export const lucideIcons = {
   aws: Cloud,
   // Sidebar icons
   home: Home,
+  chat: MessageCircle,
   experience: BriefcaseBusiness,
   technologies: CodeXml,
   contact: MessagesSquare,

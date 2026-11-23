@@ -2,6 +2,7 @@ import type { IconKey } from "../utils/getIcon";
 
 export const SECTION_NAVIGATION = [
   { id: "intro", icon: "home", i18nKey: "sidebar.intro" },
+  { id: "chat", icon: "chat", i18nKey: "sidebar.chat" },
   { id: "experience", icon: "experience", i18nKey: "sidebar.experience" },
   {
     id: "technologies",
@@ -10,9 +11,14 @@ export const SECTION_NAVIGATION = [
   },
   { id: "contact", icon: "contact", i18nKey: "sidebar.contact" },
 ] as const satisfies readonly {
-  id: "intro" | "experience" | "technologies" | "contact";
+  id: "intro" | "chat" | "experience" | "technologies" | "contact";
   icon: IconKey;
-  i18nKey: "sidebar.intro" | "sidebar.experience" | "sidebar.technologies" | "sidebar.contact";
+  i18nKey:
+    | "sidebar.intro"
+    | "sidebar.chat"
+    | "sidebar.experience"
+    | "sidebar.technologies"
+    | "sidebar.contact";
 }[];
 
 export type SectionId = (typeof SECTION_NAVIGATION)[number]["id"];
