@@ -35,16 +35,7 @@ export function useChatUserId(): ChatUserId {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    const id = readStoredUserId() || createAndPersistUserId();
-
-    if (!cancelled) {
-      setUserId(id);
-    }
-
-    return () => {
-      cancelled = true;
-    };
+    setUserId(readStoredUserId() || createAndPersistUserId());
   }, []);
 
   return { userId, resetUserId };

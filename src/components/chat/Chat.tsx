@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { Option } from "../../types/chat";
 import { downloadChatMarkdown } from "./lib/exportChat";
 import { resolveErrorMessage } from "./lib/errorMessage";
@@ -38,14 +38,7 @@ export default function Chat({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const shouldRestoreFocusRef = useRef(false);
   const isNearBottomRef = useRef(true);
-  const wasStreamingRef = useRef(false);
   const scrollFrameRef = useRef<number | null>(null);
-  const engineRef = useRef(engine);
-  const [showDoneAnnouncement, setShowDoneAnnouncement] = useState(false);
-
-  useEffect(() => {
-    engineRef.current = engine;
-  });
 
   useEffect(() => {
     if (engine.isBusy || !shouldRestoreFocusRef.current) return;
@@ -72,34 +65,6 @@ export default function Chat({
       if (container !== null) container.scrollTop = container.scrollHeight;
     });
   }, [engine.messages, engine.status, engine.leavingStatus]);
-
-  useEffect(
-    () => () => {
-      if (scrollFrameRef.current !== null) {
-        cancelAnimationFrame(scrollFrameRef.current);
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    const wasStreaming = wasStreamingRef.current;
-    wasStreamingRef.current = engine.isStreaming;
-
-    if (engine.isStreaming) {
-      setShowDoneAnnouncement(false);
-      return;
-    }
-
-    if (engine.error !== null || engine.status !== null) {
-      setShowDoneAnnouncement(false);
-      return;
-    }
-
-    if (!wasStreaming) return;
-
-    setShowDoneAnnouncement(true);
-  }, [engine.isStreaming, engine.error, engine.status]);
 
   const handleScroll = () => {
     const container = containerRef.current;
@@ -140,9 +105,9 @@ export default function Chat({
     (messageId: string, option: Option, optionKey: string) => {
       shouldRestoreFocusRef.current = true;
       isNearBottomRef.current = true;
-      void engineRef.current.scheduleOption(messageId, option, optionKey);
+      void engine.scheduleOption(messageId, option, optionKey);
     },
-    [],
+    [engine.scheduleOption],
   );
 
   const limitLabel =
@@ -171,7 +136,8 @@ export default function Chat({
   const liveStatus = engine.statusKind === "info" ? engine.status : null;
   const statusAnnouncement =
     errorMessage === null
-      ? (liveStatus ?? (showDoneAnnouncement ? dictionary.status.done : ""))
+      ? (liveStatus ??
+        (engine.lastOutcome === "done" ? dictionary.status.done : ""))
       : "";
 
   return (

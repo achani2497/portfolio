@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type {
   ChatErrorCode,
@@ -36,6 +36,7 @@ type ChatEngine = {
   error: ChatErrorState | null;
   isLimitReached: boolean;
   isScheduling: boolean;
+  lastOutcome: "done" | null;
   sendMessage: (text: string) => Promise<void>;
   stopStream: () => void;
   retry: () => Promise<void>;
@@ -67,6 +68,7 @@ export function useChatEngine({
   const [messageLimit, setMessageLimit] = useState<number | null>(null);
   const [error, setError] = useState<ChatErrorState | null>(null);
   const [isScheduling, setIsScheduling] = useState(false);
+  const [lastOutcome, setLastOutcome] = useState<"done" | null>(null);
 
   const chatInFlightRef = useRef(false);
   const scheduleInFlightRef = useRef(false);
@@ -101,6 +103,7 @@ export function useChatEngine({
     errorKey?: string,
   ) => {
     resetStatus();
+    setLastOutcome(null);
     setError({
       code,
       retryable,
@@ -114,6 +117,7 @@ export function useChatEngine({
     setMessageLimit(null);
     lastRequestRef.current = null;
     setError(null);
+    setLastOutcome(null);
   };
 
   const showStreamError = (error: unknown) => {
@@ -198,6 +202,7 @@ export function useChatEngine({
     if (!userId) return;
     if (chatInFlightRef.current) return;
 
+    setLastOutcome(null);
     chatInFlightRef.current = true;
     stopReasonRef.current = null;
 
@@ -250,6 +255,7 @@ export function useChatEngine({
             break;
           case "done":
             resetStatus();
+            setLastOutcome("done");
             if (typeof event.messageLimit === "number") {
               setMessageLimit(event.messageLimit);
             }
@@ -306,63 +312,66 @@ export function useChatEngine({
     setError(null);
   };
 
-  const scheduleOption = async (
-    messageId: string,
-    option: Option,
-    optionKey: string,
-  ): Promise<void> => {
-    if (option.action !== "schedule-meeting") return;
-    if (!userId) return;
-    if (scheduleInFlightRef.current) return;
+  const scheduleOption = useCallback(
+    async (
+      messageId: string,
+      option: Option,
+      optionKey: string,
+    ): Promise<void> => {
+      if (option.action !== "schedule-meeting") return;
+      if (!userId) return;
+      if (scheduleInFlightRef.current) return;
 
-    setError(null);
-    scheduleInFlightRef.current = true;
-    setIsScheduling(true);
-    dispatch({ type: "patchOption", id: messageId, pendingKey: optionKey });
+      setError(null);
+      scheduleInFlightRef.current = true;
+      setIsScheduling(true);
+      dispatch({ type: "patchOption", id: messageId, pendingKey: optionKey });
 
-    try {
-      const result = await scheduleMeeting(
-        scheduleMeetingUrl,
-        userId,
-        option.value,
-      );
-      if (!mountedRef.current) return;
-      dispatch({
-        type: "patchOption",
-        id: messageId,
-        pendingKey: null,
-        locked: result.ok,
-      });
-      const reply = result.ok
-        ? (result.message || dictionary.errors.scheduleSuccess)
-        : resolveErrorMessage(
-            dictionary,
-            result,
-            dictionary.errors.scheduleFailure,
-          );
-      dispatch({
-        type: "append",
-        message: { id: createChatId(), role: "assistant", content: reply },
-      });
-    } catch {
-      if (mountedRef.current) {
-        dispatch({ type: "patchOption", id: messageId, pendingKey: null });
+      try {
+        const result = await scheduleMeeting(
+          scheduleMeetingUrl,
+          userId,
+          option.value,
+        );
+        if (!mountedRef.current) return;
+        dispatch({
+          type: "patchOption",
+          id: messageId,
+          pendingKey: null,
+          locked: result.ok,
+        });
+        const reply = result.ok
+          ? (result.message || dictionary.errors.scheduleSuccess)
+          : resolveErrorMessage(
+              dictionary,
+              result,
+              dictionary.errors.scheduleFailure,
+            );
         dispatch({
           type: "append",
-          message: {
-            id: createChatId(),
-            role: "assistant",
-            content: dictionary.errors.scheduleFailure,
-          },
+          message: { id: createChatId(), role: "assistant", content: reply },
         });
+      } catch {
+        if (mountedRef.current) {
+          dispatch({ type: "patchOption", id: messageId, pendingKey: null });
+          dispatch({
+            type: "append",
+            message: {
+              id: createChatId(),
+              role: "assistant",
+              content: dictionary.errors.scheduleFailure,
+            },
+          });
+        }
+      } finally {
+        scheduleInFlightRef.current = false;
+        if (mountedRef.current) {
+          setIsScheduling(false);
+        }
       }
-    } finally {
-      scheduleInFlightRef.current = false;
-      if (mountedRef.current) {
-        setIsScheduling(false);
-      }
-    }
-  };
+    },
+    [userId, scheduleMeetingUrl, dictionary],
+  );
 
   const isStreaming = phase !== "done";
   const isBusy =
@@ -379,6 +388,7 @@ export function useChatEngine({
     error,
     isLimitReached,
     isScheduling,
+    lastOutcome,
     sendMessage,
     stopStream,
     retry,
