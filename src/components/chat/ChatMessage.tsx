@@ -1,11 +1,9 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
-import type { ComponentProps } from "react";
+import { lazy, memo, Suspense } from "react";
 import MoonieSprite, { MOONIE_PHASES } from "./MoonieSprite";
 import type { ChatPhase, ChatRole, ChatStatus, Option } from "../../types/chat";
 
 type ChatMessageProps = {
+  messageId?: string;
   role: ChatRole;
   content: string;
   phase?: ChatPhase;
@@ -17,18 +15,13 @@ type ChatMessageProps = {
   optionsPendingLabel?: string;
   optionsLocked?: boolean;
   optionsDisabled?: boolean;
-  onOptionClick?: (option: Option, optionKey: string) => void;
+  onOptionClick?: (messageId: string, option: Option, optionKey: string) => void;
 };
 
-const REMARK_PLUGINS = [remarkGfm, remarkBreaks];
+const loadMarkdownBody = () => import("./MarkdownBody");
+const MarkdownBody = lazy(loadMarkdownBody);
 
-const MARKDOWN_COMPONENTS = {
-  a: ({ children, href }: ComponentProps<"a">) => (
-    <a href={href} target="_blank" rel="noopener noreferrer">
-      {children}
-    </a>
-  ),
-};
+export { loadMarkdownBody };
 
 function BouncingDots() {
   return (
@@ -44,7 +37,8 @@ function BouncingDots() {
   );
 }
 
-export default function ChatMessage({
+function ChatMessage({
+  messageId,
   role,
   content,
   phase = "done",
@@ -84,13 +78,11 @@ export default function ChatMessage({
             <p className="text-sm break-words whitespace-pre-wrap">{content}</p>
           ) : (
             <div className="chat-markdown text-sm break-words">
-              <ReactMarkdown
-                remarkPlugins={REMARK_PLUGINS}
-                components={MARKDOWN_COMPONENTS}
-                skipHtml
+              <Suspense
+                fallback={<p className="whitespace-pre-wrap">{content}</p>}
               >
-                {content}
-              </ReactMarkdown>
+                <MarkdownBody content={content} />
+              </Suspense>
             </div>
           )
         ) : null}
@@ -116,7 +108,10 @@ export default function ChatMessage({
                   key={optionKey}
                   type="button"
                   disabled={disabled}
-                  onClick={() => onOptionClick?.(option, optionKey)}
+                  onClick={() => {
+                    if (messageId === undefined) return;
+                    onOptionClick?.(messageId, option, optionKey);
+                  }}
                   className="bg-lilac-600 hover:bg-lilac-700 text-text-primary rounded-full px-3 py-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isPending
@@ -131,3 +126,5 @@ export default function ChatMessage({
     </div>
   );
 }
+
+export default memo(ChatMessage);

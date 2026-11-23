@@ -59,6 +59,18 @@ Personal developer portfolio for **Alejandro Ismael Chañi**, built with Astro, 
 ### Imports
 - Relative imports only (`../components/...`). No path aliases.
 
+### Exports
+- Add `export` only when another file imports the symbol. Types, constants and helpers used only inside their own file stay private.
+- Reusable helpers live in their own file under the module's `lib/` (or `src/utils/`) with a single purpose. Never export a helper from a hook file.
+
+### Readability
+- Prefer flat code: early returns and small named predicates over nested conditionals.
+- A function must be understandable on one read by someone unfamiliar with the project. No cleverness for its own sake.
+
+### Commits
+- Conventional commits with one concise subject line.
+- No bullet lists in the commit message body.
+
 ### Package manager
 - pnpm only. Do not use npm or yarn; `package-lock.json` and `yarn.lock` are not tracked.
 
@@ -74,6 +86,10 @@ Colors are defined as CSS custom properties in `src/styles/global.css` and mappe
 ## i18n
 
 Two locales: `en` (default), `es`. Each locale has its own dictionary split by section (intro, experience, technologies, contact, sidebar, footer, meta). Use `getDictionary(locale)` to load, `getDictionarySafe()` for fallback. Language toggle via `LanguageSwitch.astro` with flag SVGs from `public/flags/`.
+
+### Copy & tone
+- Chat copy must sound like Moonie: warm, friendly and dog-themed (Moonie represents Luna). ES uses Rioplatense voseo consistently across every chat section.
+- Pending tone refinement is tracked in `PROGRESS.md`.
 
 ## Commands
 

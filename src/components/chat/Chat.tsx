@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Option } from "../../types/chat";
 import { downloadChatMarkdown } from "./lib/exportChat";
 import { resolveErrorMessage } from "./lib/errorMessage";
@@ -7,7 +7,7 @@ import { useChatEngine } from "./hooks/useChatEngine";
 import ChatBadge from "./ChatBadge";
 import ChatErrorBubble from "./ChatErrorBubble";
 import ChatInput from "./ChatInput";
-import ChatMessage from "./ChatMessage";
+import ChatMessage, { loadMarkdownBody } from "./ChatMessage";
 import MoonieSprite from "./MoonieSprite";
 
 // Dev-only sprite preview in the empty state; always false in a production build.
@@ -39,7 +39,13 @@ export default function Chat({
   const shouldRestoreFocusRef = useRef(false);
   const isNearBottomRef = useRef(true);
   const wasStreamingRef = useRef(false);
+  const scrollFrameRef = useRef<number | null>(null);
+  const engineRef = useRef(engine);
   const [showDoneAnnouncement, setShowDoneAnnouncement] = useState(false);
+
+  useEffect(() => {
+    engineRef.current = engine;
+  });
 
   useEffect(() => {
     if (engine.isBusy || !shouldRestoreFocusRef.current) return;
@@ -59,10 +65,22 @@ export default function Chat({
 
   useEffect(() => {
     if (!isNearBottomRef.current) return;
-    const container = containerRef.current;
-    if (container === null) return;
-    container.scrollTo({ top: container.scrollHeight });
+    if (scrollFrameRef.current !== null) return;
+    scrollFrameRef.current = requestAnimationFrame(() => {
+      scrollFrameRef.current = null;
+      const container = containerRef.current;
+      if (container !== null) container.scrollTop = container.scrollHeight;
+    });
   }, [engine.messages, engine.status, engine.leavingStatus]);
+
+  useEffect(
+    () => () => {
+      if (scrollFrameRef.current !== null) {
+        cancelAnimationFrame(scrollFrameRef.current);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const wasStreaming = wasStreamingRef.current;
@@ -98,6 +116,7 @@ export default function Chat({
   const handleSend = (text: string) => {
     shouldRestoreFocusRef.current = true;
     isNearBottomRef.current = true;
+    void loadMarkdownBody();
     void engine.sendMessage(text);
   };
 
@@ -117,15 +136,14 @@ export default function Chat({
     containerRef.current?.focus({ preventScroll: true });
   };
 
-  const handleOptionClick = (
-    messageId: string,
-    option: Option,
-    optionKey: string,
-  ) => {
-    shouldRestoreFocusRef.current = true;
-    isNearBottomRef.current = true;
-    void engine.scheduleOption(messageId, option, optionKey);
-  };
+  const handleOptionClick = useCallback(
+    (messageId: string, option: Option, optionKey: string) => {
+      shouldRestoreFocusRef.current = true;
+      isNearBottomRef.current = true;
+      void engineRef.current.scheduleOption(messageId, option, optionKey);
+    },
+    [],
+  );
 
   const limitLabel =
     engine.messageLimit === null
@@ -204,6 +222,7 @@ export default function Chat({
           engine.messages.map((message) => (
             <ChatMessage
               key={message.id}
+              messageId={message.id}
               role={message.role}
               content={message.content}
               phase={message.streaming ? "streaming" : "done"}
@@ -212,9 +231,7 @@ export default function Chat({
               optionsPendingLabel={dictionary.options.schedulePending}
               optionsLocked={message.optionsLocked ?? false}
               optionsDisabled={engine.isStreaming || engine.isScheduling}
-              onOptionClick={(option, optionKey) =>
-                handleOptionClick(message.id, option, optionKey)
-              }
+              onOptionClick={handleOptionClick}
             />
           ))
         )}
