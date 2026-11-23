@@ -49,7 +49,6 @@ export type AppDictionary = {
   };
   chat: {
     title: string;
-    description: string;
     emptyState: string;
     input: {
       placeholder: string;
@@ -107,8 +106,6 @@ export type AppDictionary = {
       description: string;
     };
     options: {
-      scheduleMeeting: string;
-      downloadCv: string;
       schedulePending: string;
     };
   };

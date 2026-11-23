@@ -1,20 +1,8 @@
 import { useSyncExternalStore } from "react";
 import { DEFAULT_LOCALE, getDictionary } from "../../../i18n";
-import type { AppDictionary, Locale } from "../../../i18n/types";
+import type { Locale } from "../../../i18n/types";
 import { getResolvedLocale, onLocaleChange } from "../../../utils/localeClient";
-
-export type ChatDictionary = AppDictionary["chat"];
-
-export function getServerErrorMessage(
-  dictionary: ChatDictionary,
-  errorKey?: string,
-): string | undefined {
-  if (errorKey === undefined) return undefined;
-  if (!Object.prototype.hasOwnProperty.call(dictionary.serverErrors, errorKey)) {
-    return undefined;
-  }
-  return (dictionary.serverErrors as Record<string, string>)[errorKey];
-}
+import type { ChatDictionary } from "../lib/errorMessage";
 
 function subscribe(callback: () => void): () => void {
   return onLocaleChange(() => callback());

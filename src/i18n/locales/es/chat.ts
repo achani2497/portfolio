@@ -1,7 +1,5 @@
 export const esChat = {
   title: "Conversa con Moonie",
-  description:
-    "Pregunta sobre mi experiencia, proyectos o disponibilidad. Moonie responde en tiempo real.",
   emptyState: "Pregúntame lo que quieras...",
   input: {
     placeholder: "Escribe un mensaje...",
@@ -33,10 +31,10 @@ export const esChat = {
   },
   errors: {
     network:
-      "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
-    timeout: "La solicitud tardó demasiado. Inténtalo de nuevo.",
-    interruptedStream: "La respuesta se interrumpió. Inténtalo de nuevo.",
-    generic: "Algo salió mal. Inténtalo de nuevo.",
+      "No se pudo conectar con el servidor. Revisá tu conexión e intentá de nuevo.",
+    timeout: "La solicitud tardó demasiado. Intentá de nuevo.",
+    interruptedStream: "La respuesta se interrumpió. Intentá de nuevo.",
+    generic: "Algo salió mal. Intentá de nuevo.",
     quota: "Llegaste al límite de mensajes de hoy. Probá de nuevo mañana.",
     scheduleFailure: "No pude agendar la reunión. ¿Lo intentamos de nuevo?",
     scheduleSuccess: "Listo, la reunión quedó agendada.",
@@ -65,8 +63,6 @@ export const esChat = {
       "Moonie no está disponible en este momento. Inténtalo de nuevo más tarde.",
   },
   options: {
-    scheduleMeeting: "Agendar reunión",
-    downloadCv: "Descargar CV",
     schedulePending: "Agendando...",
   },
 } as const;

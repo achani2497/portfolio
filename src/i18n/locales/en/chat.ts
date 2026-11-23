@@ -1,7 +1,5 @@
 export const enChat = {
   title: "Chat with Moonie",
-  description:
-    "Ask about my experience, projects, or availability. Moonie replies in real time.",
   emptyState: "Ask me anything...",
   input: {
     placeholder: "Type a message...",
@@ -65,8 +63,6 @@ export const enChat = {
     description: "Moonie is not available right now. Please try again later.",
   },
   options: {
-    scheduleMeeting: "Schedule meeting",
-    downloadCv: "Download CV",
     schedulePending: "Scheduling...",
   },
 } as const;

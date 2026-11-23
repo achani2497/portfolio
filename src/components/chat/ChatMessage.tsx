@@ -30,7 +30,7 @@ const MARKDOWN_COMPONENTS = {
   ),
 };
 
-export function BouncingDots() {
+function BouncingDots() {
   return (
     <span className="inline-flex items-center gap-0.5">
       {[0, 150, 300].map((delay) => (

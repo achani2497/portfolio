@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CHAT_USER_ID_KEY } from "../../../config/chat";
 import { createChatId } from "../lib/chatId";
 
-export type ChatUserId = {
+type ChatUserId = {
   userId: string | null;
   resetUserId: () => void;
 };

@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import type { ChatPhase } from "../../types/chat";
 import "../../styles/moonie.css";
 
-export type MoonieSheet = {
+type MoonieSheet = {
   src: string;
   frameWidth: number;
   frameHeight: number;
@@ -11,7 +11,7 @@ export type MoonieSheet = {
   duration: string;
 };
 
-export const MOONIE_SHEETS = {
+const MOONIE_SHEETS = {
   face: {
     src: "/lunita_face.png",
     frameWidth: 128,
@@ -31,9 +31,9 @@ export const MOONIE_SHEETS = {
   },
 } satisfies Record<string, MoonieSheet>;
 
-export type MoonieVariant = keyof typeof MOONIE_SHEETS;
+type MoonieVariant = keyof typeof MOONIE_SHEETS;
 
-export type MooniePhase = ChatPhase;
+type MooniePhase = ChatPhase;
 
 // streaming and done are placeholders until the barking and closing sprites exist.
 export const MOONIE_PHASES: Record<
@@ -48,7 +48,6 @@ export const MOONIE_PHASES: Record<
 type MoonieSpriteProps = {
   variant: MoonieVariant;
   scale?: number;
-  duration?: string;
   smooth?: boolean;
   className?: string;
 };
@@ -56,7 +55,6 @@ type MoonieSpriteProps = {
 export default function MoonieSprite({
   variant,
   scale,
-  duration,
   smooth,
   className,
 }: MoonieSpriteProps) {
@@ -68,7 +66,7 @@ export default function MoonieSprite({
     "--frame-height": `${sheet.frameHeight}px`,
     "--frame-count": sheet.frameCount,
     "--sprite-scale": scale ?? sheet.scale,
-    "--sprite-duration": duration ?? sheet.duration,
+    "--sprite-duration": sheet.duration,
     ...(smooth ? { imageRendering: "auto" } : {}),
   } as CSSProperties;
 

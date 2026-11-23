@@ -3,13 +3,13 @@ import { isRecord } from "./guards";
 
 const MAX_ERROR_MESSAGE_LENGTH = 300;
 
-export type ScheduleMeetingResult = {
+type ScheduleMeetingResult = {
   ok: boolean;
   message?: string;
   errorKey?: string;
 };
 
-export type ErrorPayload = {
+type ErrorPayload = {
   message: string;
   errorKey?: string;
 };
@@ -22,15 +22,48 @@ function truncateMessage(message: string): string {
     : trimmed;
 }
 
-async function requestJson(
-  response: Response,
-): Promise<{ message?: string; errorKey?: string }> {
-  const data: unknown = await response.json().catch(() => null);
-  if (!isRecord(data)) return {};
+function parseJsonFields(
+  body: string,
+): { message?: string; errorKey?: string } | null {
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return null;
+  }
+
+  if (!isRecord(parsed)) return null;
+
   return {
-    ...(typeof data.message === "string" ? { message: data.message } : {}),
-    ...(typeof data.errorKey === "string" ? { errorKey: data.errorKey } : {}),
+    ...(typeof parsed.message === "string" ? { message: parsed.message } : {}),
+    ...(typeof parsed.errorKey === "string"
+      ? { errorKey: parsed.errorKey }
+      : {}),
   };
+}
+
+export async function readJsonPayload(
+  response: Response,
+  fallbackMessage: string = "",
+): Promise<ErrorPayload> {
+  const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
+  const body = (await response.text().catch(() => "")).trim();
+  const isHtmlLike =
+    contentType.includes("text/html") || body.startsWith("<");
+
+  if (body === "" || isHtmlLike) return { message: fallbackMessage };
+
+  const isJson =
+    contentType.includes("application/json") || body.startsWith("{");
+  if (!isJson) return { message: truncateMessage(body) };
+
+  const fields = parseJsonFields(body);
+  const message = truncateMessage(fields?.message ?? "") || fallbackMessage;
+
+  return fields?.errorKey === undefined
+    ? { message }
+    : { message, errorKey: fields.errorKey };
 }
 
 export function isEventStreamResponse(response: Response): boolean {
@@ -56,16 +89,19 @@ export async function scheduleMeeting(
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify({ userId, value }),
       signal: controller.signal,
     });
 
-    const { message, errorKey } = await requestJson(response);
+    const { message, errorKey } = await readJsonPayload(response);
 
     return {
       ok: response.ok,
-      ...(message === undefined ? {} : { message }),
+      message,
       ...(errorKey === undefined ? {} : { errorKey }),
     };
   } catch {
@@ -76,43 +112,4 @@ export async function scheduleMeeting(
   } finally {
     clearTimeout(timeoutId);
   }
-}
-
-export async function readErrorPayload(
-  response: Response,
-  fallback: string = "",
-): Promise<ErrorPayload> {
-  const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
-  const body = (await response.text().catch(() => "")).trim();
-  if (body === "") return { message: fallback };
-
-  if (contentType.includes("application/json") || body.startsWith("{")) {
-    try {
-      const parsed: unknown = JSON.parse(body);
-      if (isRecord(parsed) && typeof parsed.message === "string") {
-        return {
-          message: truncateMessage(parsed.message),
-          ...(typeof parsed.errorKey === "string"
-            ? { errorKey: parsed.errorKey }
-            : {}),
-        };
-      }
-    } catch {
-      return { message: fallback };
-    }
-    return { message: fallback };
-  }
-
-  if (contentType.includes("text/html") || body.startsWith("<")) {
-    return { message: fallback };
-  }
-
-  return { message: truncateMessage(body) };
-}
-
-export async function readErrorMessage(
-  response: Response,
-  fallback: string = "",
-): Promise<string> {
-  return (await readErrorPayload(response, fallback)).message;
 }

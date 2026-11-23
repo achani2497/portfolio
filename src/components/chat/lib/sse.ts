@@ -7,7 +7,7 @@ function stripLeadingBom(text: string): string {
   return text.startsWith("\uFEFF") ? text.slice(1) : text;
 }
 
-export type SseParser = {
+type SseParser = {
   push: (chunk: string) => string[];
   flush: () => string[];
 };

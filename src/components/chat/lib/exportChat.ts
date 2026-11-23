@@ -1,6 +1,6 @@
 import type { ChatMessageData, ChatRole } from "../../../types/chat";
 
-export type ChatExportLabels = {
+type ChatExportLabels = {
   header: string;
   exportedAt: string;
   userRole: string;
@@ -19,7 +19,7 @@ function authorForRole(role: ChatRole, labels: ChatExportLabels): string {
   return role === "user" ? labels.userRole : labels.assistantRole;
 }
 
-export function buildChatMarkdown(
+function buildChatMarkdown(
   messages: readonly ChatMessageData[],
   labels: ChatExportLabels,
   now: Date = new Date(),

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Option } from "../../types/chat";
 import { downloadChatMarkdown } from "./lib/exportChat";
-import { getServerErrorMessage, useChatDictionary } from "./hooks/useChatDictionary";
+import { resolveErrorMessage } from "./lib/errorMessage";
+import { useChatDictionary } from "./hooks/useChatDictionary";
 import { useChatEngine } from "./hooks/useChatEngine";
 import ChatBadge from "./ChatBadge";
 import ChatErrorBubble from "./ChatErrorBubble";
@@ -141,15 +142,18 @@ export default function Chat({
   const errorMessage =
     engine.error === null
       ? null
-      : (getServerErrorMessage(dictionary, engine.error.errorKey) ??
-        engine.error.message ??
-        (engine.error.code === "http"
-          ? dictionary.errors.generic
-          : dictionary.errors[engine.error.code]));
+      : resolveErrorMessage(
+          dictionary,
+          engine.error,
+          engine.error.code === "http"
+            ? dictionary.errors.generic
+            : dictionary.errors[engine.error.code],
+        );
 
+  const liveStatus = engine.statusKind === "info" ? engine.status : null;
   const statusAnnouncement =
     errorMessage === null
-      ? (engine.status ?? (showDoneAnnouncement ? dictionary.status.done : ""))
+      ? (liveStatus ?? (showDoneAnnouncement ? dictionary.status.done : ""))
       : "";
 
   return (

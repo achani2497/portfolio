@@ -1,10 +1,10 @@
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type { ChatEvent } from "../../../types/chat";
-import { isEventStreamResponse, readErrorPayload } from "./chatApi";
+import { isEventStreamResponse, readJsonPayload } from "./chatApi";
 import { isAbortError } from "./guards";
 import { createSseParser, parseChatEvent } from "./sse";
 
-export type ChatStreamErrorCode =
+type ChatStreamErrorCode =
   "network" | "http" | "timeout" | "interrupted";
 
 export class ChatStreamError extends Error {
@@ -39,11 +39,13 @@ type ReaderResult = ReadableStreamReadResult<Uint8Array>;
 async function readWithIdleTimeout(
   reader: ReadableStreamDefaultReader<Uint8Array>,
   idleTimeoutMs: number,
+  controller: AbortController,
 ): Promise<ReaderResult> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   const timeout = new Promise<never>((_, reject) => {
     timeoutId = setTimeout(() => {
+      controller.abort();
       reject(new ChatStreamError("timeout", "The stream stalled."));
     }, idleTimeoutMs);
   });
@@ -116,7 +118,7 @@ export async function* streamChatEvents({
   }
 
   if (!response.ok || !response.body) {
-    const payload = await readErrorPayload(response);
+    const payload = await readJsonPayload(response);
     removeAbortListener();
     throw new ChatStreamError(
       "http",
@@ -127,7 +129,7 @@ export async function* streamChatEvents({
   }
 
   if (!isEventStreamResponse(response)) {
-    const payload = await readErrorPayload(response);
+    const payload = await readJsonPayload(response);
     removeAbortListener();
     throw new ChatStreamError(
       "http",
@@ -153,7 +155,11 @@ export async function* streamChatEvents({
 
   try {
     while (!terminal) {
-      const result = await readWithIdleTimeout(reader, idleTimeoutMs);
+      const result = await readWithIdleTimeout(
+        reader,
+        idleTimeoutMs,
+        controller,
+      );
       if (result.done) break;
 
       const events = parseEvents(

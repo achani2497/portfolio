@@ -12,7 +12,7 @@ function getCounterTone(length: number): ChatBadgeTone {
   return "neutral";
 }
 
-export type ChatInputLabels = {
+type ChatInputLabels = {
   placeholder: string;
   ariaLabel: string;
   send: string;

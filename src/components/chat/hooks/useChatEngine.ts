@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type {
   ChatErrorCode,
@@ -12,8 +12,9 @@ import { createChatId } from "../lib/chatId";
 import { ChatStreamError, streamChatEvents } from "../lib/chatStream";
 import { scheduleMeeting } from "../lib/chatApi";
 import { isAbortError } from "../lib/guards";
-import type { ChatDictionary } from "./useChatDictionary";
-import { getServerErrorMessage } from "./useChatDictionary";
+import { messagesReducer } from "../lib/messages";
+import type { ChatDictionary } from "../lib/errorMessage";
+import { resolveErrorMessage } from "../lib/errorMessage";
 import { useChatStatus } from "./useChatStatus";
 import type { ChatStatusKind } from "./useChatStatus";
 import { useChatUserId } from "./useChatUserId";
@@ -24,7 +25,7 @@ type UseChatEngineOptions = {
   dictionary: ChatDictionary;
 };
 
-export type ChatEngine = {
+type ChatEngine = {
   messages: ChatMessageData[];
   isStreaming: boolean;
   isBusy: boolean;
@@ -35,7 +36,6 @@ export type ChatEngine = {
   error: ChatErrorState | null;
   isLimitReached: boolean;
   isScheduling: boolean;
-  isReady: boolean;
   sendMessage: (text: string) => Promise<void>;
   stopStream: () => void;
   retry: () => Promise<void>;
@@ -62,7 +62,7 @@ export function useChatEngine({
     reset: resetStatus,
   } = useChatStatus();
 
-  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [messages, dispatch] = useReducer(messagesReducer, []);
   const [phase, setPhase] = useState<ChatPhase>("done");
   const [messageLimit, setMessageLimit] = useState<number | null>(null);
   const [error, setError] = useState<ChatErrorState | null>(null);
@@ -94,93 +94,6 @@ export function useChatEngine({
     };
   }, []);
 
-  const addUserMessage = (text: string) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: createChatId(), role: "user", content: text },
-    ]);
-  };
-
-  const appendAssistantChunk = (assistantId: string, chunk: string) => {
-    setMessages((prev) => {
-      const index = prev.findIndex((message) => message.id === assistantId);
-      if (index === -1) {
-        return [
-          ...prev,
-          {
-            id: assistantId,
-            role: "assistant",
-            content: chunk,
-            streaming: true,
-          },
-        ];
-      }
-
-      const next = [...prev];
-      next[index] = {
-        ...next[index],
-        content: next[index].content + chunk,
-      };
-      return next;
-    });
-  };
-
-  const attachAssistantOptions = (assistantId: string, options: Option[]) => {
-    setMessages((prev) => {
-      const index = prev.findIndex((message) => message.id === assistantId);
-      if (index === -1) {
-        return [
-          ...prev,
-          {
-            id: assistantId,
-            role: "assistant",
-            content: "",
-            options,
-            streaming: true,
-          },
-        ];
-      }
-
-      const next = [...prev];
-      next[index] = { ...next[index], options };
-      return next;
-    });
-  };
-
-  const finishAssistantMessage = (assistantId: string) => {
-    setMessages((prev) =>
-      prev.map((message) =>
-        message.id === assistantId && message.streaming
-          ? { ...message, streaming: false }
-          : message,
-      ),
-    );
-  };
-
-  const addAssistantMessage = (content: string) => {
-    setMessages((prev) => [
-      ...prev,
-      { id: createChatId(), role: "assistant", content },
-    ]);
-  };
-
-  const updateOptionState = (
-    messageId: string,
-    pendingKey: string | null,
-    optionsLocked?: boolean,
-  ) => {
-    setMessages((prev) =>
-      prev.map((message) => {
-        if (message.id !== messageId) return message;
-        return {
-          ...message,
-          pendingKey,
-          ...(optionsLocked === undefined ? {} : { optionsLocked }),
-        };
-      }),
-    );
-  };
-
   const setChatError = (
     code: ChatErrorCode,
     retryable: boolean,
@@ -197,7 +110,7 @@ export function useChatEngine({
   };
 
   const resetConversation = () => {
-    setMessages([]);
+    dispatch({ type: "reset" });
     setMessageLimit(null);
     lastRequestRef.current = null;
     setError(null);
@@ -294,7 +207,10 @@ export function useChatEngine({
     lastRequestRef.current = { text, assistantId };
 
     if (appendUserMessage) {
-      addUserMessage(text);
+      dispatch({
+        type: "append",
+        message: { id: createChatId(), role: "user", content: text },
+      });
     }
     setPhase("thinking");
     showStatus(dictionary.status.thinking);
@@ -318,11 +234,19 @@ export function useChatEngine({
             setPhase((current) =>
               current === "thinking" ? "streaming" : current,
             );
-            appendAssistantChunk(assistantId, event.content);
+            dispatch({
+              type: "appendChunk",
+              id: assistantId,
+              chunk: event.content,
+            });
             break;
           case "options":
             resetStatus();
-            attachAssistantOptions(assistantId, event.options);
+            dispatch({
+              type: "attachOptions",
+              id: assistantId,
+              options: event.options,
+            });
             break;
           case "done":
             resetStatus();
@@ -346,7 +270,7 @@ export function useChatEngine({
       }
     } finally {
       if (mountedRef.current) {
-        finishAssistantMessage(assistantId);
+        dispatch({ type: "finish", id: assistantId });
       }
       if (abortControllerRef.current === controller) {
         abortControllerRef.current = null;
@@ -374,9 +298,7 @@ export function useChatEngine({
 
     setError(null);
     const failedAssistantId = lastRequest.assistantId;
-    setMessages((prev) =>
-      prev.filter((message) => message.id !== failedAssistantId),
-    );
+    dispatch({ type: "remove", id: failedAssistantId });
     await runRequest(lastRequest.text, false);
   };
 
@@ -396,7 +318,7 @@ export function useChatEngine({
     setError(null);
     scheduleInFlightRef.current = true;
     setIsScheduling(true);
-    updateOptionState(messageId, optionKey);
+    dispatch({ type: "patchOption", id: messageId, pendingKey: optionKey });
 
     try {
       const result = await scheduleMeeting(
@@ -405,17 +327,34 @@ export function useChatEngine({
         option.value,
       );
       if (!mountedRef.current) return;
-      updateOptionState(messageId, null, result.ok);
+      dispatch({
+        type: "patchOption",
+        id: messageId,
+        pendingKey: null,
+        locked: result.ok,
+      });
       const reply = result.ok
-        ? (result.message ?? dictionary.errors.scheduleSuccess)
-        : (getServerErrorMessage(dictionary, result.errorKey) ??
-          result.message ??
-          dictionary.errors.scheduleFailure);
-      addAssistantMessage(reply);
+        ? (result.message || dictionary.errors.scheduleSuccess)
+        : resolveErrorMessage(
+            dictionary,
+            result,
+            dictionary.errors.scheduleFailure,
+          );
+      dispatch({
+        type: "append",
+        message: { id: createChatId(), role: "assistant", content: reply },
+      });
     } catch {
       if (mountedRef.current) {
-        updateOptionState(messageId, null);
-        addAssistantMessage(dictionary.errors.scheduleFailure);
+        dispatch({ type: "patchOption", id: messageId, pendingKey: null });
+        dispatch({
+          type: "append",
+          message: {
+            id: createChatId(),
+            role: "assistant",
+            content: dictionary.errors.scheduleFailure,
+          },
+        });
       }
     } finally {
       scheduleInFlightRef.current = false;
@@ -426,8 +365,8 @@ export function useChatEngine({
   };
 
   const isStreaming = phase !== "done";
-  const isReady = userId !== null;
-  const isBusy = !isReady || isStreaming || isScheduling || isLimitReached;
+  const isBusy =
+    userId === null || isStreaming || isScheduling || isLimitReached;
 
   return {
     messages,
@@ -440,7 +379,6 @@ export function useChatEngine({
     error,
     isLimitReached,
     isScheduling,
-    isReady,
     sendMessage,
     stopStream,
     retry,
