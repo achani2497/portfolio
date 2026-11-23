@@ -1,5 +1,6 @@
 import { CHAT_STREAM_INACTIVITY_TIMEOUT_MS } from "../../../config/chat";
 import type { ChatEvent } from "../../../types/chat";
+import type { ChatErrorKey } from "../../../types/chatErrorKeys";
 import { isEventStreamResponse, readJsonPayload } from "./chatApi";
 import { isAbortError } from "./guards";
 import { createSseParser, parseChatEvent } from "./sse";
@@ -10,13 +11,13 @@ type ChatStreamErrorCode =
 export class ChatStreamError extends Error {
   readonly code: ChatStreamErrorCode;
   readonly status?: number;
-  readonly errorKey?: string;
+  readonly errorKey?: ChatErrorKey;
 
   constructor(
     code: ChatStreamErrorCode,
     message: string,
     status?: number,
-    errorKey?: string,
+    errorKey?: ChatErrorKey,
   ) {
     super(message);
     this.name = "ChatStreamError";

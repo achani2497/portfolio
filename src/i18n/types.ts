@@ -1,5 +1,6 @@
 import type { ExperienceId } from "../data/experiences";
 import type { TechnologyLevelKey } from "../data/technologies";
+import type { ChatErrorKey } from "../types/chatErrorKeys";
 
 export type Locale = "en" | "es";
 
@@ -87,20 +88,7 @@ export type AppDictionary = {
       scheduleFailure: string;
       scheduleSuccess: string;
     };
-    serverErrors: {
-      quota_exceeded: string;
-      model_unavailable: string;
-      chat_busy: string;
-      schedule_busy: string;
-      meeting_already_scheduled: string;
-      session_invalid: string;
-      schedule_failed: string;
-      schedule_timeout: string;
-      invalid_body: string;
-      message_too_long: string;
-      origin_not_allowed: string;
-      generic: string;
-    };
+    serverErrors: Record<ChatErrorKey, string>;
     unavailable: {
       title: string;
       description: string;

@@ -1,4 +1,6 @@
 import { CHAT_SCHEDULE_TIMEOUT_MS } from "../../../config/chat";
+import type { ChatErrorKey } from "../../../types/chatErrorKeys";
+import { isChatErrorKey } from "../../../types/chatErrorKeys";
 import { isRecord } from "./guards";
 
 const MAX_ERROR_MESSAGE_LENGTH = 300;
@@ -6,12 +8,12 @@ const MAX_ERROR_MESSAGE_LENGTH = 300;
 type ScheduleMeetingResult = {
   ok: boolean;
   message?: string;
-  errorKey?: string;
+  errorKey?: ChatErrorKey;
 };
 
 type ErrorPayload = {
   message: string;
-  errorKey?: string;
+  errorKey?: ChatErrorKey;
 };
 
 function truncateMessage(message: string): string {
@@ -24,7 +26,7 @@ function truncateMessage(message: string): string {
 
 function parseJsonFields(
   body: string,
-): { message?: string; errorKey?: string } | null {
+): { message?: string; errorKey?: ChatErrorKey } | null {
   let parsed: unknown;
 
   try {
@@ -37,9 +39,7 @@ function parseJsonFields(
 
   return {
     ...(typeof parsed.message === "string" ? { message: parsed.message } : {}),
-    ...(typeof parsed.errorKey === "string"
-      ? { errorKey: parsed.errorKey }
-      : {}),
+    ...(isChatErrorKey(parsed.errorKey) ? { errorKey: parsed.errorKey } : {}),
   };
 }
 

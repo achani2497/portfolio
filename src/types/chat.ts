@@ -1,3 +1,5 @@
+import type { ChatErrorKey } from "./chatErrorKeys";
+
 export type ChatRole = "user" | "assistant";
 
 export type ChatPhase = "thinking" | "streaming" | "done";
@@ -17,7 +19,7 @@ export type ChatErrorCode =
 export type ChatErrorState = {
   code: ChatErrorCode;
   message?: string; // server-owned text
-  errorKey?: string; // stable server key, translated by the client
+  errorKey?: ChatErrorKey; // stable server key, translated by the client
   retryable: boolean;
 };
 
@@ -34,7 +36,7 @@ export type ChatEvent =
   | { type: "messageChunk"; content: string }
   | { type: "options"; options: Option[] }
   | { type: "done"; messageLimit?: number }
-  | { type: "error"; message: string; errorKey?: string };
+  | { type: "error"; message: string; errorKey?: ChatErrorKey };
 
 export type ChatMessageData = {
   id: string;

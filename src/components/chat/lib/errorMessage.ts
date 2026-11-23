@@ -1,21 +1,18 @@
 import type { AppDictionary } from "../../../i18n/types";
+import type { ChatErrorKey } from "../../../types/chatErrorKeys";
 
 export type ChatDictionary = AppDictionary["chat"];
 
 function getServerErrorMessage(
   dictionary: ChatDictionary,
-  errorKey?: string,
+  errorKey?: ChatErrorKey,
 ): string | undefined {
-  if (errorKey === undefined) return undefined;
-  if (!Object.prototype.hasOwnProperty.call(dictionary.serverErrors, errorKey)) {
-    return undefined;
-  }
-  return (dictionary.serverErrors as Record<string, string>)[errorKey];
+  return errorKey === undefined ? undefined : dictionary.serverErrors[errorKey];
 }
 
 export function resolveErrorMessage(
   dictionary: ChatDictionary,
-  source: { errorKey?: string; message?: string },
+  source: { errorKey?: ChatErrorKey; message?: string },
   fallback: string,
 ): string {
   return (

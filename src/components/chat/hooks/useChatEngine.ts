@@ -8,6 +8,7 @@ import type {
   Option,
   StreamStopReason,
 } from "../../../types/chat";
+import type { ChatErrorKey } from "../../../types/chatErrorKeys";
 import { createChatId } from "../lib/chatId";
 import { ChatStreamError, streamChatEvents } from "../lib/chatStream";
 import { scheduleMeeting } from "../lib/chatApi";
@@ -100,7 +101,7 @@ export function useChatEngine({
     code: ChatErrorCode,
     retryable: boolean,
     message?: string,
-    errorKey?: string,
+    errorKey?: ChatErrorKey,
   ) => {
     resetStatus();
     setLastOutcome(null);

@@ -1,4 +1,5 @@
 import type { ChatEvent, Option } from "../../../types/chat";
+import { isChatErrorKey } from "../../../types/chatErrorKeys";
 import { isRecord } from "./guards";
 
 const OPTION_ACTIONS = new Set<string>(["download-cv", "schedule-meeting"]);
@@ -131,7 +132,7 @@ export function parseChatEvent(data: string): ChatEvent | null {
         ? {
             type: "error",
             message: parsed.message,
-            ...(typeof parsed.errorKey === "string"
+            ...(isChatErrorKey(parsed.errorKey)
               ? { errorKey: parsed.errorKey }
               : {}),
           }

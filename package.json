@@ -13,6 +13,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
+    "check:contract": "node scripts/check-chat-contract.mjs",
     "astro": "astro"
   },
   "dependencies": {
